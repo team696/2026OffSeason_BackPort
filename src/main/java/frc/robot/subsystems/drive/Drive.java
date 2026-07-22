@@ -8,8 +8,8 @@
 package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.ChassisVelocities;
-import edu.wpi.first.math.linalg.Matrix;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.Time;
@@ -29,13 +29,13 @@ public class Drive extends SubsystemBase {
   }
 
   public DriveVelocityState getState() {
-    return new DriveVelocityState(Swerve.get().getState().Velocity);
+    return new DriveVelocityState(Swerve.get().getState().Speeds);
   }
 
   //Again, self explanitory
   public static class DriveVelocityState {
-    public final ChassisVelocities Speeds;
-    public DriveVelocityState(ChassisVelocities speeds) { this.Speeds = speeds; }
+    public final ChassisSpeeds Speeds;
+    public DriveVelocityState(ChassisSpeeds speeds) { this.Speeds = speeds; }
   }
 
   //Add Vision Update through pose, the current timestamp, and standard deviations
