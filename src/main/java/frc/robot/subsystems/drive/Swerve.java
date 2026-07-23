@@ -29,9 +29,10 @@ import edu.wpi.first.units.measure.Time;
 import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public final class Swerve extends TunerSwerveDrivetrain implements Sendable{
+public final class Swerve extends TunerSwerveDrivetrain implements Sendable, Subsystem{
     private static Swerve m_Swerve;
 
     private final SwerveSubsystem m_subsystemWrapper = new SwerveSubsystem();

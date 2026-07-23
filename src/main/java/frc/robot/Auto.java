@@ -1,103 +1,95 @@
 package frc.robot;
 
+import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
-/*
-    Due to the current situation with Choreo and Pathplanner not being supported on the new 2027 Alpha 5 code base
-    and any version prior to Alpha 2 needing to be ported over anyways, disregard this file or any file related to 
-    autos. We are currently either waiting for a new updated, or a port. 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.drive.Swerve;
 
-*/
+public class Auto {
+	public static boolean initialized = false;
 
-// import com.ctre.phoenix6.swerve.SwerveRequest;
-// import com.pathplanner.lib.auto.AutoBuilder;
-// import com.pathplanner.lib.auto.Namedwpilibj2.commands;
-// import com.pathplanner.lib.config.PIDConstants;
-// import com.pathplanner.lib.config.RobotConfig;
-// import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+	public static SendableChooser<Command> autoChooser;
 
-// import frc.robot.subsystems.drive.Swerve;
+	public static void initialize(NamedCommand... Commands) {
+		if (initialized == true) {
+			return;
+		}
 
-// import edu.wpi.first.wpilibj.DriverStation.Alliance;
-// import edu.wpi.first.wpilibj.DriverStation;
-// import edu.wpi.first.wpilibj.DriverStationErrors;
-// // import edu.wpi.first.smartdashboard.SendableChooser;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-// import edu.wpi.first.wpilibj2.command.Command;
+		for (NamedCommand command : Commands) 
+		  command.register();
 
-// public class Auto {
-// 	public static boolean initialized = false;
+		if (configureAutoBuilder()) {
+			autoChooser = AutoBuilder.buildAutoChooser();
+			SmartDashboard.putData("Auto Chooser", autoChooser);
+		}
 
-// 	public static SendableChooser<wpilibj2.command> autoChooser;
+		initialized = true;
+	}
 
-// 	public static void initialize(Namedwpilibj2.command... wpilibj2.commands) {
-// 		if (initialized == true) {
-// 			return;
-// 		}
+	public static Command getSelectedAuto() {
+		if (!initialized)
+			return null;
 
-// 		for (Namedwpilibj2.command wpilibj2.command : wpilibj2.commands) 
-// 		  wpilibj2.command.register();
+		return autoChooser.getSelected();
+	}
 
-// 		if (configureAutoBuilder()) {
-// 			autoChooser = AutoBuilder.buildAutoChooser();
-// 			SmartDashboard.putData("Auto Chooser", autoChooser);
-// 		}
+	public static final class NamedCommand {
+		public String name;
+		public Command command;
 
-// 		initialized = true;
-// 	}
+		/**
+		 * @param name    to be used inside of the pathplanner GUI
+		 * @param command to be run when called inside pathplanner
+		 */
+		public NamedCommand(String name, Command command) {
+			this.name = name;
+			this.command = command;
+		}
 
-// 	public static wpilibj2.command getSelectedAuto() {
-// 		if (!initialized)
-// 			return null;
+		public void register() {
+			NamedCommands.registerCommand(name, command);
+		}
+	}
+	private static boolean configureAutoBuilder() {
+		try {
+			var config = RobotConfig.fromGUISettings();
+			AutoBuilder.configure(
+				() -> Swerve.get().getState().Pose, // Supplier of current robot pose
+				Swerve.get()::resetPose,             // Consumer for seeding pose against auto
+				() -> Swerve.get().getState().Speeds, // Supplier of current robot speeds
+				// Consumer of ChassisSpeeds and feedforwards to drive the robot
+				(speeds, feedforwards) -> {
+					Swerve.get().setControl(
+						m_pathApplyRobotSpeeds.withSpeeds(speeds)
+							.withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
+							.withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
+					);
+				},
+				new PPHolonomicDriveController(
+					new PIDConstants(10.0, 0.0, 0.0),
+					new PIDConstants(7.0, 0.0, 0.0)
+				),
+				config,
+				// Assume path needs to be flipped for Red vs Blue
+				() -> DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Red,
+				Swerve.get() // Subsystem requirement
+			);
+			return true;
+		} catch (Exception ex) {
+			DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder: " + ex.getMessage(), true);
+			return false;
+		}
+	}
+	
+	private static final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
 
-// 		return autoChooser.getSelected();
-// 	}
-
-// 	public static final class Namedwpilibj2.command {
-// 		public String name;
-// 		public wpilibj2.command wpilibj2.command;
-
-// 		/**
-// 		 * @param name    to be used inside of the pathplanner GUI
-// 		 * @param wpilibj2.command to be run when called inside pathplanner
-// 		 */
-// 		public Namedwpilibj2.command(String name, wpilibj2.command wpilibj2.command) {
-// 			this.name = name;
-// 			this.wpilibj2.command = wpilibj2.command;
-// 		}
-
-// 		public void register() {
-// 			Namedwpilibj2.commands.registerwpilibj2.command(name, wpilibj2.command);
-// 		}
-// 	}
-
-// 	private static boolean configureAutoBuilder() {
-// 		try {
-// 			var config = RobotConfig.fromGUISettings();
-// 			AutoBuilder.configure(
-// 					() -> Swerve.get().getState().Pose, // Supplier of current robot pose
-// 					Swerve.get()::resetPose, // Consumer for seeding pose against auto
-// 					() -> Swerve.get().getState().Velocity, // Supplier of current robot speeds
-// 					// Consumer of ChassisSpeeds and feedforwards to drive the robot
-// 					(speeds, feedforwards) -> Swerve.get().setControl(
-// 							m_pathApplyRobotSpeeds.withSpeeds(speeds)
-// 									.withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
-// 									.withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())),
-// 					new PPHolonomicDriveController(
-// 							new PIDConstants(10, 0, 0),
-// 							new PIDConstants(7, 0, 0)),
-// 					config,
-// 					// Assume the path needs to be flipped for Red vs Blue, this is normally the
-// 					// case
-// 					() -> MatchState.getAlliance().orElse(Alliance.BLUE) == Alliance.RED,
-// 					Swerve.get() // Subsystem for requirements
-// 			);
-// 		} catch (Exception ex) {
-// 			DriverStationErrors.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
-// 			return false;
-// 		}
-
-// 		return true;
-// 	}
-
-// 	private static final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
-// }
+}
