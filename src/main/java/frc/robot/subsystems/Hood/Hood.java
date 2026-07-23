@@ -1,0 +1,34 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.robot.subsystems.Hood;
+
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import frc.lib.bases.ServoMotorSubsystem;
+import frc.lib.io.MotorIOTalonFX;
+import frc.lib.io.MotorIO.Setpoint;
+
+public class Hood extends ServoMotorSubsystem<MotorIOTalonFX> {
+
+    private static Hood hood = null;
+    public static synchronized Hood get(){
+      if(hood == null){
+        hood = new Hood();
+      }
+      return hood;
+    }
+
+
+    public static final Setpoint STOW = Setpoint.withPositionSetpoint(HoodConstants.kMinAngle);
+    public static final Setpoint MAX_ANGLE = Setpoint.withPositionSetpoint(HoodConstants.kMaxAngle);
+
+
+  /** Creates a new Hood. */
+  private Hood() {
+    super(HoodConstants.getMotorIO(), "Hood", HoodConstants.kEpsilonThreshold, HoodConstants.getServoConfig());
+    setCurrentPosition(HoodConstants.kMinAngle);
+  }
+
+}

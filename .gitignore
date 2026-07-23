@@ -181,7 +181,7 @@ ctre_sim/
 
 # clangd
 /.cache
-compile_commands.json
+compile_wpilibj2.commands.json
 
 # Eclipse generated file for annotation processors
 .factorypath
