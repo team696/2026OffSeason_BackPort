@@ -7,7 +7,7 @@ package frc.robot.subsystems.Hopper;
 import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.Units.Amps;
 
-import edu.wpi.first.math.system.DCMotor;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Current;

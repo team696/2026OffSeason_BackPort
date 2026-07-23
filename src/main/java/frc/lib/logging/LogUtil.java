@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.DoubleStream;
 
+
 public class LogUtil {
 	public static final HashMap<String, StructPublisher<? extends StructSerializable>> structPublisherMap =
 			new HashMap<>();

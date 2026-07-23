@@ -21,7 +21,7 @@ package frc.robot;
 // import edu.wpi.first.wpilibj.DriverStation;
 // import edu.wpi.first.wpilibj.DriverStationErrors;
 // // import edu.wpi.first.smartdashboard.SendableChooser;
-// import edu.wpi.first.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj2.command.Command;
 
 // public class Auto {

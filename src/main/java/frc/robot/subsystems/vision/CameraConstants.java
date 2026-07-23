@@ -15,8 +15,8 @@ import static edu.wpi.first.units.Units.Milliseconds;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.linalg.VecBuilder;
-import edu.wpi.first.math.linalg.Vector;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.numbers.N3;
 
 import com.ctre.phoenix6.Utils;

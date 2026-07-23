@@ -10,8 +10,8 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import frc.robot.subsystems.drive.TunerConstants.TunerSwerveDrivetrain;
 
-import edu.wpi.first.math.linalg.Matrix;
-import edu.wpi.first.math.linalg.VecBuilder;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
@@ -23,8 +23,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.smartdashboard.Field2d;
-import edu.wpi.first.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.units.measure.Time;
 import static edu.wpi.first.units.Units.Seconds;
 
@@ -133,11 +133,11 @@ public final class Swerve extends TunerSwerveDrivetrain implements Sendable{
     //Simple calculations base off of its current position plus the speed times the current timestamp
     public Pose2d getLookAheadPoseWithoutHeading(Time dt) {
         Pose2d current = getState().Pose;
-        var speeds = getState().Velocity;
+        var speeds = getState().Speeds;
         double t = dt.in(Seconds);
         return new Pose2d(
-            current.getX() + speeds.vx * t,
-            current.getY() + speeds.vy * t,
+            current.getX() + speeds.vxMetersPerSecond * t,
+            current.getY() + speeds.vyMetersPerSecond * t,
             current.getRotation()
     );
 }

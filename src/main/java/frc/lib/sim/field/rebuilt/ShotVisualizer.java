@@ -25,7 +25,7 @@ import frc.lib.util.MathHelpers;
 import frc.robot.RobotConstants;
 import frc.robot.shooting.Shooting;
 import frc.robot.shooting.Shooting.ShootingState;
-import frc.robot.shooting.regressions.DistanceToAirTimeRegressions;
+import frc.robot.shooting.regression.AirtimeRegression;
 import frc.robot.subsystems.drive.Drive;
 import java.util.function.Supplier;
 
@@ -127,7 +127,7 @@ public class ShotVisualizer {
 
 		Distance distanceToHub = Meters.of(lookAheadPose.getTranslation().getDistance(target));
 
-		Time dt = DistanceToAirTimeRegressions.getHubShotTime(distanceToHub);
+		Time dt = AirtimeRegression.getHubShotTime(distanceToHub);
 
 		double dx = distanceToHub.in(Meters);
 		double dtSec = dt.in(Seconds);
@@ -183,7 +183,7 @@ public class ShotVisualizer {
 
 		Distance distanceToHub = Meters.of(lookAheadPose.getTranslation().getDistance(target));
 
-		Time dt = DistanceToAirTimeRegressions.getHubShotTime(distanceToHub);
+		Time dt = AirtimeRegression.getHubShotTime(distanceToHub);
 
 		double dx = distanceToHub.in(Meters);
 		double dtSec = dt.in(Units.Seconds);

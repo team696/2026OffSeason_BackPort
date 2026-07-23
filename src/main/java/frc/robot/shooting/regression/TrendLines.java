@@ -4,7 +4,7 @@
 
 package frc.robot.shooting.regression;
 
-import edu.wpi.first.math.util.Pair;
+import edu.wpi.first.math.Pair;
 
 import frc.lib.math.LinearLineCalculator;
 import java.util.List;

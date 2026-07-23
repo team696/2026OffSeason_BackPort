@@ -17,7 +17,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
-import edu.wpi.first.math.kinematics.ChassisVelocities;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
@@ -35,32 +35,32 @@ public class MotionComp {
     public static final Time SHOOTER_DELAY = Seconds.of(0.0);
 
     Pose2d pose = Swerve.get().getState().Pose;
-    ChassisVelocities velocities = new ChassisVelocities();
+    ChassisSpeeds velocities = new ChassisSpeeds();
 
     MotionComp() {
     }
  
     Pose2d ProgressLookAheadPos() {
         Twist2d twist2d = new Twist2d(
-            velocities.vx * SHOOTER_DELAY.in(Seconds),
-            velocities.vy * SHOOTER_DELAY.in(Seconds),
-            velocities.omega * SHOOTER_DELAY.in(Seconds)
+            velocities.vxMetersPerSecond * SHOOTER_DELAY.in(Seconds),
+            velocities.vyMetersPerSecond * SHOOTER_DELAY.in(Seconds),
+            velocities.omegaRadiansPerSecond * SHOOTER_DELAY.in(Seconds)
         );
-        Pose2d new_pos = pose.plus(twist2d.exp());
+        Pose2d new_pos = pose.exp(twist2d);
         return new_pos;
     }
 
     Rotation2d phi() {
         Rotation2d theta = ProgressLookAheadPos().getRotation();
-        Rotation2d phi = theta.plus(Rotation2d.fromRadians(Math.copySign(Math.PI/2.0, velocities.omega)));
+        Rotation2d phi = theta.plus(Rotation2d.fromRadians(Math.copySign(Math.PI/2.0, velocities.omegaRadiansPerSecond)));
 
         return phi;
     }
 
-    ChassisVelocities FindDirectionTangentialVelocity() {
-        double vel_x = velocities.vx + (SHOOTER_DELAY.in(Seconds) * velocities.omega * phi().getCos());
-        double vel_y = velocities.vy + (SHOOTER_DELAY.in(Seconds) * velocities.omega * phi().getSin());
-        ChassisVelocities Shooter_Velocity = new ChassisVelocities(vel_x, vel_y,0.0);
+    ChassisSpeeds FindDirectionTangentialVelocity() {
+        double vel_x = velocities.vxMetersPerSecond + (SHOOTER_DELAY.in(Seconds) * velocities.omegaRadiansPerSecond * phi().getCos());
+        double vel_y = velocities.vyMetersPerSecond + (SHOOTER_DELAY.in(Seconds) * velocities.omegaRadiansPerSecond * phi().getSin());
+        ChassisSpeeds Shooter_Velocity = new ChassisSpeeds(vel_x, vel_y,0.0);
         
         return Shooter_Velocity;
     }

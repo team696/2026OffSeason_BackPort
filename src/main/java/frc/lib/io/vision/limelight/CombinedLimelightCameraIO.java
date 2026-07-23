@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class CombinedLimelightCameraIO extends LimelightCameraIO {
+public class CombinedLimelightCameraIO extends LimelightCameraIO {
 
 	private Optional<VisionEstimate> lastEstimate = Optional.empty();
 	private final NetworkTable table;

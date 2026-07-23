@@ -9,13 +9,13 @@ import edu.wpi.first.hal.PowerJNI;
 import edu.wpi.first.hal.can.CANJNI;
 import edu.wpi.first.hal.can.CANStatus;
 import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.DataLogManager;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public final class Log {
 	public static boolean initialized = false;
@@ -72,7 +72,7 @@ public final class Log {
 	}
 
 	public static final CANStatus status = new CANStatus();
-	public static final PowerDistribution pdh = new PowerDistribution(1, 0, PowerDistribution.ModuleType.REV);
+	public static final PowerDistribution pdh = new PowerDistribution(1, PowerDistribution.ModuleType.kRev);
 	public static final OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
 
 	public static final void logSystemInformation() {
@@ -100,7 +100,7 @@ public final class Log {
     // value("SystemStats/6vRail/Active", RobotController.getEnabled6V());
     // value("SystemStats/6vRail/CurrentFaults", RobotController.getFaultCount6V());
     
-    var canStatus = RobotController.getCANStatus(0);
+    var canStatus = RobotController.getCANStatus();
     value("SystemStats/CANBus/Utilization", canStatus.percentBusUtilization);
     value("SystemStats/CANBus/OffCount", canStatus.busOffCount);
     value("SystemStats/CANBus/TxFullCount", canStatus.txFullCount);
