@@ -36,25 +36,25 @@ public class CameraConstants {
 
     //Standard deviation
     public static final Vector<N3> DEFAULT_STD_DEVIATION = 
-        VecBuilder.fill(0.3,0.3,99999999.0); //Basically rejects all rotational values, relying purely on the pigeon
+        VecBuilder.fill(0.0001,0.0001,0.0001); //Basically rejects all rotational values, relying purely on the pigeon
 
-    public static final class FrontConstants{ //Front Camera
+    public static final class LeftConstants{ //Front Camera
 
         // Necessary for stuff like object detection and simulation 
         public static final Pose3d OFFSET_FROM_CENTER = new Pose3d(
             Inches.of(0.0),   // x — forward/back from center
-            Inches.of(0.0),   // y — left/right from center
+            Inches.of(8.6875),   // y — left/right from center
             Inches.of(0.0),   // z — height from ground
             new Rotation3d(
                 Degrees.of(0.0),   // roll
-                Degrees.of(0.0),   // pitch — angle camera tilts up/down
-                Degrees.of(0.0))); // yaw — angle camera faces left/right
+                Degrees.of(5.0),   // pitch — angle camera tilts up/down
+                Degrees.of(90.0))); // yaw — angle camera faces left/right
 
 
             //Standard Limelight set up, even a monkey can understand
             public static CameraIOConfig getCameraConfig(){
                 CameraIOConfig config = new CameraIOConfig();
-                config.name = "limelight-front";
+                config.name = "limelight-left";
                 config.robotToCameraOffset = OFFSET_FROM_CENTER;
                 config.aprilTagVisionStdDevs = DEFAULT_STD_DEVIATION;
                 return config;
@@ -90,7 +90,7 @@ public class CameraConstants {
             public static VisionConfig getConfig(){
                 VisionConfig config = new VisionConfig();
                 config.name = "Vision";
-                config.cameras = new CameraIO[]{FrontConstants.getIO()};
+                config.cameras = new CameraIO[]{LeftConstants.getIO()};
                 config.agreedTranslationUpdatesThreshold = 5;
                 config.agreedTranslationUpdateEpsilon = Centimeters.of(20.0);
                 return config;

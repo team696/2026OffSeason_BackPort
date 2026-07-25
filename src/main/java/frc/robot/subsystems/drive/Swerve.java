@@ -8,6 +8,7 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import frc.lib.bases.CameraSubsystem;
 import frc.robot.subsystems.drive.TunerConstants.TunerSwerveDrivetrain;
 
 import edu.wpi.first.math.Matrix;
@@ -30,12 +31,9 @@ import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public final class Swerve extends TunerSwerveDrivetrain implements Sendable, Subsystem{
     private static Swerve m_Swerve;
-
-    private final SwerveSubsystem m_subsystemWrapper = new SwerveSubsystem();
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -45,6 +43,7 @@ public final class Swerve extends TunerSwerveDrivetrain implements Sendable, Sub
     private boolean m_hasAppliedOperatorPerspective = false;
 
     public Field2d fieldSim = new Field2d();
+    
 
     public static synchronized Swerve get() {
         if (m_Swerve == null)
@@ -60,20 +59,13 @@ public final class Swerve extends TunerSwerveDrivetrain implements Sendable, Sub
         if (Utils.isSimulation()) {
             simulationInit();
         }
-    }
-
-    /* 
-    Due to the changes in the new 2027 code base, SubsystemBase has become the new standard Class for subsystems. 
-    Java's inheritance rules state you can only inherite ONE class, and that class being TunerSwerveDriveTrain,
-    this class cannot support standard Command base methods such as run(), but most importantly setDefaultCommand().
-    Hence, this method and the class metioned further down the file exists
-    */
-    public SubsystemBase toSubsystem() {
-        return m_subsystemWrapper;
+        registerTelemetry(TunerConstants.logger::telemeterize); 
+        register();
     }
 
     // This handles our standard periodic updates
-    public void periodicUpdate() {
+    @Override
+    public void periodic() {
         //Red or Blue alliance checking base off if the robot is Disabled
         //This would be good for comps, since once FMS is connected the robot would be disabled
         //instead of defaulting to the Blue alliances no matter what alliance your on
@@ -88,9 +80,9 @@ public final class Swerve extends TunerSwerveDrivetrain implements Sendable, Sub
             });
         }
 
-    
         fieldSim.setRobotPose(this.getState().Pose);
         SmartDashboard.putData("field", fieldSim);
+
     }
 
 
@@ -104,13 +96,13 @@ public final class Swerve extends TunerSwerveDrivetrain implements Sendable, Sub
      */
     //Simple apply request
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
-        return m_subsystemWrapper.run(() -> this.setControl(requestSupplier.get()));
+        return this.run(() -> this.setControl(requestSupplier.get()));
     }
 
-    //Uhhhhh i guess no stdDev?
     @Override
     public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds) {
-        super.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds);
+        // Wrap timestamp with Utils.fpgaToCurrentTime
+        super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds)); 
     }
 
     @Override
@@ -118,9 +110,13 @@ public final class Swerve extends TunerSwerveDrivetrain implements Sendable, Sub
             Pose2d visionRobotPoseMeters,
             double timestampSeconds,
             Matrix<N3, N1> visionMeasurementStdDevs) {
-        super.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
+        // Wrap timestamp with Utils.fpgaToCurrentTime
+        super.addVisionMeasurement(
+            visionRobotPoseMeters, 
+            Utils.fpgaToCurrentTime(timestampSeconds), 
+            visionMeasurementStdDevs
+        );
     }
-
     //Supports the Time class instead of a double
     public void addVisionUpdate(Pose2d pose,Time timestamp,Matrix<N3,N1>stdDev){
         addVisionMeasurement(pose, timestamp.in(Seconds),stdDev);
@@ -157,13 +153,5 @@ public final class Swerve extends TunerSwerveDrivetrain implements Sendable, Sub
         });
         simUpdate.setName("Swerve Simulation Update");
         simUpdate.startPeriodic(0.005);
-    }
-
-    // 3. This nested inner class extends SubsystemBase cleanly and handles the scheduler loops
-    private class SwerveSubsystem extends SubsystemBase {
-        @Override
-        public void periodic() {
-            periodicUpdate();
-        }
     }
 }

@@ -12,9 +12,17 @@ public class Binds {
 
 
 	public static final class Controller {
+			private static final SwerveRequest.FieldCentric swerveFCDriveRequest = new SwerveRequest.FieldCentric()
+				.withDeadband(5. * 0.05).withRotationalDeadband(8 * 0.05)
+				.withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
 		public static final void bind() {
-
+			Swerve.get().setDefaultCommand(Swerve.get().applyRequest(
+				(()->swerveFCDriveRequest
+				.withVelocityX(Controls.xboxController.leftJoyY.getAsDouble())
+				.withVelocityY(Controls.xboxController.leftJoyX.getAsDouble())
+				.withRotationalRate(Controls.xboxController.rightJoyX.getAsDouble()))
+			));
 		}
 	}
 }

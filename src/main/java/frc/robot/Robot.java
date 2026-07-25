@@ -22,15 +22,15 @@ public class Robot extends TimedRobot {
 
 	public Robot() {
 
+		Swerve.get();
+		Camera.get();
 
-
-		Log.initialize(SEVERITY.EVERYTHING);
-		Log.data("Swerve", Swerve.get(), SEVERITY.MINIMAL);
+		//Log.initialize(SEVERITY.EVERYTHING);
+		//Log.data("Swerve", Swerve.get(), SEVERITY.MINIMAL);
 
 		// Auto.initialize(
 		// 		new NamedCommand("PRINT", new InstantCommand(() -> System.out.println(1))));
 
-		Swerve.get();
 		Camera.get().setPipeline(PipelineConstants.APRIL_TAG);
 		Binds.Controller.bind();
 	}

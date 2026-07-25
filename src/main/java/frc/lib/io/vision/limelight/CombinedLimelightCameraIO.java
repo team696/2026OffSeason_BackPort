@@ -69,7 +69,7 @@ public class CombinedLimelightCameraIO extends LimelightCameraIO {
 		if (limelightEstimate == null
 				|| (limelightEstimate.pose.getX() == 0
 						|| limelightEstimate.pose.getY() == 0
-						|| limelightEstimate.tagCount >= 1)) {
+						|| limelightEstimate.tagCount < 1)) {
 			return Optional.empty();
 		}
 		int buffer[] = new int[limelightEstimate.rawFiducials.length];

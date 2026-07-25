@@ -11,7 +11,6 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Rotation;
 import static edu.wpi.first.units.Units.Seconds;
 
-import org.opencv.core.Point;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -37,8 +36,7 @@ public class MotionComp {
     Pose2d pose = Swerve.get().getState().Pose;
     ChassisSpeeds velocities = new ChassisSpeeds();
 
-    MotionComp() {
-    }
+    MotionComp() {}
  
     Pose2d ProgressLookAheadPos() {
         Twist2d twist2d = new Twist2d(

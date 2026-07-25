@@ -8,7 +8,6 @@ import frc.lib.bases.MotorSubsystem;
 import frc.lib.bases.ServoMotorSubsystem;
 import frc.lib.io.MotorIOTalonFX;
 import frc.lib.io.MotorIO.Setpoint;
-import frc.robot.subsystems.Intake.IntakeConstants;
 
 public class Hopper {
 

@@ -31,6 +31,7 @@ public class Camera extends CameraSubsystem{
     public Command switchToNueralNetworkPipeline(){
         return runOnce(()-> setPipeline(CameraConstants.PipelineConstants.GAME_PIECE));
     }
+
     
 
 }

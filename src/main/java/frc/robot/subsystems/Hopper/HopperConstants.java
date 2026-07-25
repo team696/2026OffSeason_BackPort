@@ -24,13 +24,10 @@ import frc.lib.io.MotorIOTalonFXSim;
 import frc.lib.sim.LinearSim;
 import frc.lib.sim.RollerSim;
 import frc.lib.sim.LinearSim.LinearSimConstants;
-import frc.lib.sim.PivotSim.PivotSimConstants;
 import frc.lib.sim.RollerSim.RollerSimConstants;
-import frc.lib.util.Util;
 import frc.lib.util.Util.DistanceAngleConverter;
 import frc.robot.Ports;
 import frc.robot.Robot;
-import frc.robot.RobotConstants;
 
 /** Add your docs here. */
 public class HopperConstants {
