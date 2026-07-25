@@ -36,7 +36,7 @@ public class CameraConstants {
 
     //Standard deviation
     public static final Vector<N3> DEFAULT_STD_DEVIATION = 
-        VecBuilder.fill(0.0001,0.0001,0.0001); //Basically rejects all rotational values, relying purely on the pigeon
+        VecBuilder.fill(0.3,0.3,999999.0); //Basically rejects all rotational values, relying purely on the pigeon
 
     public static final class LeftConstants{ //Front Camera
 
