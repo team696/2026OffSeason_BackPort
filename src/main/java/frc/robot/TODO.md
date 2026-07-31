@@ -31,12 +31,12 @@
                     -3 Tables, Shooting velocity, hood angle, and air time
                 -Greater than 6m = Line of best fit[x]
             -Motion Compentation[]
-                -Launch Delay(Current x,y position + velocity*launch delay)[]
-                -Shooter offset(velocity(x,y) + distance between center and shooter * rotational velocity * cos(phi)/sin(phi), where phi = theta + the positve or negative sign of the rotational velocity * pi/2);Can be used to with a twist2d[]
-                -Look Ahead value(x and y lookahead = Launch Delay + Shooter Offset Velocity * time of flight(movement))[]
+                -Launch Delay(Current x,y position + velocity*launch delay)[x]
+                -Shooter offset(velocity(x,y) + distance between center and shooter * rotational velocity * cos(phi)/sin(phi), where phi = theta + the positve or negative sign of the rotational velocity * pi/2);Can be used to with a twist2d[x]
+                -Look Ahead value(x and y lookahead = Launch Delay + Shooter Offset Velocity * time of flight(movement))[x]
                 -Rejection conditions(Yaw stability,error tolerances, and static shots)[]
-                -atan2(dx,dy), where dx/dy = Look ahead - current pose[]
-                -PID to rotation(either pid or call a swerve request)[]
+                -atan2(dx,dy), where dx/dy = Look ahead - current pose[x]
+                -PID to rotation(either pid or call a swerve request)[x]
             -Fitlering[]
                 -WIP
         -Tune motors
