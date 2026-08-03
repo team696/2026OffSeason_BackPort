@@ -24,7 +24,7 @@ import frc.lib.util.FieldLayout;
 import frc.lib.util.MathHelpers;
 import frc.robot.RobotConstants;
 import frc.robot.shooting.Shooting;
-import frc.robot.shooting.Shooting.ShootingState;
+import frc.robot.shooting.ShootingState;
 import frc.robot.shooting.regression.AirtimeRegression;
 import frc.robot.subsystems.drive.Drive;
 import java.util.function.Supplier;
