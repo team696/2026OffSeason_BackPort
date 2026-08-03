@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.util.FieldLayout;
 import frc.robot.Controls;
 import frc.robot.RobotConstants;
+import frc.robot.shooting.Shooting;
 import frc.robot.shooting.regression.AirtimeRegression;
 import frc.robot.subsystems.drive.Swerve;
 
@@ -46,7 +47,7 @@ public class MotionComp {
     private boolean m_rejectLookAhead = false;
 
 
-    MotionComp() {}
+    public MotionComp() {}
 
     private Pose2d getCurrentPose() {
         return Swerve.get().getState().Pose;
@@ -56,13 +57,13 @@ public class MotionComp {
         return Swerve.get().getState().Speeds;
     }
 
-    public Translation2d getHubTarget() {
-        boolean isBlue = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue;
-        return isBlue ? FieldLayout.kBlueHub : FieldLayout.handleAllianceFlip(FieldLayout.kBlueHub, true);
+    public Translation2d getTarget() {
+        boolean isRed = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red;
+        return Shooting.getState().getTarget(isRed);
     }
 
     private Distance getRobotDistance(){
-        return Meters.of(getCurrentPose().getTranslation().getDistance(getHubTarget()));
+        return Meters.of(getCurrentPose().getTranslation().getDistance(getTarget()));
     }
 
     
@@ -124,7 +125,7 @@ public class MotionComp {
 
     public void rejectPose(){
         boolean yawUnstable = getYawInstability();
-        boolean errorTolerance = errorTolerance(getDriveError(getHubTarget()));
+        boolean errorTolerance = errorTolerance(getDriveError(getTarget()));
         boolean staticShot = staticShot();
          
         m_rejectLookAhead = (yawUnstable && errorTolerance) || staticShot;
@@ -164,7 +165,7 @@ public class MotionComp {
             FCFARequest
             .withVelocityX(Controls.xboxController.leftJoyX.getAsDouble()/2*RobotConstants.DriveConstants.MaxSpeed)
             .withVelocityY(Controls.xboxController.leftJoyY.getAsDouble()/2*RobotConstants.DriveConstants.MaxSpeed)
-            .withTargetDirection(atan2(getHubTarget().minus(base))));});
+            .withTargetDirection(atan2(getTarget().minus(base))));});
     }
 
 
