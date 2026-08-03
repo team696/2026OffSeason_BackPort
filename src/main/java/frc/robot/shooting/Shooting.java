@@ -1,28 +1,44 @@
 package frc.robot.shooting;
 
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import edu.wpi.first.units.measure.Time;
-import frc.lib.util.FieldLayout;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.shooting.motionComp.MotionComp;
+import frc.robot.shooting.shotverifier.ShotVerify;
+import frc.robot.shooting.shotverifier.ShotVerify;
+
 
 public class Shooting {
-    public static class ShootingState {
-        public Translation2d getLocationTranslation(boolean isRedAlliance) {
-            return FieldLayout.kBlueHub;
-        }
+    
 
-        public InterpolatingDoubleTreeMap getDistanceToFuelAirTimeMap() {
-            return new InterpolatingDoubleTreeMap();
-        }
+    public static final Shooting mInstance = new Shooting();
 
-        public Time getLookAheadTimeOffset() {
-            return edu.wpi.first.units.Units.Seconds.zero();
-        }
+    private final MotionComp motionComp = new MotionComp();
+
+    private static ShootingState state = ShootingState.HUB;
+    
+        private Shooting() {}
+    
+        /** Call this once per loop from Robot.java, same as Swerve/Cameras. */
+    public void periodic() {
+         motionComp.rejectPose();
     }
 
-    private static final ShootingState mState = new ShootingState();
+
+    public static void setState(ShootingState newState) {
+        state = newState;
+    }
 
     public static ShootingState getState() {
-        return mState;
+        return state;
+    }
+
+    public boolean shotVerified() {
+        return ShotVerify.verifyShot(motionComp);
+    }
+
+    public MotionComp getMotionComp() {
+        return motionComp;
     }
 }

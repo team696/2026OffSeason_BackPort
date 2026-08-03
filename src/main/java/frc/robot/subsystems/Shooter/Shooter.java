@@ -14,6 +14,16 @@ import frc.lib.io.MotorIO.Setpoint;
 
 public class Shooter extends FlywheelMotorSubsystem<MotorIOTalonFX> {
 
+    private static Shooter shooter = null;
+    public static synchronized Shooter get(){
+      if(shooter == null){
+        shooter = new Shooter();
+      }
+      return shooter;
+    }
+
+  
+
   //testshot
   //idle
   //ferry

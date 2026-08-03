@@ -14,6 +14,14 @@ import frc.lib.io.MotorIO.Setpoint;
 public class FeedRollers extends MotorSubsystem<MotorIOTalonFX> {
   /** Creates a new FeedRollers. */
 
+    private static FeedRollers roller = null;
+    public static synchronized FeedRollers get(){
+      if(roller == null){
+        roller = new FeedRollers();
+      }
+      return roller;
+    }
+
   public static Setpoint IDLE = Setpoint.withVelocitySetpoint(FeedRollersConstants.IdleSpeed);
   public static Setpoint RUNNING = Setpoint.withVelocitySetpoint(FeedRollersConstants.RunningSpeed);
 

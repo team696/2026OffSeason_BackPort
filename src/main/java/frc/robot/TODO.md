@@ -23,22 +23,23 @@
         -Add Shooter Rollers[x]
         -Add Feeding Rollers[x]
         -Add Hood[x]
-        -Add 1678's Shooting logic[]
+        -Add 1678's Shooting logic[x]
             ~~-Shooting verification(Hub or ferry)[]~~
-            -Shooting state(Enum)[]
+            -Shooting state(Enum)[x]
             -Regression[x]:
                 -Less than 6m = Interpolating LUTs[x]
                     -3 Tables, Shooting velocity, hood angle, and air time
                 -Greater than 6m = Line of best fit[x]
-            -Motion Compentation[]
+            -Motion Compentation[x]
                 -Launch Delay(Current x,y position + velocity*launch delay)[x]
                 -Shooter offset(velocity(x,y) + distance between center and shooter * rotational velocity * cos(phi)/sin(phi), where phi = theta + the positve or negative sign of the rotational velocity * pi/2);Can be used to with a twist2d[x]
                 -Look Ahead value(x and y lookahead = Launch Delay + Shooter Offset Velocity * time of flight(movement))[x]
-                -Rejection conditions(Yaw stability,error tolerances, and static shots)[]
+                -Rejection conditions(Yaw stability,error tolerances, and static shots)[x]
                 -atan2(dx,dy), where dx/dy = Look ahead - current pose[x]
                 -PID to rotation(either pid or call a swerve request)[x]
-            -Fitlering[]
-                -WIP
+            -Fitlering[x]
+                -Tilt[x]
+                -Roll[x]
         -Tune motors
             -PID[]
             -Voltage[]
@@ -64,7 +65,7 @@
         -If not, figure out something else[]
 
 -Misc:
-    -Add Telemetary[]
+    -Add Telemetary[x]
     -Add Battery Checker[]
     -Add a Match Timer[]
         -Add rumble to the controller[]
