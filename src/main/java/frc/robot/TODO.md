@@ -6,7 +6,8 @@
         -Rename it to drive[]
         -Merge the two code bases[]
     -Intake:
-        -Add Pivot[x]
+        ~~-Add Pivot[x]~~
+        -Move Rack and Pinion to Intake[]
         -Add Rollers[x]
         -Tune motors
             -PID[]

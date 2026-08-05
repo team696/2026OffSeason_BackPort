@@ -24,8 +24,8 @@ public class Shooting {
     public void periodic() {
          motionComp.rejectPose();
     }
-
-
+    
+    
     public static void setState(ShootingState newState) {
         state = newState;
     }

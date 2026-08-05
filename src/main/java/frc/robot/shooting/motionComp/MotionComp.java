@@ -59,7 +59,7 @@ public class MotionComp {
 
     public Translation2d getTarget() {
         boolean isRed = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red;
-        return Shooting.getState().getTarget(isRed);
+        return Shooting.getState().getLocationTranslation(isRed);
     }
 
     private Distance getRobotDistance(){
