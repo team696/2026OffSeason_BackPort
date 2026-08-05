@@ -33,31 +33,6 @@ public class Hopper {
 
   }
 
-  public static class RackAndPinion extends ServoMotorSubsystem<MotorIOTalonFX>{
-    private static RackAndPinion RackAndPinion = null;
-    public static synchronized RackAndPinion get(){
-      if(RackAndPinion == null){
-        RackAndPinion = new RackAndPinion();
-      }
-      return RackAndPinion;
-    }
-
-    public static final Setpoint RETRACT = Setpoint.withPositionSetpoint(HopperConstants.RackAndPinion.kInAngle);
-    public static final Setpoint EXTEND = Setpoint.withPositionSetpoint(HopperConstants.RackAndPinion.kOutAngle);
-
-
-    public RackAndPinion(){
-      super(
-        HopperConstants.RackAndPinion.getMotorIO(), 
-        "Rack and Pinon", 
-        HopperConstants.RackAndPinion.kEpsilonThreshold);
-        setCurrentPosition(HopperConstants.RackAndPinion.kInAngle);
-    }
-
-
-
-  }
-
   public static class Upwards extends ServoMotorSubsystem<MotorIOTalonFX> {
     public static final Setpoint MOVE_HIGH = Setpoint.withPositionSetpoint(HopperConstants.Upwards.HighPosAngle);
     public static final Setpoint MOVE_LOW = Setpoint.withPositionSetpoint(HopperConstants.Upwards.LowPosAngle);

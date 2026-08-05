@@ -10,6 +10,8 @@ import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Velocity;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -23,9 +25,9 @@ import frc.lib.sim.RollerSim.RollerSimConstants;
 import frc.robot.Ports;
 import frc.robot.Robot;
 
-/** Add your docs here. */
+/** Add your docs here. */  
 public class ShooterConstants {
-    public static final AngularVelocity TestShotSpeed = RotationsPerSecond.of(10);
+    public static final AngularVelocity TestShotSpeed = RotationsPerSecond.of(SmartDashboard.getNumber("Test Speed", 0));
     public static final AngularVelocity IdleSpeed = RotationsPerSecond.of(0);
     public static final AngularVelocity FerrySpeed = RotationsPerSecond.of(20);
     public static final AngularVelocity ShotSpeed = RotationsPerSecond.of(30);

@@ -11,27 +11,28 @@ import frc.lib.io.MotorIOTalonFX;
 
 public class Intake{
 
-    public static class Pivot extends ServoMotorSubsystem<MotorIOTalonFX>{
-
-		private static Pivot pivot = null;
-		public static synchronized Pivot get(){
-			if(pivot == null){
-				pivot = new Pivot();
-			}
-			return pivot;
-		}
-
-      	public static final Setpoint STOWED = Setpoint.withPositionSetpoint(IntakeConstants.Pivot.kStowAngle);
-	    public static final Setpoint DEPLOYED =
-			    Setpoint.withPositionSetpoint(IntakeConstants.Pivot.kDeployAngle);
-	    public static final Setpoint PARTIAL = Setpoint.withPositionSetpoint(IntakeConstants.Pivot.kPartiallyin);
-		private Pivot() {
-				super(IntakeConstants.Pivot.geMotorIO(), "Intake Deploy", IntakeConstants.Pivot.kEpsilonThreshold,
-					IntakeConstants.Pivot.getServoHomingConfig()
-					);
-				setCurrentPosition(IntakeConstants.Pivot.kStowAngle);
-			}
+  public static class RackAndPinion extends ServoMotorSubsystem<MotorIOTalonFX>{
+    private static RackAndPinion RackAndPinion = null;
+    public static synchronized RackAndPinion get(){
+      if(RackAndPinion == null){
+        RackAndPinion = new RackAndPinion();
+      }
+      return RackAndPinion;
     }
+
+    public static final Setpoint RETRACT = Setpoint.withPositionSetpoint(IntakeConstants.RackAndPinion.kInAngle);
+    public static final Setpoint EXTEND = Setpoint.withPositionSetpoint(IntakeConstants.RackAndPinion.kOutAngle);
+
+
+    public RackAndPinion(){
+      super(
+        IntakeConstants.RackAndPinion.getMotorIO(), 
+        "Rack and Pinon", 
+        IntakeConstants.RackAndPinion.kEpsilonThreshold);
+        setCurrentPosition(IntakeConstants.RackAndPinion.kInAngle);
+    }
+
+  }
 
 	public static class Rollers extends MotorSubsystem<MotorIOTalonFX>{
 		private static Rollers rollers = null;

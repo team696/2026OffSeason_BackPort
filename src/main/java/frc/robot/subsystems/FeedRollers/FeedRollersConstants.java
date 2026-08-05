@@ -26,7 +26,7 @@ public class FeedRollersConstants {
 
     public static AngularVelocity IdleSpeed = RotationsPerSecond.of(0);
     public static AngularVelocity RunningSpeed = RotationsPerSecond.of(20);
-    public static double kGearing;
+    public static final double kGearing = 1;
 
     public static MotorIOTalonFXConfig getConfig() {
         MotorIOTalonFXConfig config = new MotorIOTalonFXConfig();

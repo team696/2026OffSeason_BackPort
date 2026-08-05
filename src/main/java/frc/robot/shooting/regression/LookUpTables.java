@@ -12,7 +12,7 @@ public class LookUpTables {
         public static final InterpolatingDoubleTreeMap scoringvelocityLUT = new InterpolatingDoubleTreeMap();
 
         static{
-            scoringvelocityLUT.put(0.0, 0.0); //meters ,RPM
+            scoringvelocityLUT.put(0.0, 0.0); //meters ,RPS
             scoringvelocityLUT.put(1.0,0.0);
             scoringvelocityLUT.put(2.0, 0.0);
         }
@@ -32,7 +32,7 @@ public class LookUpTables {
         public static final InterpolatingDoubleTreeMap neturalzonevelocityLUT = new InterpolatingDoubleTreeMap();
 
         static{
-            neturalzonevelocityLUT.put(0.0, 0.0); //meters ,RPM
+            neturalzonevelocityLUT.put(0.0, 0.0); //meters ,RPS
             neturalzonevelocityLUT.put(1.0,0.0);
             neturalzonevelocityLUT.put(2.0, 0.0);
         }
@@ -53,7 +53,7 @@ public class LookUpTables {
         public static final InterpolatingDoubleTreeMap oppositesidevelocityLUT = new InterpolatingDoubleTreeMap();
 
         static{
-            oppositesidevelocityLUT.put(0.0, 0.0); //meters ,RPM
+            oppositesidevelocityLUT.put(0.0, 0.0); //meters ,RPS
             oppositesidevelocityLUT.put(1.0,0.0);
             oppositesidevelocityLUT.put(2.0, 0.0);
         }

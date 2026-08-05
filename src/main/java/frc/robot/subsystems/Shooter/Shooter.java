@@ -6,6 +6,7 @@ package frc.robot.subsystems.Shooter;
 
 import static edu.wpi.first.units.Units.Seconds;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.lib.bases.FlywheelMotorSubsystem;
@@ -35,12 +36,13 @@ public class Shooter extends FlywheelMotorSubsystem<MotorIOTalonFX> {
 
 
   /** Creates a new Shooter. */
-  public Shooter() {
+  private Shooter() {
     super(
       ShooterConstants.getMotorIO(),
       "Shooter",
       ShooterConstants.epsilonThreshold,
       Seconds.of(0)
     );
+    SmartDashboard.putNumber("Test Speed", 0);
   }
 }

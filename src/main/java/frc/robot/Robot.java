@@ -8,8 +8,11 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Log.SEVERITY;
+import frc.robot.subsystems.FeedRollers.FeedRollers;
+import frc.robot.subsystems.Hood.Hood;
+import frc.robot.subsystems.Hopper.Hopper;
 import frc.robot.subsystems.Intake.Intake;
-import frc.robot.subsystems.Intake.Intake.Pivot;
+import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.drive.Swerve;
 import frc.robot.subsystems.vision.Camera;
 import frc.robot.subsystems.vision.CameraConstants.PipelineConstants;
@@ -33,6 +36,18 @@ public class Robot extends TimedRobot {
 
 		Camera.get().setPipeline(PipelineConstants.APRIL_TAG);
 		Binds.Controller.bind();
+	}
+
+	@Override
+	public void robotInit(){
+		Shooter.get(); //temp
+		Intake.RackAndPinion.get(); //also temp
+		Intake.Rollers.get();
+		Hopper.Rollers.get();
+		Hopper.Upwards.get();
+		FeedRollers.get();
+		Hood.get();
+
 	}
 
 	@Override
