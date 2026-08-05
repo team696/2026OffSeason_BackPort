@@ -26,7 +26,14 @@ public class Robot extends TimedRobot {
 	public Robot() {
 
 		Swerve.get();
-		Camera.get();
+		//Camera.get();
+		Shooter.get(); //temp
+		Intake.RackAndPinion.get(); //also temp
+		Intake.Rollers.get();
+		Hopper.Rollers.get();
+		Hopper.Upwards.get();
+		FeedRollers.get();
+		Hood.get();
 
 		//Log.initialize(SEVERITY.EVERYTHING);
 		//Log.data("Swerve", Swerve.get(), SEVERITY.MINIMAL);
@@ -40,13 +47,6 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotInit(){
-		Shooter.get(); //temp
-		Intake.RackAndPinion.get(); //also temp
-		Intake.Rollers.get();
-		Hopper.Rollers.get();
-		Hopper.Upwards.get();
-		FeedRollers.get();
-		Hood.get();
 
 	}
 
