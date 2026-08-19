@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Log.SEVERITY;
+import frc.robot.commands.ShootingCommands;
 import frc.robot.subsystems.FeedRollers.FeedRollers;
 import frc.robot.subsystems.Hood.Hood;
 import frc.robot.subsystems.Hopper.Hopper;
@@ -26,7 +27,6 @@ public class Robot extends TimedRobot {
 	public Robot() {
 
 		Swerve.get();
-		//Camera.get();
 		Shooter.get(); //temp
 		Intake.RackAndPinion.get(); //also temp
 		Intake.Rollers.get();
@@ -47,7 +47,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotInit(){
-
+		SmartDashboard.putData("Testing autoaling", ShootingCommands.shoot());
 	}
 
 	@Override

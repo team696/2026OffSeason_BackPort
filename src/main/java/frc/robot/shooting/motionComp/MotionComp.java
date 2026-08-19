@@ -41,7 +41,7 @@ public class MotionComp {
     private Pose2d m_currLookAhead = new Pose2d();
 
     //TODO: need to update relase time
-    public static final Time SHOOTER_DELAY = Seconds.of(0.5);
+    public static final Time SHOOTER_DELAY = Seconds.of(0.125);
     public static final AngularVelocity YAW_INSTABILITY = DegreesPerSecond.of(180);
     public static final Angle ERROR_TOLERANCE = Degrees.of(0.1);
     public static final double STATIC_SHOT_THRESHOLD = 0.09;
@@ -153,20 +153,19 @@ public class MotionComp {
     }
     
     public Command PointToTarget(){
-
         SwerveRequest.FieldCentricFacingAngle FCFARequest = new SwerveRequest.FieldCentricFacingAngle()
         .withDeadband(RobotConstants.DriveConstants.MaxSpeed *0.05)
         .withRotationalDeadband(RobotConstants.DriveConstants.MaxSpeed*0.05)
-        .withHeadingPID(4, 0, 0);
+        .withHeadingPID(3, 0, 0);
  
        return Commands.run(()->{ 
         Swerve.get().fieldSim.getObject("Target Pose").setPose(getTarget().getX(),getTarget().getY(),  getTarget().getAngle()); 
 
         Swerve.get().setControl(
             FCFARequest
-            .withVelocityX(Controls.xboxController.leftJoyX.getAsDouble()/2*RobotConstants.DriveConstants.MaxSpeed)
-            .withVelocityY(Controls.xboxController.leftJoyY.getAsDouble()/2*RobotConstants.DriveConstants.MaxSpeed)
-            .withTargetDirection(atan2(getBaseTranslation().minus(getTarget()))));});
+            .withVelocityX(Controls.xboxController.leftJoyY.getAsDouble()/2*RobotConstants.DriveConstants.MaxSpeed)
+            .withVelocityY(Controls.xboxController.leftJoyX.getAsDouble()/2*RobotConstants.DriveConstants.MaxSpeed)
+            .withTargetDirection(atan2(getTarget().minus(getBaseTranslation()))));});
     }
 
 
