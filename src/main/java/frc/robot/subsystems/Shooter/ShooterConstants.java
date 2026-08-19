@@ -27,7 +27,7 @@ import frc.robot.Robot;
 
 /** Add your docs here. */  
 public class ShooterConstants {
-    public static final AngularVelocity TestShotSpeed = RotationsPerSecond.of(SmartDashboard.getNumber("Test Speed", 0));
+    public static AngularVelocity TestShotSpeed = RotationsPerSecond.of(SmartDashboard.getNumber("Test Speed", 0));
     public static final AngularVelocity IdleSpeed = RotationsPerSecond.of(0);
     public static final AngularVelocity FerrySpeed = RotationsPerSecond.of(20);
     public static final AngularVelocity ShotSpeed = RotationsPerSecond.of(30);

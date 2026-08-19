@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.Hood;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.lib.bases.ServoMotorSubsystem;
@@ -23,12 +24,15 @@ public class Hood extends ServoMotorSubsystem<MotorIOTalonFX> {
 
     public static final Setpoint STOW = Setpoint.withPositionSetpoint(HoodConstants.kMinAngle);
     public static final Setpoint MAX_ANGLE = Setpoint.withPositionSetpoint(HoodConstants.kMaxAngle);
+    public static Setpoint TEST_ANGLE = Setpoint.withPositionSetpoint(HoodConstants.TestAngle);
 
 
   /** Creates a new Hood. */
   private Hood() {
     super(HoodConstants.getMotorIO(), "Hood", HoodConstants.kEpsilonThreshold, HoodConstants.getServoConfig());
     setCurrentPosition(HoodConstants.kMinAngle);
+    SmartDashboard.putNumber("Test Angle", 0);
   }
+
 
 }

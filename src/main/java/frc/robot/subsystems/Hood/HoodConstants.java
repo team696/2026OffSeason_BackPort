@@ -9,6 +9,7 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -29,6 +30,7 @@ public class HoodConstants {
     
     public static final Angle kMaxAngle = Units.Degrees.of(150);
     public static final Angle kMinAngle = Units.Degrees.of(15);
+    public static Angle TestAngle = Units.Degrees.of(SmartDashboard.getNumber("Test Angle", 0));
 
     public static final Angle kEpsilonThreshold = Units.Degrees.of(0.5);
     

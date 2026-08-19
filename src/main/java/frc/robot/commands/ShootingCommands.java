@@ -26,6 +26,25 @@ public class ShootingCommands {
         );
     }
 
+    public static Command testspinUp() {
+        Hood.get();
+        Shooter.get();
+        return Commands.parallel(
+            Shooter.get().run(() -> 
+                Shooter.get().setpointCommand(Shooter.TESTSHOT)),
+            Hood.get().run(() -> 
+                Hood.get().setpointCommand(Hood.TEST_ANGLE))
+        );
+    }
+
+    
+    public static Command testShot(){
+        return Commands.parallel(
+            testspinUp(),
+            FeedRollers.get().setpointCommand(FeedRollers.RUNNING)
+        );
+    }
+
     public static Command shoot(){
         return Commands.parallel(
             Shooting.mInstance.getMotionComp().PointToTarget(),

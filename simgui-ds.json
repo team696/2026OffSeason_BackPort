@@ -1,4 +1,14 @@
 {
+  "Keyboard 0 Settings": {
+    "window": {
+      "visible": true
+    }
+  },
+  "System Joysticks": {
+    "window": {
+      "enabled": false
+    }
+  },
   "keyboardJoysticks": [
     {
       "axisConfig": [
@@ -88,5 +98,13 @@
       "buttonCount": 0,
       "povCount": 0
     }
-  ]
+  ],
+  "robotJoysticks": [
+    {
+      "guid": "78696e70757401000000000000000000",
+      "useGamepad": true
+    }
+  ],
+  "useEnableDisableHotkeys": true,
+  "zeroDisconnectedJoysticks": false
 }

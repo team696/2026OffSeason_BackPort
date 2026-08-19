@@ -19,9 +19,9 @@ public class Binds {
 		public static final void bind() {
 			Swerve.get().setDefaultCommand(Swerve.get().applyRequest(
 				(()->swerveFCDriveRequest
-				.withVelocityX(Controls.xboxController.leftJoyY.getAsDouble())
-				.withVelocityY(Controls.xboxController.leftJoyX.getAsDouble())
-				.withRotationalRate(Controls.xboxController.rightJoyX.getAsDouble()))
+				.withVelocityX(Controls.xboxController.leftJoyY.getAsDouble()*2)
+				.withVelocityY(Controls.xboxController.leftJoyX.getAsDouble()*2)
+				.withRotationalRate(Controls.xboxController.rightJoyX.getAsDouble()*2))
 			));
 		}
 	}

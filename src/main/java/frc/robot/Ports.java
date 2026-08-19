@@ -3,7 +3,7 @@ package frc.robot;
 import com.ctre.phoenix6.CANBus;
 
 public enum Ports {
-	INTAKE_ROLLERS_MAIN(8, RobotConstants.RIOBUS),
+	INTAKE_ROLLERS_MAIN(26, RobotConstants.RIOBUS),
 	INTAKE_ROLLERS_FOLLOWER(9, RobotConstants.RIOBUS),
 	INTAKE_PIVOT(10, RobotConstants.CANIVORE_BUS),
 	HOPPER_ROLLERS(11, RobotConstants.CANIVORE_BUS),
