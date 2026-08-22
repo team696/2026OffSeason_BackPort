@@ -2,8 +2,6 @@ package frc.robot.shooting;
 
 import static edu.wpi.first.units.Units.Meters;
 
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import frc.lib.io.MotorIO.Setpoint;
 import frc.robot.shooting.motionComp.MotionComp;

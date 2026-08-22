@@ -4,6 +4,10 @@
 
 package frc.robot.subsystems.Intake;
 
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.bases.MotorSubsystem;
 import frc.lib.bases.ServoMotorSubsystem;
 import frc.lib.io.MotorIO.Setpoint;
@@ -30,7 +34,16 @@ public class Intake{
         "Rack and Pinon", 
         IntakeConstants.RackAndPinion.kEpsilonThreshold);
         setCurrentPosition(IntakeConstants.RackAndPinion.kInAngle);
+
+;
+
     }
+
+    @Override
+    public void periodic() {
+    super.periodic();
+      SmartDashboard.putNumber("Rack and Pinion Pose", this.getPosition().in(Rotations));
+  }
 
   }
 
@@ -50,6 +63,11 @@ public class Intake{
 			super(IntakeConstants.Roller.getMotorIO(), "Intake Roller");
 		}
 
+    @Override
+    public void periodic() {
+      super.periodic();
+      SmartDashboard.putNumber("Intake Roller Velocity", this.getVelocity().in(RotationsPerSecond));
+    }
 
 	}
 

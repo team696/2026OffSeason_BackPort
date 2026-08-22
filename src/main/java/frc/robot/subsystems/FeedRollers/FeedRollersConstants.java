@@ -4,10 +4,8 @@
 
 package frc.robot.subsystems.FeedRollers;
 
-import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
-import edu.wpi.first.math.estimator.AngleStatistics;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.AngularVelocity;
 

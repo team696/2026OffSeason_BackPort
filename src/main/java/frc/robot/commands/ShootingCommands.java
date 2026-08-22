@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.shooting.Shooting;
 import frc.robot.shooting.ShootingSetpoint;
-import frc.robot.shooting.motionComp.MotionComp;
+import frc.robot.shooting.ShootingState;
 import frc.robot.subsystems.FeedRollers.FeedRollers;
 import frc.robot.subsystems.Hood.Hood;
 import frc.robot.subsystems.Shooter.Shooter;
@@ -46,6 +46,7 @@ public class ShootingCommands {
     }
 
     public static Command shoot(){
+        Shooting.setState(ShootingState.HUB);
         return Commands.parallel(
             Shooting.mInstance.getMotionComp().PointToTarget(),
             spinUp(),
@@ -53,6 +54,17 @@ public class ShootingCommands {
                 Commands.waitUntil(Shooting.mInstance::shotVerified),
                 FeedRollers.get().setpointCommand(FeedRollers.RUNNING)
             )
+        );
+    }
+
+    public static Command Pass(){
+        Shooting.setState(ShootingState.NEUTRAL_FERRY);
+        return Commands.parallel(
+            Shooting.mInstance.getMotionComp().PointToTarget(),
+            spinUp(),
+            Commands.sequence(
+            Commands.waitUntil(Shooting.mInstance::shotVerified),
+            FeedRollers.get().setpointCommand(FeedRollers.RUNNING))
         );
     }
 

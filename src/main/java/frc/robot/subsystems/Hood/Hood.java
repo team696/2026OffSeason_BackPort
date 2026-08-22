@@ -4,9 +4,11 @@
 
 package frc.robot.subsystems.Hood;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import static edu.wpi.first.units.Units.Rotations;
 
+import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.bases.ServoMotorSubsystem;
 import frc.lib.io.MotorIOTalonFX;
 import frc.lib.io.MotorIO.Setpoint;
@@ -31,8 +33,23 @@ public class Hood extends ServoMotorSubsystem<MotorIOTalonFX> {
   private Hood() {
     super(HoodConstants.getMotorIO(), "Hood", HoodConstants.kEpsilonThreshold, HoodConstants.getServoConfig());
     setCurrentPosition(HoodConstants.kMinAngle);
-    SmartDashboard.putNumber("Test Angle", 0);
+
   }
+
+  // Inside Hood.java
+  public Command getTestShotCommand() {
+    return followSetpointCommand(() -> 
+        Setpoint.withPositionSetpoint(
+            Units.Degrees.of(SmartDashboard.getNumber("Test Angle", 0))
+        )
+    );
+}
+
+      @Override
+    public void periodic() {
+      super.periodic();
+      SmartDashboard.putNumber("Hood Angle", this.getPosition().in(Rotations));
+    }
 
 
 }

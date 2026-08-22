@@ -7,7 +7,6 @@ package frc.robot.subsystems.Intake;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Voltage;
@@ -16,19 +15,12 @@ import static edu.wpi.first.units.Units.Amps;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
-
-import frc.lib.bases.ServoMotorSubsystem.ServoHomingConfig;
 import frc.lib.io.MotorIOTalonFX;
 import frc.lib.io.MotorIOTalonFXSim;
 import frc.lib.io.MotorIOTalonFX.MotorIOTalonFXConfig;
 import frc.lib.sim.LinearSim;
 import frc.lib.sim.LinearSim.LinearSimConstants;
-import frc.lib.sim.PivotSim.PivotSimConstants;
-import frc.lib.sim.PivotSimHelper;
 import frc.lib.sim.RollerSim;
 import frc.lib.sim.RollerSim.RollerSimConstants;
 import frc.lib.util.Util.DistanceAngleConverter;
@@ -61,7 +53,7 @@ public class IntakeConstants {
     public static final TalonFXConfiguration getTalonFXConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
 
-        config.Slot0.kP = 1;
+        config.Slot0.kP = 15;
         config.Slot0.kI = 0;
         config.Slot0.kD = 0;
 
@@ -78,8 +70,8 @@ public class IntakeConstants {
     public static MotorIOTalonFXConfig getIOConfig(){
         MotorIOTalonFXConfig config = new MotorIOTalonFXConfig();
         config.mainConfig = getTalonFXConfig();
-        config.mainID = Ports.HOPPER_ROLLERS.id;
-        config.mainBus = Ports.HOPPER_ROLLERS.bus;
+        config.mainID = Ports.INTAKE_RACK_AND_PINION.id;
+        config.mainBus = Ports.INTAKE_RACK_AND_PINION.bus;
         config.time = Units.Seconds;
         config.unit = Units.Degrees;
         return config;

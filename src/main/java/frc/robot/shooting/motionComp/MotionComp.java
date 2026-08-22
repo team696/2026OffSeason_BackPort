@@ -24,11 +24,8 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.lib.sim.field.rebuilt.FieldSim;
-import frc.lib.util.FieldLayout;
 import frc.robot.Controls;
 import frc.robot.RobotConstants;
 import frc.robot.shooting.Shooting;
@@ -38,7 +35,7 @@ import frc.robot.subsystems.drive.Swerve;
 /** Add your docs here. */
 public class MotionComp {
     private final Transform2d m_shooterOffset = RobotConstants.SHOOTER_OFFSET;
-    private Pose2d m_currLookAhead = new Pose2d();
+    //private Pose2d m_currLookAhead = new Pose2d();
 
     //TODO: need to update relase time
     public static final Time SHOOTER_DELAY = Seconds.of(0.125);

@@ -1,11 +1,7 @@
 package frc.robot.shooting;
 
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.shooting.motionComp.MotionComp;
-import frc.robot.shooting.shotverifier.ShotVerify;
 import frc.robot.shooting.shotverifier.ShotVerify;
 
 
@@ -15,6 +11,8 @@ public class Shooting {
     public static final Shooting mInstance = new Shooting();
 
     private final MotionComp motionComp = new MotionComp();
+
+    public Command setState;
 
     private static ShootingState state = ShootingState.HUB;
     

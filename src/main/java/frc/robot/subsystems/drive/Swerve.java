@@ -8,13 +8,12 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
-import frc.lib.bases.CameraSubsystem;
 import frc.robot.subsystems.drive.TunerConstants.TunerSwerveDrivetrain;
 
 import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.util.sendable.Sendable;
@@ -154,4 +153,18 @@ public final class Swerve extends TunerSwerveDrivetrain implements Sendable, Sub
         simUpdate.setName("Swerve Simulation Update");
         simUpdate.startPeriodic(0.005);
     }
+    
+    
+	public Pose2d getPose(){
+		return this.getState().Pose;
+	}
+
+    public double distTo(Translation2d position) {
+        return getPose().getTranslation().getDistance(position);
+    }
+
+
+  public double distTo(Pose2d position) {
+    return distTo(position.getTranslation());
+  }
 }

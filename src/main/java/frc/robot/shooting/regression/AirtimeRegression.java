@@ -9,7 +9,6 @@ import static edu.wpi.first.units.Units.Meter;
 import static edu.wpi.first.units.Units.Second;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import edu.wpi.first.units.DistanceUnit;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
 

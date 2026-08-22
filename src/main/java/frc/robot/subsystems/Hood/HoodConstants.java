@@ -28,8 +28,8 @@ import frc.robot.Robot;
 public class HoodConstants {
     public static final double kGearing = 1;
     
-    public static final Angle kMaxAngle = Units.Degrees.of(150);
-    public static final Angle kMinAngle = Units.Degrees.of(15);
+    public static final Angle kMaxAngle = Units.Degrees.of(145);
+    public static final Angle kMinAngle = Units.Degrees.of(0);
     public static Angle TestAngle = Units.Degrees.of(SmartDashboard.getNumber("Test Angle", 0));
 
     public static final Angle kEpsilonThreshold = Units.Degrees.of(0.5);
@@ -45,7 +45,7 @@ public class HoodConstants {
     public static final TalonFXConfiguration getTalonFXConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
         
-        config.Slot0.kP = 1;
+        config.Slot0.kP = 7;
         config.Slot0.kI = 0;
         config.Slot0.kD = 0;
 

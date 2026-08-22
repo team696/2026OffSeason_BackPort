@@ -2,12 +2,8 @@ package frc.robot;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-
-import frc.robot.commands.ShootingCommands;
 import frc.robot.subsystems.drive.Swerve;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Binds {

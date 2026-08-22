@@ -4,9 +4,10 @@
 
 package frc.robot;
 
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import frc.lib.util.FieldLayout;
 import frc.robot.Log.SEVERITY;
 import frc.robot.commands.ShootingCommands;
 import frc.robot.subsystems.FeedRollers.FeedRollers;
@@ -35,11 +36,10 @@ public class Robot extends TimedRobot {
 		FeedRollers.get();
 		Hood.get();
 
-		//Log.initialize(SEVERITY.EVERYTHING);
-		//Log.data("Swerve", Swerve.get(), SEVERITY.MINIMAL);
+		Log.initialize(SEVERITY.EVERYTHING);
+		Log.data("Swerve", Swerve.get(), SEVERITY.MINIMAL);
 
-		// Auto.initialize(
-		// 		new NamedCommand("PRINT", new InstantCommand(() -> System.out.println(1))));
+		//Auto.initialize(null);
 
 		Camera.get().setPipeline(PipelineConstants.APRIL_TAG);
 		Binds.Controller.bind();
@@ -47,8 +47,28 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotInit(){
-		SmartDashboard.putData("Testing autoaling", ShootingCommands.shoot());
-	}
+		SmartDashboard.putData("Testing autoalign", ShootingCommands.shoot());
+		SmartDashboard.putData("Testing Ferry", ShootingCommands.Pass());
+		SmartDashboard.putData("Testing Intake", Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.EXTEND));
+		SmartDashboard.putData("Retracting Intake", Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.RETRACT));
+		SmartDashboard.putData("Testing Roller Intake", Intake.Rollers.get().setpointCommand(Intake.Rollers.INTAKE));
+		SmartDashboard.putData("Testing Roller Outtake", Intake.Rollers.get().setpointCommand(Intake.Rollers.OUTAKE));
+		SmartDashboard.putData("Stop Intake Roller", Intake.Rollers.get().setpointCommand(Intake.Rollers.IDLE));
+		SmartDashboard.putData("Stop intake", Intake.Rollers.get().setpointCommand(Intake.Rollers.IDLE));
+		SmartDashboard.putData("Hood Test", Hood.get().getTestShotCommand());
+		SmartDashboard.putData("Hood Zero", Hood.get().setpointCommand(Hood.STOW));
+		SmartDashboard.putData("Shooter Speed", Shooter.get().getTestShot());
+		SmartDashboard.putData("Shooter Stop", Shooter.get().setpointCommand(Shooter.IDLE));
+		SmartDashboard.putData("Hopper Roller Intake", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.INTAKE));
+		SmartDashboard.putData("Hopper Roller Output", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.OUTAKE));
+		SmartDashboard.putData("Hopper Roller Slow Intake", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.SLOW_INTAKE));
+		SmartDashboard.putData("Hopper Roller Stop", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.IDLE));
+		SmartDashboard.putData("Upward Extending Out", Hopper.Upwards.get().setpointCommand(Hopper.Upwards.MOVE_HIGH));
+		SmartDashboard.putData("Upward Extending In", Hopper.Upwards.get().setpointCommand(Hopper.Upwards.MOVE_LOW));
+		SmartDashboard.putData("Test Feed Rollers", FeedRollers.get().setpointCommand(FeedRollers.RUNNING));
+		SmartDashboard.putData("Feed Rollers stop", FeedRollers.get().setpointCommand(FeedRollers.IDLE));
+		SmartDashboard.putNumber("Distance to Hub", Swerve.get().distTo(FieldLayout.kBlueHub));
+	} 
 
 	@Override
 	public void robotPeriodic() {
@@ -57,11 +77,11 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousInit() {
-		// m_autonomousCommand = Auto.getSelectedAuto();
+		m_autonomousCommand = Auto.getSelectedAuto();
 
-		// if (m_autonomousCommand != null) {
-		// 	m_autonomousCommand.schedule();
-		// }
+		if (m_autonomousCommand != null) {
+			m_autonomousCommand.schedule();
+		}
 	}
 
 	@Override
