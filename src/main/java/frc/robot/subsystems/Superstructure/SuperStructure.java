@@ -12,11 +12,11 @@ import frc.robot.commands.ShootingCommands;
 /** Add your docs here. */
 public class SuperStructure extends SubsystemBase{
 
-    public Command AutoAlgin(){
+    public static Command AutoAlgin(){
         return ShootingCommands.AutoAlgin();
     }
 
-    public Command Shooting(){
+    public static Command Shooting(){
         return Commands.parallel(
             ShootingCommands.shoot(),
             SuperStructureConstants.runHopperRoller(),
@@ -24,13 +24,13 @@ public class SuperStructure extends SubsystemBase{
         );
     }
 
-    public Command Passing(){
+    public static Command Passing(){
         return Commands.parallel(
             ShootingCommands.Pass(),
             SuperStructureConstants.runHopperRoller()
         );
     }
 
-    
+
 
 }
