@@ -16,7 +16,6 @@ import frc.robot.subsystems.Shooter.Shooter;
 /** Add your docs here. */
 public class ShootingCommands {
 
-
     public static Command spinUp() {
         return Commands.parallel(
             Shooter.get().run(() -> 
@@ -45,10 +44,14 @@ public class ShootingCommands {
         );
     }
 
+    public static Command AutoAlgin(){
+        Shooting.setState(ShootingState.HUB);
+        return Commands.run(()->{Shooting.mInstance.getMotionComp().PointToTarget();});
+    }
+
     public static Command shoot(){
         Shooting.setState(ShootingState.HUB);
         return Commands.parallel(
-            Shooting.mInstance.getMotionComp().PointToTarget(),
             spinUp(),
             Commands.sequence(
                 Commands.waitUntil(Shooting.mInstance::shotVerified),
