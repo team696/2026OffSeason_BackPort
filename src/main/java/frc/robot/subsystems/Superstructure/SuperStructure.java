@@ -4,5 +4,34 @@
 
 package frc.robot.subsystems.Superstructure;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.Hopper.Hopper;
+import frc.robot.subsystems.Intake.Intake;
+
 /** Add your docs here. */
-public class SuperStructure {}
+public class SuperStructure {
+    public Command RunIntake() {
+        return Commands.parallel(
+            Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.EXTEND),
+            Intake.Rollers.get().setpointCommand(Intake.Rollers.INTAKE)
+        );
+    }
+
+    public Command Outtake() {
+        return Commands.parallel(
+            Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.RETRACT),
+            Intake.Rollers.get().setpointCommand(Intake.Rollers.OUTAKE)
+        );
+    }
+    
+    public Command upwardExtendingHopper() {
+        return Hopper.Upwards.get().setpointCommand(Hopper.Upwards.MOVE_HIGH);
+    }
+
+    public Command lowerExtendingHopper() {
+        return Hopper.Upwards.get().setpointCommand(Hopper.Upwards.MOVE_LOW);
+    }
+
+    
+}
