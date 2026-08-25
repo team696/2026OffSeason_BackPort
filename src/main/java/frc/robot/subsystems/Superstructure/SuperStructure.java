@@ -24,6 +24,13 @@ public class SuperStructure extends SubsystemBase{
         );
     }
 
+    public Command ShootingStop(){
+        return Commands.parallel(
+            ShootingCommands.Stop(),
+            SuperStructureConstants.StopRoller()
+        );
+    }
+
     public Command Passing(){
         return Commands.parallel(
             ShootingCommands.Pass(),
