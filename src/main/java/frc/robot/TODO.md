@@ -49,6 +49,43 @@
 -SuperStructure:
     -Research Superstructure and how 1678's structures their class[]
     -Implement it(again will elaborate once I figure this out)[]
+    - Run intake
+        - stick out rack in pintoin && rollers
+    - Take in balls
+        - Run intake && Run Hopper rolls
+    - Shooting 
+        - Motsoin comp shooting && Hopper rollers running && intake rack and pinton osolation && Lower hopper
+    - Outtake
+        - Review run intake
+    - Upward Exting
+        - Raise hopper
+    - Auto Alline
+        - Mostion comp rotate (only drivebase) 
+    - Farry Shooting (passing)
+        - 
+    - Lower hopper
+        - sets hopper to low
+    - User actions 
+        - Standard drivebase
+        - Button: Shoots 
+            - Shooting
+        - Button: AutoAline
+            - Auto Alline
+        - Button: Farry Shooting Right
+            - Farry Shooting Right
+        - Button: Farry Shooting Left
+            - Farry Shooting Left
+        - Button: Autoline to the hub
+            - Auto Aline
+        - Button: Intake
+            - Run intake
+        - Button: Outtake
+            - Run Outtake
+        - Button: Flip state
+            - IF up
+                - Lower
+            - IF down
+                - Upper
 
 -wpilibj2.commands:
     -3 Axis PID[]
