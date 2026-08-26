@@ -49,21 +49,21 @@
 -SuperStructure:
     -Research Superstructure and how 1678's structures their class[]
     -Implement it(again will elaborate once I figure this out)[]
-    - Run intake P 
+    - Run intake P  X
         - stick out rack in pintoin && rollers
     - Take in balls P
         - Run intake && Run Hopper rolls
     - Shooting B
         - Motsoin comp shooting && Hopper rollers running && intake rack and pinton osolation && Lower hopper
-    - Outtake P
+    - Outtake P X
         - Review run intake
-    - Upward Exting P
+    - Upward Exting P X
         - Raise hopper
     - Auto Alline B
         - Mostion comp rotate (only drivebase) 
     - Farry Shooting (passing) B
         - 
-    - Lower hopper P
+    - Lower hopper P X
         - sets hopper to low
     - User actions 
         - Standard drivebase
