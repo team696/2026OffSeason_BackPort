@@ -26,6 +26,7 @@ public class Intake{
 
     public static final Setpoint RETRACT = Setpoint.withPositionSetpoint(IntakeConstants.RackAndPinion.kInAngle);
     public static final Setpoint EXTEND = Setpoint.withPositionSetpoint(IntakeConstants.RackAndPinion.kOutAngle);
+    public static final Setpoint HALF = Setpoint.withPositionSetpoint(IntakeConstants.RackAndPinion.kOutAngle.div(2));
 
 
     public RackAndPinion(){

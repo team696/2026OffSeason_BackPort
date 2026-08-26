@@ -13,6 +13,8 @@ import frc.robot.subsystems.drive.Drive;
 import java.util.List;
 import java.util.Optional;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class AprilTagLimelightCameraIO extends LimelightCameraIO {
 
 	private Optional<VisionEstimate> lastGivenEstimate = Optional.empty();
@@ -31,7 +33,7 @@ public class AprilTagLimelightCameraIO extends LimelightCameraIO {
 	@Override
 	public Optional<VisionEstimate> getRobotPose() {
 		updateGyro();
-		PoseEstimate limelightEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(config.name);
+		PoseEstimate limelightEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(config.name);
 		if (limelightEstimate == null
 				|| (limelightEstimate.pose.getX() == 0 && limelightEstimate.pose.getY() == 0)
 				|| limelightEstimate.tagCount < 1)
@@ -53,7 +55,12 @@ public class AprilTagLimelightCameraIO extends LimelightCameraIO {
 	@Override
 	public Optional<List<VisionEstimate>> getLastEstimates() {
 		updateGyro();
-		PoseEstimate limelightEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(config.name);
+		PoseEstimate limelightEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(config.name);
+
+		  if (limelightEstimate != null && limelightEstimate.rawFiducials.length > 0) {
+        SmartDashboard.putNumber("Debug/Ambiguity", limelightEstimate.rawFiducials[0].ambiguity);
+    		}
+    	SmartDashboard.putNumber("Debug/TagCount", limelightEstimate == null ? -1 : limelightEstimate.tagCount);
 		if (limelightEstimate == null
 				|| (limelightEstimate.pose.getX() == 0
 						|| limelightEstimate.pose.getY() == 0

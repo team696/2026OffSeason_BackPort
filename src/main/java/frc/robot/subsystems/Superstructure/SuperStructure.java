@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.Hopper.Hopper;
 import frc.robot.subsystems.Intake.Intake;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.ShootingCommands;
 
 /** Add your docs here. */
 public class SuperStructure {
@@ -32,6 +34,29 @@ public class SuperStructure {
     public Command lowerExtendingHopper() {
         return Hopper.Upwards.get().setpointCommand(Hopper.Upwards.MOVE_LOW);
     }
+      public static Command AutoAlgin(){
+        return ShootingCommands.AutoAlgin();
+    }
 
-    
+    public static Command Shooting(){
+        return Commands.parallel(
+            ShootingCommands.shoot(),
+            SuperStructureConstants.runHopperRoller(),
+            SuperStructureConstants.OscilateIntake()
+        );
+    }
+
+    public Command ShootingStop(){
+        return Commands.parallel(
+            ShootingCommands.Stop(),
+            SuperStructureConstants.StopRoller()
+        );
+    }
+
+    public Command Passing(){
+        return Commands.parallel(
+            ShootingCommands.Pass(),
+            SuperStructureConstants.runHopperRoller()
+        );
+    }
 }
