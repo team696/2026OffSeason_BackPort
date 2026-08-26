@@ -4,5 +4,40 @@
 
 package frc.robot.subsystems.Superstructure;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.ShootingCommands;
+
 /** Add your docs here. */
-public class SuperStructure {}
+public class SuperStructure extends SubsystemBase {
+
+    public static Command AutoAlgin(){
+        return ShootingCommands.AutoAlgin();
+    }
+
+    public static Command Shooting(){
+        return Commands.parallel(
+            ShootingCommands.shoot(),
+            SuperStructureConstants.runHopperRoller(),
+            SuperStructureConstants.OscilateIntake()
+        );
+    }
+
+    public Command ShootingStop(){
+        return Commands.parallel(
+            ShootingCommands.Stop(),
+            SuperStructureConstants.StopRoller()
+        );
+    }
+
+    public Command Passing(){
+        return Commands.parallel(
+            ShootingCommands.Pass(),
+            SuperStructureConstants.runHopperRoller()
+        );
+    }
+
+
+
+}

@@ -43,12 +43,12 @@ public class CameraConstants {
         // Necessary for stuff like object detection and simulation 
         public static final Pose3d OFFSET_FROM_CENTER = new Pose3d(
             Inches.of(0.0),   // x — forward/back from center
-            Inches.of(8.6875),   // y — left/right from center
+            Inches.of(-11),   // y — left/right from center
             Inches.of(0.0),   // z — height from ground
             new Rotation3d(
                 Degrees.of(0.0),   // roll
                 Degrees.of(5.0),   // pitch — angle camera tilts up/down
-                Degrees.of(90.0))); // yaw — angle camera faces left/right
+                Degrees.of(180.0))); // yaw — angle camera faces left/right
 
 
             //Standard Limelight set up, even a monkey can understand

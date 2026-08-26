@@ -15,6 +15,7 @@ import frc.robot.subsystems.Hood.Hood;
 import frc.robot.subsystems.Hopper.Hopper;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Shooter.Shooter;
+import frc.robot.subsystems.Superstructure.SuperStructure;
 import frc.robot.subsystems.drive.Swerve;
 import frc.robot.subsystems.vision.Camera;
 import frc.robot.subsystems.vision.CameraConstants.PipelineConstants;
@@ -28,13 +29,13 @@ public class Robot extends TimedRobot {
 	public Robot() {
 
 		Swerve.get();
-		Shooter.get(); //temp
-		Intake.RackAndPinion.get(); //also temp
-		Intake.Rollers.get();
-		Hopper.Rollers.get();
-		Hopper.Upwards.get();
-		FeedRollers.get();
-		Hood.get();
+		// Shooter.get(); //temp
+		// Intake.RackAndPinion.get(); //also temp
+		// Intake.Rollers.get();
+		// Hopper.Rollers.get();
+		// Hopper.Upwards.get();
+		// FeedRollers.get();
+		// Hood.get();
 
 		Log.initialize(SEVERITY.EVERYTHING);
 		Log.data("Swerve", Swerve.get(), SEVERITY.MINIMAL);
@@ -47,27 +48,31 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotInit(){
-		SmartDashboard.putData("Testing autoalign", ShootingCommands.shoot());
-		SmartDashboard.putData("Testing Ferry", ShootingCommands.Pass());
-		SmartDashboard.putData("Testing Intake", Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.EXTEND));
-		SmartDashboard.putData("Retracting Intake", Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.RETRACT));
-		SmartDashboard.putData("Testing Roller Intake", Intake.Rollers.get().setpointCommand(Intake.Rollers.INTAKE));
-		SmartDashboard.putData("Testing Roller Outtake", Intake.Rollers.get().setpointCommand(Intake.Rollers.OUTAKE));
-		SmartDashboard.putData("Stop Intake Roller", Intake.Rollers.get().setpointCommand(Intake.Rollers.IDLE));
-		SmartDashboard.putData("Stop intake", Intake.Rollers.get().setpointCommand(Intake.Rollers.IDLE));
-		SmartDashboard.putData("Hood Test", Hood.get().getTestShotCommand());
-		SmartDashboard.putData("Hood Zero", Hood.get().setpointCommand(Hood.STOW));
-		SmartDashboard.putData("Shooter Speed", Shooter.get().getTestShot());
-		SmartDashboard.putData("Shooter Stop", Shooter.get().setpointCommand(Shooter.IDLE));
-		SmartDashboard.putData("Hopper Roller Intake", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.INTAKE));
-		SmartDashboard.putData("Hopper Roller Output", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.OUTAKE));
-		SmartDashboard.putData("Hopper Roller Slow Intake", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.SLOW_INTAKE));
-		SmartDashboard.putData("Hopper Roller Stop", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.IDLE));
-		SmartDashboard.putData("Upward Extending Out", Hopper.Upwards.get().setpointCommand(Hopper.Upwards.MOVE_HIGH));
-		SmartDashboard.putData("Upward Extending In", Hopper.Upwards.get().setpointCommand(Hopper.Upwards.MOVE_LOW));
-		SmartDashboard.putData("Test Feed Rollers", FeedRollers.get().setpointCommand(FeedRollers.RUNNING));
-		SmartDashboard.putData("Feed Rollers stop", FeedRollers.get().setpointCommand(FeedRollers.IDLE));
-		SmartDashboard.putNumber("Distance to Hub", Swerve.get().distTo(FieldLayout.kBlueHub));
+		// SmartDashboard.putData("Testing autoalign", ShootingCommands.shoot());
+		// SmartDashboard.putData("Testing Ferry", ShootingCommands.Pass());
+		// SmartDashboard.putData("Testing Intake", Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.EXTEND));
+		// SmartDashboard.putData("Retracting Intake", Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.RETRACT));
+		// SmartDashboard.putData("Testing Roller Intake", Intake.Rollers.get().setpointCommand(Intake.Rollers.INTAKE));
+		// SmartDashboard.putData("Testing Roller Outtake", Intake.Rollers.get().setpointCommand(Intake.Rollers.OUTAKE));
+		// SmartDashboard.putData("Stop Intake Roller", Intake.Rollers.get().setpointCommand(Intake.Rollers.IDLE));
+		// SmartDashboard.putData("Stop intake", Intake.Rollers.get().setpointCommand(Intake.Rollers.IDLE));
+		// SmartDashboard.putData("Hood Test", Hood.get().getTestShotCommand());
+		// SmartDashboard.putData("Hood Zero", Hood.get().setpointCommand(Hood.STOW));
+		// SmartDashboard.putData("Shooter Speed", Shooter.get().getTestShot());
+		// SmartDashboard.putData("Shooter Stop", Shooter.get().setpointCommand(Shooter.IDLE));
+		// SmartDashboard.putData("Hopper Roller Intake", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.INTAKE));
+		// SmartDashboard.putData("Hopper Roller Output", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.OUTAKE));
+		// SmartDashboard.putData("Hopper Roller Slow Intake", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.SLOW_INTAKE));
+		// SmartDashboard.putData("Hopper Roller Stop", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.IDLE));
+		// SmartDashboard.putData("Upward Extending Out", Hopper.Upwards.get().setpointCommand(Hopper.Upwards.MOVE_HIGH));
+		// SmartDashboard.putData("Upward Extending In", Hopper.Upwards.get().setpointCommand(Hopper.Upwards.MOVE_LOW));
+		// SmartDashboard.putData("Test Feed Rollers", FeedRollers.get().setpointCommand(FeedRollers.RUNNING));
+		// SmartDashboard.putData("Feed Rollers stop", FeedRollers.get().setpointCommand(FeedRollers.IDLE));
+		// SmartDashboard.putNumber("Distance to Hub", Swerve.get().distTo(FieldLayout.kBlueHub));
+
+		// SmartDashboard.putData("Testing Shooting Sequence", SuperStructure.Shooting());
+		// SmartDashboard.putData("Testing Auto Algin Sequence", SuperStructure.AutoAlgin());
+		// SmartDashboard.putData("Testing Passing", SuperStructure.Passing());
 	} 
 
 	@Override
