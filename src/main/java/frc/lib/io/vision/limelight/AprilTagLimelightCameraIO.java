@@ -24,7 +24,7 @@ public class AprilTagLimelightCameraIO extends LimelightCameraIO {
 	}
 
 	private void updateGyro() {
-		LimelightHelpers.SetRobotOrientation(
+		LimelightHelpers.SetRobotOrientation_NoFlush(
 				config.name, Drive.mInstance.getPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
 	}
 

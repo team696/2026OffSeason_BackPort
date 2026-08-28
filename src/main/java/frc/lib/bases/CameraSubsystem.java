@@ -43,6 +43,8 @@ public class CameraSubsystem extends SubsystemBase {
 	private int numPoseStableUpdates = 0;
 	private ArrayList<VisionGamePiece> tracker = new ArrayList<>();
 
+	private ArrayList<VisionGamePiece> lastDetections = new ArrayList<>();
+
 	private Vector<N3> m_deviations;
 
 	private Optional<VisionEstimate> lastEstimate = Optional.empty();
@@ -57,6 +59,7 @@ public class CameraSubsystem extends SubsystemBase {
 
 	private void updateDetection() {
 		ArrayList<VisionGamePiece> all = getAllDetections();
+		lastDetections = all;
 		if (all.size() == 0) return;
 		Time now = Seconds.of(Timer.getFPGATimestamp());
 		tracker.removeIf((piece) -> now.minus(piece.getTimeStamp()).gte(Seconds.of(0.2)));
@@ -118,11 +121,6 @@ public class CameraSubsystem extends SubsystemBase {
 		}
 	}
 
-	@Deprecated
-	private void updatePose() {
-		updateLocalization();
-	}
-
 	@Override
 	public void periodic() {
 		if (enabled) {
@@ -131,7 +129,7 @@ public class CameraSubsystem extends SubsystemBase {
 			}
 			outputTelemetry();
 			updateDetection();
-			updatePose();
+			updateLocalization();
 		}
 	}
 
@@ -207,7 +205,7 @@ public class CameraSubsystem extends SubsystemBase {
 	}
 
 	public int coralCount() {
-		return getAllDetections().size();
+		return lastDetections.size();
 	}
 
 	public boolean hasGamePiece() {
@@ -215,7 +213,6 @@ public class CameraSubsystem extends SubsystemBase {
 	}
 
 	public Time getLastUpdatedPoseTime() {
-		updatePose();
 		return lastUpdatePoseTime;
 	}
 
@@ -228,7 +225,6 @@ public class CameraSubsystem extends SubsystemBase {
 	}
 
 	public Pose2d getLatestUpdate() {
-		updatePose();
 		return lastPose;
 	}
 
