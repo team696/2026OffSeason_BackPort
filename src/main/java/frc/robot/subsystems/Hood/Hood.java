@@ -48,7 +48,7 @@ public class Hood extends ServoMotorSubsystem<MotorIOTalonFX> {
       @Override
     public void periodic() {
       super.periodic();
-      SmartDashboard.putNumber("Hood Angle", this.getPosition().in(Rotations));
+      //SmartDashboard.putNumber("Hood Angle", this.getPosition().in(Rotations));
     }
 
 

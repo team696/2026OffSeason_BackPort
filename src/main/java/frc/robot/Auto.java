@@ -15,6 +15,7 @@ import frc.robot.subsystems.drive.Swerve;
 
 public class Auto {
 	public static boolean initialized = false;
+	private static boolean builderConfigured = false;
 
 	public static SendableChooser<Command> autoChooser;
 
@@ -23,10 +24,12 @@ public class Auto {
 			return;
 		}
 
-		for (NamedCommand command : Commands) 
+		boolean configured = configureAutoBuilder();
+
+		for (NamedCommand command : Commands)
 		  command.register();
 
-		if (configureAutoBuilder()) {
+		if (configured) {
 			autoChooser = AutoBuilder.buildAutoChooser();
 			SmartDashboard.putData("Auto Chooser", autoChooser);
 		}
@@ -35,7 +38,7 @@ public class Auto {
 	}
 
 	public static Command getSelectedAuto() {
-		if (!initialized)
+		if (!initialized || autoChooser == null)
 			return null;
 
 		return autoChooser.getSelected();
@@ -58,7 +61,10 @@ public class Auto {
 			NamedCommands.registerCommand(name, command);
 		}
 	}
-	private static boolean configureAutoBuilder() {
+	public static boolean configureAutoBuilder() {
+		if (builderConfigured) {
+			return true;
+		}
 		try {
 			var config = RobotConfig.fromGUISettings();
 			AutoBuilder.configure(
@@ -82,6 +88,7 @@ public class Auto {
 				() -> DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Red,
 				Swerve.get() // Subsystem requirement
 			);
+			builderConfigured = true;
 			return true;
 		} catch (Exception ex) {
 			DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder: " + ex.getMessage(), true);

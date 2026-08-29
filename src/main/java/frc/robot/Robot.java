@@ -5,9 +5,12 @@
 package frc.robot;
 
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.util.FieldLayout;
+import frc.robot.Auto.NamedCommand;
 import frc.robot.Log.SEVERITY;
 import frc.robot.commands.ShootingCommands;
 import frc.robot.subsystems.FeedRollers.FeedRollers;
@@ -29,25 +32,27 @@ public class Robot extends TimedRobot {
 	public Robot() {
 
 		Swerve.get();
-		// Shooter.get(); //temp
-		// Intake.RackAndPinion.get(); //also temp
-		// Intake.Rollers.get();
-		// Hopper.Rollers.get();
-		// Hopper.Upwards.get();
-		// FeedRollers.get();
-		// Hood.get();
+		 //Shooter.get(); //temp
+		 //Intake.RackAndPinion.get(); //also temp
+		 //Intake.Rollers.get();
+		 //Hopper.Rollers.get();
+		 //Hopper.Upwards.get();
+		 //FeedRollers.get();
+		 //Hood.get();
 
-		Log.initialize(SEVERITY.EVERYTHING);
-		Log.data("Swerve", Swerve.get(), SEVERITY.MINIMAL);
+		//Log.initialize(SEVERITY.EVERYTHING);
+		//Log.data("Swerve", Swerve.get(), SEVERITY.MINIMAL);
 
-		//Auto.initialize(null);
+		Auto.configureAutoBuilder();
+		Auto.initialize(new Auto.NamedCommand("Funny auto", new PathPlannerAuto("Test Auto")));
 
 		Camera.get().setPipeline(PipelineConstants.APRIL_TAG);
-		//Binds.Controller.bind();
+		Binds.Controller.bind();
 	}
 
 	@Override
 	public void robotInit(){
+		/* 
 		SmartDashboard.putData("Testing autoalign", ShootingCommands.shoot());
 		SmartDashboard.putData("Testing Ferry", ShootingCommands.Pass());
 		SmartDashboard.putData("Testing Intake", Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.EXTEND));
@@ -71,7 +76,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Distance to Hub", Swerve.get().distTo(FieldLayout.kBlueHub));
 
 		SmartDashboard.putData("Testing Shooting Sequence", SuperStructure.Shooting());
-		SmartDashboard.putData("Testing Auto Algin Sequence", SuperStructure.AutoAlgin());
+		SmartDashboard.putData("Testing Auto Algin Sequence", SuperStructure.AutoAlgin());*/
 	} 
 
 	@Override

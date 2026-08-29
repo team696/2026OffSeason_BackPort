@@ -43,7 +43,7 @@ public class Intake{
     @Override
     public void periodic() {
     super.periodic();
-      SmartDashboard.putNumber("Rack and Pinion Pose", this.getPosition().in(Rotations));
+      //SmartDashboard.putNumber("Rack and Pinion Pose", this.getPosition().in(Rotations));
   }
 
   }
@@ -67,7 +67,7 @@ public class Intake{
     @Override
     public void periodic() {
       super.periodic();
-      SmartDashboard.putNumber("Intake Roller Velocity", this.getVelocity().in(RotationsPerSecond));
+      //SmartDashboard.putNumber("Intake Roller Velocity", this.getVelocity().in(RotationsPerSecond));
     }
 
 	}

@@ -28,12 +28,7 @@ public class ShootingCommands {
     public static Command testspinUp() {
         Hood.get();
         Shooter.get();
-        return Commands.parallel(
-            Shooter.get().run(() -> 
-                Shooter.get().setpointCommand(Shooter.TESTSHOT)),
-            Hood.get().run(() -> 
-                Hood.get().setpointCommand(Hood.TEST_ANGLE))
-        );
+        return Shooter.get().setpointCommand(Shooter.TESTSHOT).alongWith(Hood.get().setpointCommand(Hood.TEST_ANGLE));
     }
 
     
