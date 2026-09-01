@@ -15,6 +15,7 @@ import static edu.wpi.first.units.Units.Amps;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import frc.lib.io.MotorIOTalonFX;
 import frc.lib.io.MotorIOTalonFXSim;
@@ -31,11 +32,11 @@ import frc.robot.Robot;
 public class IntakeConstants {
 
    public class RackAndPinion{
-    public static final double kGearing  = 1;
+    public static final double kGearing  = 30/12;
 
 
     public static final Distance kInDistance = Units.Inches.of(0.0);
-    public static final Distance kOutDistance = Units.Inches.of(11.56703288);
+    public static final Distance kOutDistance = Units.Inches.of(12);
 
     public static final Distance kRadius = Units.Inches.of(34.0 / 20.0).div(2.0); //pitch radius
 	public static final DistanceAngleConverter converter = new DistanceAngleConverter(kRadius);
@@ -53,9 +54,13 @@ public class IntakeConstants {
     public static final TalonFXConfiguration getTalonFXConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
 
-        config.Slot0.kP = 15;
+        config.Slot0.kP = 1;
         config.Slot0.kI = 0;
         config.Slot0.kD = 0;
+
+        config.Feedback.SensorToMechanismRatio = kGearing;
+
+        config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         config.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
         config.CurrentLimits.StatorCurrentLimit = 90.0;

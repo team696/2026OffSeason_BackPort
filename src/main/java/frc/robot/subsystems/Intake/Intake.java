@@ -43,7 +43,7 @@ public class Intake{
     @Override
     public void periodic() {
     super.periodic();
-      //SmartDashboard.putNumber("Rack and Pinion Pose", this.getPosition().in(Rotations));
+      SmartDashboard.putNumber("Rack and Pinion Pose", this.getPosition().in(Rotations));
   }
 
   }

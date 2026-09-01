@@ -12,10 +12,6 @@ import frc.robot.subsystems.Intake.Intake;
 /** Add your docs here. */
 public class SuperStructureConstants {
 
-
-
-
-
     public static Command runHopperRoller(){
         return Commands.run(()->{Hopper.Rollers.get().setpointCommand(Hopper.Rollers.INTAKE);});
     }

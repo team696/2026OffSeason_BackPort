@@ -34,7 +34,8 @@ public class SuperStructure {
     public Command lowerExtendingHopper() {
         return Hopper.Upwards.get().setpointCommand(Hopper.Upwards.MOVE_LOW);
     }
-      public static Command AutoAlgin(){
+
+    public static Command AutoAlgin(){
         return ShootingCommands.AutoAlgin();
     }
 
