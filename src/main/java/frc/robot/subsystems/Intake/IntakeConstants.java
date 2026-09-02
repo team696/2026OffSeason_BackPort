@@ -32,7 +32,7 @@ import frc.robot.Robot;
 public class IntakeConstants {
 
    public class RackAndPinion{
-    public static final double kGearing  = 30/12;
+    public static final double kGearing  = 30.0/12.0;
 
 
     public static final Distance kInDistance = Units.Inches.of(0.0);
