@@ -35,13 +35,13 @@ public class IntakeConstants {
     public static final double kGearing  = 30.0/12.0;
 
 
-    public static final Distance kInDistance = Units.Inches.of(0.0);
-    public static final Distance kOutDistance = Units.Inches.of(12);
+    public static final Distance kInDistance = Units.Inches.of(-0.01);
+    public static final Distance kOutDistance = Units.Inches.of(14);
 
     public static final Distance kRadius = Units.Inches.of(34.0 / 20.0).div(2.0); //pitch radius
 	public static final DistanceAngleConverter converter = new DistanceAngleConverter(kRadius);
 
-    public static final Angle kEpsilonThreshold = converter.toAngle(Units.Inches.of(0.5));//Amount of error the motor is willing to accept
+    public static final Angle kEpsilonThreshold = converter.toAngle(Units.Inches.of(0.001));//Amount of error the motor is willing to accept
 
     //Need these for the servo motor base class
     public static final Angle kInAngle = converter.toAngle(kInDistance);
@@ -54,7 +54,7 @@ public class IntakeConstants {
     public static final TalonFXConfiguration getTalonFXConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
 
-        config.Slot0.kP = 1;
+        config.Slot0.kP = 2;
         config.Slot0.kI = 0;
         config.Slot0.kD = 0;
 
@@ -113,8 +113,8 @@ public class IntakeConstants {
         public static final double kGearing = 1;
 
         public static final Voltage kIdleVoltage = Units.Volts.of(0.0);
-        public static final Voltage kIntakeVoltage = Units.Volts.of(12.0);
-        public static final Voltage kOuttakeVoltage = Units.Volts.of(-12.0);
+        public static final Voltage kIntakeVoltage = Units.Volts.of(3.0);
+        public static final Voltage kOuttakeVoltage = Units.Volts.of(-3.0);
 
         public static TalonFXConfiguration getTaloFXConfig(){
             TalonFXConfiguration config = new TalonFXConfiguration();
@@ -140,10 +140,10 @@ public class IntakeConstants {
             config.mainConfig = getTaloFXConfig();
             config.mainID = Ports.INTAKE_ROLLERS_MAIN.id;
             config.mainBus = Ports.INTAKE_ROLLERS_MAIN.bus;
-            config.followerConfig = getTaloFXConfig();
-            config.followerAlignment = new MotorAlignmentValue[] {MotorAlignmentValue.Opposed};
-            config.followerIDs = new int[] {Ports.INTAKE_ROLLERS_FOLLOWER.id};
-            config.followerBuses = new CANBus[] {Ports.INTAKE_ROLLERS_FOLLOWER.bus};
+            // config.followerConfig = getTaloFXConfig();
+            // config.followerAlignment = new MotorAlignmentValue[] {MotorAlignmentValue.Opposed};
+            // config.followerIDs = new int[] {Ports.INTAKE_ROLLERS_FOLLOWER.id};
+            // config.followerBuses = new CANBus[] {Ports.INTAKE_ROLLERS_FOLLOWER.bus};
             return config;
         }
 

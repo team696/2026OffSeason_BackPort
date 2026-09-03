@@ -57,10 +57,12 @@ public class Robot extends TimedRobot {
 		// SmartDashboard.putData("Testing Ferry", ShootingCommands.Pass());
 		SmartDashboard.putData("Testing Intake", Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.EXTEND));
 		SmartDashboard.putData("Retracting Intake", Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.RETRACT));
-		// SmartDashboard.putData("Testing Roller Intake", Intake.Rollers.get().setpointCommand(Intake.Rollers.INTAKE));
-		// SmartDashboard.putData("Testing Roller Outtake", Intake.Rollers.get().setpointCommand(Intake.Rollers.OUTAKE));
-		// SmartDashboard.putData("Stop Intake Roller", Intake.Rollers.get().setpointCommand(Intake.Rollers.IDLE));
-		// SmartDashboard.putData("Stop intake", Intake.Rollers.get().setpointCommand(Intake.Rollers.IDLE));
+		SmartDashboard.putData("Testing Roller Intake", Intake.Rollers.get().setpointCommand(Intake.Rollers.INTAKE));
+		SmartDashboard.putData("Testing Roller Outtake", Intake.Rollers.get().setpointCommand(Intake.Rollers.OUTAKE));
+		//SmartDashboard.putData("Stop Intake Roller", Intake.Rollers.get().setpointCommand(Intake.Rollers.IDLE));
+		SmartDashboard.putData("Stop intake", Intake.Rollers.get().setpointCommand(Intake.Rollers.IDLE));
+		SmartDashboard.putData("Testing Intake SuperStructure", SuperStructure.RunIntake());
+		SmartDashboard.putData("Testing Intake SuperStucure Idle", SuperStructure.StopIntake());
 		// SmartDashboard.putData("Hood Test", Hood.get().getTestShotCommand());
 		// SmartDashboard.putData("Hood Zero", Hood.get().setpointCommand(Hood.STOW));
 		// SmartDashboard.putData("Shooter Speed", Shooter.get().getTestShot());

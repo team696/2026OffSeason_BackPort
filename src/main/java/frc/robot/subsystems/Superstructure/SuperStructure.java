@@ -13,25 +13,32 @@ import frc.robot.commands.ShootingCommands;
 
 /** Add your docs here. */
 public class SuperStructure {
-    public Command RunIntake() {
+    public static Command RunIntake() {
         return Commands.parallel(
             Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.EXTEND),
             Intake.Rollers.get().setpointCommand(Intake.Rollers.INTAKE)
         );
     }
 
-    public Command Outtake() {
+    public static Command Outtake() {
         return Commands.parallel(
-            Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.RETRACT),
+            Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.EXTEND),
             Intake.Rollers.get().setpointCommand(Intake.Rollers.OUTAKE)
         );
     }
+
+    public static Command StopIntake(){
+        return Commands.parallel(
+            Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.RETRACT),
+            Intake.Rollers.get().setpointCommand(Intake.Rollers.IDLE)
+        );
+    }
     
-    public Command upwardExtendingHopper() {
+    public static Command upwardExtendingHopper() {
         return Hopper.Upwards.get().setpointCommand(Hopper.Upwards.MOVE_HIGH);
     }
 
-    public Command lowerExtendingHopper() {
+    public static Command lowerExtendingHopper() {
         return Hopper.Upwards.get().setpointCommand(Hopper.Upwards.MOVE_LOW);
     }
 

@@ -67,7 +67,7 @@ public class Intake{
     @Override
     public void periodic() {
       super.periodic();
-      //SmartDashboard.putNumber("Intake Roller Velocity", this.getVelocity().in(RotationsPerSecond));
+      SmartDashboard.putNumber("Intake Roller Velocity", this.getVelocity().in(RotationsPerSecond));
     }
 
 	}
