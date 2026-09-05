@@ -35,7 +35,7 @@ public class ShootingCommands {
     public static Command testShot(){
         return Commands.parallel(
             testspinUp(),
-            FeedRollers.get().setpointCommand(FeedRollers.RUNNING)
+            FeedRollers.RUNNING
         );
     }
 
@@ -50,7 +50,7 @@ public class ShootingCommands {
             spinUp(),
             Commands.sequence(
                 Commands.waitUntil(Shooting.mInstance::shotVerified),
-                FeedRollers.get().setpointCommand(FeedRollers.RUNNING)
+                FeedRollers.RUNNING
             )
         );
     }
@@ -61,8 +61,9 @@ public class ShootingCommands {
             Shooting.mInstance.getMotionComp().PointToTarget(),
             spinUp(),
             Commands.sequence(
-            Commands.waitUntil(Shooting.mInstance::shotVerified),
-            FeedRollers.get().setpointCommand(FeedRollers.RUNNING))
+                Commands.waitUntil(Shooting.mInstance::shotVerified),
+                FeedRollers.RUNNING
+            )
         );
     }
 

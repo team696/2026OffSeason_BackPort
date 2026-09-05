@@ -119,7 +119,7 @@ public class MotorIOTalonFX extends MotorIO {
 	}
 
 	@Override
-	protected void setVelocitySetpoint(AngularVelocity mechanismVelocity) {
+	public void setVelocitySetpoint(AngularVelocity mechanismVelocity) {
 		setVelocitySetpoint(mechanismVelocity, 1);
 	}
 

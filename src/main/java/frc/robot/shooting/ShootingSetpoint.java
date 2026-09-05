@@ -18,7 +18,7 @@ public class ShootingSetpoint {
         this.motionComp = Shooting.mInstance.getMotionComp();
     }
 
-    private Distance getLookAheadDistance() {
+    public Distance getLookAheadDistance() {
         return Meters.of(motionComp.getTarget().getDistance(motionComp.getBaseTranslation()));
     }
 

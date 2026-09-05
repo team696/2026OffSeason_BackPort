@@ -4,11 +4,22 @@
 
 package frc.robot.subsystems.FeedRollers;
 
-import frc.lib.bases.MotorSubsystem;
-import frc.lib.io.MotorIOTalonFX;
-import frc.lib.io.MotorIO.Setpoint;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
 
-public class FeedRollers extends MotorSubsystem<MotorIOTalonFX> {
+import java.util.function.UnaryOperator;
+
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.lib.bases.FlywheelMotorSubsystem;
+import frc.lib.io.MotorIOTalonFX;
+import frc.lib.io.MotorIO;
+import frc.lib.io.MotorIO.Mode;
+import frc.lib.io.MotorIO.Setpoint;
+import frc.robot.shooting.Shooting;
+import frc.robot.shooting.ShootingSetpoint;
+
+public class FeedRollers extends FlywheelMotorSubsystem<MotorIOTalonFX> {
   /** Creates a new FeedRollers. */
 
     private static FeedRollers roller = null;
@@ -20,10 +31,24 @@ public class FeedRollers extends MotorSubsystem<MotorIOTalonFX> {
     }
 
   public static Setpoint IDLE = Setpoint.withVelocitySetpoint(FeedRollersConstants.IdleSpeed);
-  public static Setpoint RUNNING = Setpoint.withVelocitySetpoint(FeedRollersConstants.RunningSpeed);
+  //public static Setpoint RUNNING;
+    public static Command RUNNING = get().followSetpointCommand(() -> {
+      AngularVelocity vel = Shooting.getState().getRegression().getShooterVeloicty(ShootingSetpoint.mInstance.getLookAheadDistance()).times(FeedRollersConstants.PercentOfLUT);
+      return Setpoint.withVelocitySetpoint(vel);
+    }); 
+  
+    public FeedRollers() {
+    super(
+      FeedRollersConstants.getMotorIO(),
+      "FeedRollers",
+      FeedRollersConstants.epsilonThreshold,
+      FeedRollersConstants.debounder
+    );
 
-  public FeedRollers() {
-    super(FeedRollersConstants.getMotorIO(), "FeedRollers");
+    //define custom setpoint RUNNING
+    //dfiene the unuary opprator first
+
+    //Setpoint running = new Setpoint();
     applySetpoint(IDLE);
   }
 

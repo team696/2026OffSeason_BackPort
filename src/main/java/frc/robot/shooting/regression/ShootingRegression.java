@@ -7,6 +7,7 @@ package frc.robot.shooting.regression;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.units.measure.Angle;
@@ -31,7 +32,7 @@ public class ShootingRegression {
     }
 
     public AngularVelocity getShooterVeloicty(Distance input){
-        return RPM.of(shooterVeloictyMap.get(input.in(Meters)));
+        return RotationsPerSecond.of(shooterVeloictyMap.get(input.in(Meters)));
     }
 }
 

@@ -5,9 +5,11 @@
 package frc.robot.subsystems.FeedRollers;
 
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Second;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Time;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
@@ -18,13 +20,18 @@ import frc.lib.sim.RollerSim;
 import frc.lib.sim.RollerSim.RollerSimConstants;
 import frc.robot.Ports;
 import frc.robot.Robot;
+import frc.robot.shooting.ShootingState;
+import frc.robot.shooting.regression.LookUpTables;
 
 /** Add your docs here. */
 public class FeedRollersConstants {
 
     public static AngularVelocity IdleSpeed = RotationsPerSecond.of(0);
-    public static AngularVelocity RunningSpeed = RotationsPerSecond.of(20);
+    public static final AngularVelocity epsilonThreshold = RotationsPerSecond.of(0.1);
+    public static final Time debounder = Second.of(0.0);
     public static final double kGearing = 1;
+    public static final double PercentOfLUT = 0.7;
+
 
     public static MotorIOTalonFXConfig getConfig() {
         MotorIOTalonFXConfig config = new MotorIOTalonFXConfig();
