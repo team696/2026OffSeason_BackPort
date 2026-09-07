@@ -113,8 +113,8 @@ public class IntakeConstants {
         public static final double kGearing = 1;
 
         public static final Voltage kIdleVoltage = Units.Volts.of(0.0);
-        public static final Voltage kIntakeVoltage = Units.Volts.of(3.0);
-        public static final Voltage kOuttakeVoltage = Units.Volts.of(-3.0);
+        public static final Voltage kIntakeVoltage = Units.Volts.of(5.0);
+        public static final Voltage kOuttakeVoltage = Units.Volts.of(-5.0);
 
         public static TalonFXConfiguration getTaloFXConfig(){
             TalonFXConfiguration config = new TalonFXConfiguration();
@@ -140,10 +140,10 @@ public class IntakeConstants {
             config.mainConfig = getTaloFXConfig();
             config.mainID = Ports.INTAKE_ROLLERS_MAIN.id;
             config.mainBus = Ports.INTAKE_ROLLERS_MAIN.bus;
-            // config.followerConfig = getTaloFXConfig();
-            // config.followerAlignment = new MotorAlignmentValue[] {MotorAlignmentValue.Opposed};
-            // config.followerIDs = new int[] {Ports.INTAKE_ROLLERS_FOLLOWER.id};
-            // config.followerBuses = new CANBus[] {Ports.INTAKE_ROLLERS_FOLLOWER.bus};
+            config.followerConfig = getTaloFXConfig();
+            config.followerAlignment = new MotorAlignmentValue[] {MotorAlignmentValue.Opposed};
+            config.followerIDs = new int[] {Ports.INTAKE_ROLLERS_FOLLOWER.id};
+            config.followerBuses = new CANBus[] {Ports.INTAKE_ROLLERS_FOLLOWER.bus};
             return config;
         }
 
