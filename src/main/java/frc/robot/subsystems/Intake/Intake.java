@@ -58,8 +58,8 @@ public class Intake{
 		}
 
 		public static final Setpoint IDLE = Setpoint.withNeutralSetpoint();
-		public static final Setpoint INTAKE = Setpoint.withVoltageSetpoint(IntakeConstants.Roller.kIntakeVoltage);
-		public static final Setpoint OUTAKE = Setpoint.withVoltageSetpoint(IntakeConstants.Roller.kOuttakeVoltage);
+		public static final Setpoint INTAKE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller.kIntakeSpeed);
+		public static final Setpoint OUTAKE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller.kOuttakeSpeed);
 		public Rollers(){
 			super(IntakeConstants.Roller.getMotorIO(), "Intake Roller");
 		}

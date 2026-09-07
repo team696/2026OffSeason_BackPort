@@ -7,6 +7,7 @@ package frc.robot.subsystems.Intake;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Voltage;
@@ -113,8 +114,11 @@ public class IntakeConstants {
         public static final double kGearing = 1;
 
         public static final Voltage kIdleVoltage = Units.Volts.of(0.0);
-        public static final Voltage kIntakeVoltage = Units.Volts.of(5.0);
-        public static final Voltage kOuttakeVoltage = Units.Volts.of(-5.0);
+        // public static final Voltage kIntakeVoltage = Units.Volts.of(5.0);
+        // public static final Voltage kOuttakeVoltage = Units.Volts.of(-5.0);
+
+        public static final AngularVelocity kIntakeSpeed = Units.RotationsPerSecond.of(50.0);
+        public static final AngularVelocity kOuttakeSpeed = Units.RotationsPerSecond.of(-50.0);
 
         public static TalonFXConfiguration getTaloFXConfig(){
             TalonFXConfiguration config = new TalonFXConfiguration();
