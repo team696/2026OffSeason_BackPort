@@ -13,10 +13,10 @@ public class LookUpTables {
 
         static{
             scoringvelocityLUT.put(1.5, 30.0); // meters, RPS
-            scoringvelocityLUT.put(2.5, 31.0);
-            scoringvelocityLUT.put(3.5, 32.5);
-            scoringvelocityLUT.put(4.5, 34.5);
-            scoringvelocityLUT.put(5.5, 37.0);
+            scoringvelocityLUT.put(2.5, 30.0);
+            scoringvelocityLUT.put(3.5, 30.0);
+            scoringvelocityLUT.put(4.5, 30.0);
+            scoringvelocityLUT.put(5.5, 30.0);
         }
     }
 
@@ -36,10 +36,10 @@ public class LookUpTables {
         public static final InterpolatingDoubleTreeMap neturalzonevelocityLUT = new InterpolatingDoubleTreeMap();
 
         static{
-            neturalzonevelocityLUT.put(3.0, 34.0); // meters, RPS
-            neturalzonevelocityLUT.put(4.5, 35.5);
-            neturalzonevelocityLUT.put(6.0, 37.0);
-            neturalzonevelocityLUT.put(7.5, 38.0);
+            neturalzonevelocityLUT.put(3.0, 30.0); // meters, RPS
+            neturalzonevelocityLUT.put(4.5, 30.0);
+            neturalzonevelocityLUT.put(6.0, 30.0);
+            neturalzonevelocityLUT.put(7.5, 30.0);
         }
     }
 
@@ -59,10 +59,10 @@ public class LookUpTables {
         public static final InterpolatingDoubleTreeMap oppositesidevelocityLUT = new InterpolatingDoubleTreeMap();
 
         static{
-            oppositesidevelocityLUT.put(7.0, 37.5); // meters, RPS
-            oppositesidevelocityLUT.put(9.0, 38.5);
-            oppositesidevelocityLUT.put(11.0, 39.0);
-            oppositesidevelocityLUT.put(13.0, 39.0);
+            oppositesidevelocityLUT.put(7.0, 30.0); // meters, RPS
+            oppositesidevelocityLUT.put(9.0, 30.0);
+            oppositesidevelocityLUT.put(11.0, 30.0);
+            oppositesidevelocityLUT.put(13.0, 30.0);
         }
 
     }

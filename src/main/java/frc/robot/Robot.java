@@ -67,6 +67,10 @@ public class Robot extends TimedRobot {
 		// SmartDashboard.putData("Hood Zero", Hood.get().setpointCommand(Hood.STOW));
 		// SmartDashboard.putData("Shooter Speed", Shooter.get().getTestShot());
 		// SmartDashboard.putData("Shooter Stop", Shooter.get().setpointCommand(Shooter.IDLE));
+
+		SmartDashboard.putData("Test Spin up ", ShootingCommands.testspinUp());
+
+
 		// SmartDashboard.putData("Hopper Roller Intake", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.INTAKE));
 		// SmartDashboard.putData("Hopper Roller Output", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.OUTAKE));
 		// SmartDashboard.putData("Hopper Roller Slow Intake", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.SLOW_INTAKE));

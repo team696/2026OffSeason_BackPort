@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.lib.io.MotorIO.Setpoint;
 import frc.robot.shooting.Shooting;
 import frc.robot.shooting.ShootingSetpoint;
 import frc.robot.shooting.ShootingState;
@@ -18,17 +19,20 @@ public class ShootingCommands {
 
     public static Command spinUp() {
         return Commands.parallel(
-            Shooter.get().run(() -> 
-                Shooter.get().setpointCommand(ShootingSetpoint.mInstance.getShooterSetpoint())),
-            Hood.get().run(() -> 
-                Hood.get().setpointCommand(ShootingSetpoint.mInstance.getHoodSetpoint()))
+                Shooter.get().followSetpointCommand(
+                () -> ShootingSetpoint.mInstance.getShooterSetpoint()
+            ),
+                Hood.get().followSetpointCommand(
+                () -> ShootingSetpoint.mInstance.getHoodSetpoint()
+            )
         );
+        
     }
 
     public static Command testspinUp() {
-        Hood.get();
-        Shooter.get();
-        return Shooter.get().setpointCommand(Shooter.TESTSHOT).alongWith(Hood.get().setpointCommand(Hood.TEST_ANGLE));
+        return Shooter.get().getTestShot()
+        .alongWith(Hood.get().getTestShotCommand());
+
     }
 
     

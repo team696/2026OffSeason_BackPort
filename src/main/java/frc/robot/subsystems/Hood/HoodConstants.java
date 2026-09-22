@@ -11,6 +11,8 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -20,6 +22,7 @@ import frc.lib.io.MotorIOTalonFX;
 import frc.lib.io.MotorIOTalonFX.MotorIOTalonFXConfig;
 import frc.lib.io.MotorIOTalonFXSim;
 import frc.lib.sim.PivotSim.PivotSimConstants;
+import frc.lib.util.tunablenumbers.TunableNumber;
 import frc.lib.sim.PivotSimHelper;
 import frc.robot.Ports;
 import frc.robot.Robot;
@@ -30,7 +33,8 @@ public class HoodConstants {
     
     public static final Angle kMaxAngle = Units.Degrees.of(145);
     public static final Angle kMinAngle = Units.Degrees.of(0);
-    public static Angle TestAngle = Units.Degrees.of(SmartDashboard.getNumber("Test Angle", 0));
+    public static final TunableNumber testAngle = new TunableNumber("Test Angle", 0.0);
+    public static DoubleSupplier testAngleSupplier = () -> SmartDashboard.getNumber("Test Angle", HoodConstants.kMinAngle.in(Units.Degrees));
 
     public static final Angle kEpsilonThreshold = Units.Degrees.of(0.5);
     

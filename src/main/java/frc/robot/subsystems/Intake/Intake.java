@@ -7,6 +7,7 @@ package frc.robot.subsystems.Intake;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.bases.MotorSubsystem;
 import frc.lib.bases.ServoMotorSubsystem;
@@ -57,9 +58,9 @@ public class Intake{
 			return rollers;
 		}
 
-		public static final Setpoint IDLE = Setpoint.withNeutralSetpoint();
-		public static final Setpoint INTAKE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller.kIntakeSpeed);
-		public static final Setpoint OUTAKE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller.kOuttakeSpeed);
+		public static final Setpoint IDLE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller.kIdleSpeed,1);
+		public static final Setpoint INTAKE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller.kIntakeSpeed,1);
+		public static final Setpoint OUTAKE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller.kOuttakeSpeed,1);
 		public Rollers(){
 			super(IntakeConstants.Roller.getMotorIO(), "Intake Roller");
 		}
@@ -68,6 +69,11 @@ public class Intake{
     public void periodic() {
       super.periodic();
       SmartDashboard.putNumber("Intake Roller Velocity", this.getVelocity().in(RotationsPerSecond));
+
+        SmartDashboard.putString(
+        "Intake Roller Setpoint Type",
+        this.getSetpoint().toString()
+    );
     }
 
 	}

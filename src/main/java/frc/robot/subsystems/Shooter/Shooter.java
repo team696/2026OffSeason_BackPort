@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.Shooter;
 
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.units.Units;
@@ -30,7 +31,7 @@ public class Shooter extends FlywheelMotorSubsystem<MotorIOTalonFX> {
   //idle
   //ferry
   //shot
-  public static Setpoint TESTSHOT = Setpoint.withVelocitySetpoint(ShooterConstants.TestShotSpeed);
+  public static Setpoint TESTSHOT = Setpoint.withVelocitySetpoint(RotationsPerSecond.of(ShooterConstants.testShotSpeed.getAsDouble()));
   public static Setpoint IDLE = Setpoint.withVelocitySetpoint(ShooterConstants.IdleSpeed);
   public static Setpoint FERRY = Setpoint.withVelocitySetpoint(ShooterConstants.FerrySpeed);
   public static Setpoint SHOT = Setpoint.withVelocitySetpoint(ShooterConstants.ShotSpeed);
@@ -44,14 +45,21 @@ public class Shooter extends FlywheelMotorSubsystem<MotorIOTalonFX> {
       ShooterConstants.epsilonThreshold,
       Seconds.of(0)
     );
-    SmartDashboard.putNumber("Test Shot",0);
+
   }
 
   public Command getTestShot() {
-    return setpointCommand(
+    return followSetpointCommand(()->
         Setpoint.withVelocitySetpoint(
-            Units.RotationsPerSecond.of(SmartDashboard.getNumber("Test Speed", 0))
+            RotationsPerSecond.of(ShooterConstants.testShotSpeed.getAsDouble())
         )
     );
 }
+
+
+    @Override
+      public void periodic() {
+        super.periodic();
+        SmartDashboard.putNumber("Shooter speed", Shooter.get().getVelocity().in(RotationsPerSecond));
+      }
 }

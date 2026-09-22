@@ -8,7 +8,10 @@ import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -21,12 +24,15 @@ import frc.lib.io.MotorIOTalonFXSim;
 import frc.lib.io.MotorIOTalonFX.MotorIOTalonFXConfig;
 import frc.lib.sim.RollerSim;
 import frc.lib.sim.RollerSim.RollerSimConstants;
+import frc.lib.util.tunablenumbers.TunableNumber;
 import frc.robot.Ports;
 import frc.robot.Robot;
+import frc.robot.subsystems.Hood.HoodConstants;
 
 /** Add your docs here. */  
 public class ShooterConstants {
-    public static AngularVelocity TestShotSpeed = RotationsPerSecond.of(SmartDashboard.getNumber("Test Speed", 0));
+    public static final TunableNumber testShotSpeed = new TunableNumber("Test Speed", 0.0);
+    public static DoubleSupplier testShotSpeedSupplier = () -> SmartDashboard.getNumber("Test Speed", 0.0);
     public static final AngularVelocity IdleSpeed = RotationsPerSecond.of(0);
     public static final AngularVelocity FerrySpeed = RotationsPerSecond.of(20);
     public static final AngularVelocity ShotSpeed = RotationsPerSecond.of(30);
@@ -60,9 +66,9 @@ public class ShooterConstants {
 
         TalonFXConfiguration config_talon = new TalonFXConfiguration();
 
-        config_talon.Slot0.kP = 1;
-        config_talon.Slot0.kI = 0;
-        config_talon.Slot0.kD = 0;
+        config_talon.Slot1.kP = 1;
+        config_talon.Slot1.kI = 0;
+        config_talon.Slot1.kD = 0;
 
         config_talon.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
         config_talon.CurrentLimits.StatorCurrentLimit = 90.0;
