@@ -31,10 +31,10 @@ public class Shooter extends FlywheelMotorSubsystem<MotorIOTalonFX> {
   //idle
   //ferry
   //shot
-  public static Setpoint TESTSHOT = Setpoint.withVelocitySetpoint(RotationsPerSecond.of(ShooterConstants.testShotSpeed.getAsDouble()));
+  public static Setpoint TESTSHOT = Setpoint.withVelocitySetpoint(RotationsPerSecond.of(ShooterConstants.testShotSpeed.getAsDouble()), 1);
   public static Setpoint IDLE = Setpoint.withVelocitySetpoint(ShooterConstants.IdleSpeed);
-  public static Setpoint FERRY = Setpoint.withVelocitySetpoint(ShooterConstants.FerrySpeed);
-  public static Setpoint SHOT = Setpoint.withVelocitySetpoint(ShooterConstants.ShotSpeed);
+  public static Setpoint FERRY = Setpoint.withVelocitySetpoint(ShooterConstants.FerrySpeed ,1);
+  public static Setpoint SHOT = Setpoint.withVelocitySetpoint(ShooterConstants.ShotSpeed, 1);
 
 
   /** Creates a new Shooter. */
@@ -54,7 +54,7 @@ public class Shooter extends FlywheelMotorSubsystem<MotorIOTalonFX> {
             RotationsPerSecond.of(ShooterConstants.testShotSpeed.getAsDouble())
         )
     );
-}
+  }
 
 
     @Override

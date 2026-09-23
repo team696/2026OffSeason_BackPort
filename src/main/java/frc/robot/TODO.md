@@ -92,11 +92,19 @@
         -Calculate PID 3 PID logic(X,Y,Theta)[]
 
 -Testing Setup:
-    -Controls on Elastic[]
-        -Hood Angle[]
-        -Velocity[]
-        -Display Distance from the Hub[]
+    -Controls on Elastic[x]
+        -Hood Angle[x]
+        -Velocity[x]
+        -Display Distance from the Hub[x]
 
+
+Testing:
+    -Get the shooter delay[]
+        -Get the amperage of the feed rollers, read until it dips. 
+            Once it dips you start a timer until the amperage of the shooter roller dips.
+    -Test LUTs[]
+    -Test Hopper[]
+    -Double check intake[]
 
 -Autos(As of right now things are unsure):
     -Try intergrating Pathplanner and Choreo(If avaliable)[]

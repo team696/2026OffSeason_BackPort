@@ -70,6 +70,9 @@ public class ShooterConstants {
         config_talon.Slot1.kI = 0;
         config_talon.Slot1.kD = 0;
 
+        config_talon.MotionMagic.MotionMagicCruiseVelocity = 30.0;
+        config_talon.MotionMagic.MotionMagicAcceleration = 300.0;
+
         config_talon.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
         config_talon.CurrentLimits.StatorCurrentLimit = 90.0;
 
