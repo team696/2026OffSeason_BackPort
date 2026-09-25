@@ -31,85 +31,85 @@ import frc.robot.Robot;
 
 /** Add your docs here. */
 public class HopperConstants {
-public class Upwards {
-        //this should be defiedn in the Ports enum but for the ehhh later
+// public class Upwards {
+//         //this should be defiedn in the Ports enum but for the ehhh later
 
-        //forgot if we have one or 2 motors on it but eh i can always add it in later
+//         //forgot if we have one or 2 motors on it but eh i can always add it in later
 
-        public static Distance LowPos = Units.Meter.of(0);
-        public static Distance HighPos = Units.Meter.of(1);
-        //stuff for 
+//         public static Distance LowPos = Units.Meter.of(0);
+//         public static Distance HighPos = Units.Meter.of(1);
+//         //stuff for 
 
-        //TODO: change this to the real value
-        public static final Distance kRadius = Units.Inches.of(34.0 / 20.0).div(2.0);
-        public static final DistanceAngleConverter converter = new DistanceAngleConverter(kRadius);
+//         //TODO: change this to the real value
+//         public static final Distance kRadius = Units.Inches.of(34.0 / 20.0).div(2.0);
+//         public static final DistanceAngleConverter converter = new DistanceAngleConverter(kRadius);
 
-        public static Angle LowPosAngle = converter.toAngle(LowPos);
-        public static Angle HighPosAngle = converter.toAngle(HighPos);
+//         public static Angle LowPosAngle = converter.toAngle(LowPos);
+//         public static Angle HighPosAngle = converter.toAngle(HighPos);
 
-        public static final double kGearingRotate  = 1;
+//         public static final double kGearingRotate  = 1;
 
-        public static final Angle kEpsilonThreshold = Units.Degree.of(5);
+//         public static final Angle kEpsilonThreshold = Units.Degree.of(5);
 
-        public static LinearSimConstants getSimConstants() {
-            LinearSimConstants constants = new LinearSimConstants();
+//         public static LinearSimConstants getSimConstants() {
+//             LinearSimConstants constants = new LinearSimConstants();
 
-            constants.gearing = kGearingRotate;
-            constants.minHeight = LowPos;
-            constants.maxHeight = HighPos;
-            constants.simGravity = false;
-            constants.startingHeight = LowPos;
-            constants.motor = DCMotor.getKrakenX60(2);
-            constants.carriageMass = Units.Pounds.of(8);
-            constants.converter = converter;
+//             constants.gearing = kGearingRotate;
+//             constants.minHeight = LowPos;
+//             constants.maxHeight = HighPos;
+//             constants.simGravity = false;
+//             constants.startingHeight = LowPos;
+//             constants.motor = DCMotor.getKrakenX60(2);
+//             constants.carriageMass = Units.Pounds.of(8);
+//             constants.converter = converter;
 
-            return constants;
-        }
+//             return constants;
+//         }
 
-        public static MotorIOTalonFXConfig getConfig() {
-            MotorIOTalonFXConfig config = new MotorIOTalonFXConfig();
+//         public static MotorIOTalonFXConfig getConfig() {
+//             MotorIOTalonFXConfig config = new MotorIOTalonFXConfig();
 
-            config.mainBus = Ports.HOPPER_UPWARDS_MAIN.bus; //no way we getting vores
-            config.mainID = Ports.HOPPER_UPWARDS_MAIN.id;
+//             config.mainBus = Ports.HOPPER_UPWARDS_MAIN.bus; //no way we getting vores
+//             config.mainID = Ports.HOPPER_UPWARDS_MAIN.id;
 
-            //config the submisive one
-            config.followerAlignment = new MotorAlignmentValue[] { MotorAlignmentValue.Opposed };
-            config.followerBuses = new CANBus[] { Ports.HOPPER_UPWARDS_FOLLOWER.bus };
-            config.followerIDs = new int[] { Ports.HOPPER_UPWARDS_FOLLOWER.id };
+//             //config the submisive one
+//             config.followerAlignment = new MotorAlignmentValue[] { MotorAlignmentValue.Opposed };
+//             config.followerBuses = new CANBus[] { Ports.HOPPER_UPWARDS_FOLLOWER.bus };
+//             config.followerIDs = new int[] { Ports.HOPPER_UPWARDS_FOLLOWER.id };
 
-            config.time = Units.Seconds;
-            config.unit = Units.Degrees;
+//             config.time = Units.Seconds;
+//             config.unit = Units.Degrees;
 
-            //just some standard power config
-            TalonFXConfiguration config_talon = new TalonFXConfiguration();
-            config_talon.Slot0.kP = 1;
-            config_talon.Slot0.kI = 0;
-            config_talon.Slot0.kD = 0;
+//             //just some standard power config
+//             TalonFXConfiguration config_talon = new TalonFXConfiguration();
+//             config_talon.Slot0.kP = 1;
+//             config_talon.Slot0.kI = 0;
+//             config_talon.Slot0.kD = 0;
 
-            config_talon.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
-            config_talon.CurrentLimits.StatorCurrentLimit = 90.0;
+//             config_talon.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
+//             config_talon.CurrentLimits.StatorCurrentLimit = 90.0;
 
-            config_talon.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
-            config_talon.CurrentLimits.SupplyCurrentLimit = 45.0;
+//             config_talon.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
+//             config_talon.CurrentLimits.SupplyCurrentLimit = 45.0;
 
-            config_talon.Feedback.SensorToMechanismRatio = kGearingRotate;
+//             config_talon.Feedback.SensorToMechanismRatio = kGearingRotate;
 
-            //apply the talon configs
-            config.mainConfig = config_talon;
-            config.followerConfig = config_talon;
-            return config;
-        }
+//             //apply the talon configs
+//             config.mainConfig = config_talon;
+//             config.followerConfig = config_talon;
+//             return config;
+//         }
 
 
-        public static MotorIOTalonFX getMotorIO() {
-            if (Robot.isReal()) {
-                return new MotorIOTalonFX(getConfig());
-            } else {
-                return new MotorIOTalonFXSim(getConfig(), new LinearSim(getSimConstants()));
-            }
-        }
+//         public static MotorIOTalonFX getMotorIO() {
+//             if (Robot.isReal()) {
+//                 return new MotorIOTalonFX(getConfig());
+//             } else {
+//                 return new MotorIOTalonFXSim(getConfig(), new LinearSim(getSimConstants()));
+//             }
+//         }
 
-    }
+//     }
 
 
 public class Rollers{    

@@ -58,9 +58,9 @@ public class Intake{
 			return rollers;
 		}
 
-		public static final Setpoint IDLE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller.kIdleSpeed,1);
-		public static final Setpoint INTAKE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller.kIntakeSpeed,1);
-		public static final Setpoint OUTAKE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller.kOuttakeSpeed,1);
+		public static final Setpoint IDLE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller.kIdleSpeed);
+		public static final Setpoint INTAKE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller.kIntakeSpeed);
+		public static final Setpoint OUTAKE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller.kOuttakeSpeed);
 		public Rollers(){
 			super(IntakeConstants.Roller.getMotorIO(), "Intake Roller");
 		}

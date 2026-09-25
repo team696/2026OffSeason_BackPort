@@ -11,6 +11,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Time;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
 import frc.lib.io.MotorIOTalonFX;
@@ -39,10 +40,13 @@ public class FeedRollersConstants {
         config.mainID = Ports.FEEDER_ROLLERS.id;
         config.mainBus = Ports.FEEDER_ROLLERS.bus;
 
+        config.followerIDs = new int[] {Ports.FEED_ROLLERS_FOLLOWER.id};
+        config.followerBuses = new CANBus[] {Ports.FEED_ROLLERS_FOLLOWER.bus};
+
         TalonFXConfiguration config_talon = new TalonFXConfiguration();
-        config_talon.Slot0.kP = 1;
-        config_talon.Slot0.kI = 0;
-        config_talon.Slot0.kD = 0;
+        config_talon.Slot1.kP = 1;
+        config_talon.Slot1.kI = 0;
+        config_talon.Slot1.kD = 0;
 
         config_talon.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
         config_talon.CurrentLimits.StatorCurrentLimit = 90.0;
@@ -53,6 +57,9 @@ public class FeedRollersConstants {
         config_talon.Feedback.SensorToMechanismRatio = kGearing;
 
         config.mainConfig = config_talon;
+
+        config.followerConfig = config_talon;
+
         return config;
     }
 

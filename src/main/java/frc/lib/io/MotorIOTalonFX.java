@@ -130,7 +130,7 @@ public class MotorIOTalonFX extends MotorIO {
 
 	@Override
 	protected void setPositionSetpoint(Angle mechanismPosition) {
-		setPositionSetpoint(mechanismPosition, 0);
+		setPositionSetpoint(mechanismPosition, 2);
 	}
 
 	@Override

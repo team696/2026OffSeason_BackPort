@@ -30,11 +30,11 @@ public class FeedRollers extends FlywheelMotorSubsystem<MotorIOTalonFX> {
       return roller;
     }
 
-  public static Setpoint IDLE = Setpoint.withVelocitySetpoint(FeedRollersConstants.IdleSpeed);
+  public static Setpoint IDLE = Setpoint.withVelocitySetpoint(FeedRollersConstants.IdleSpeed , 1);
   //public static Setpoint RUNNING;
     public static Command RUNNING = get().followSetpointCommand(() -> {
       AngularVelocity vel = Shooting.getState().getRegression().getShooterVeloicty(ShootingSetpoint.mInstance.getLookAheadDistance()).times(FeedRollersConstants.PercentOfLUT);
-      return Setpoint.withVelocitySetpoint(vel);
+      return Setpoint.withVelocitySetpoint(vel, 1);
     }); 
   
     public FeedRollers() {

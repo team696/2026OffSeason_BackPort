@@ -31,26 +31,28 @@ public class Hopper {
       super(HopperConstants.Rollers.getMotorIO(), "Hopper Rollers");
     }
 
+    
+
   }
 
-  public static class Upwards extends ServoMotorSubsystem<MotorIOTalonFX> {
-    public static final Setpoint MOVE_HIGH = Setpoint.withPositionSetpoint(HopperConstants.Upwards.HighPosAngle);
-    public static final Setpoint MOVE_LOW = Setpoint.withPositionSetpoint(HopperConstants.Upwards.LowPosAngle);
+  // public static class Upwards extends ServoMotorSubsystem<MotorIOTalonFX> {
+  //   public static final Setpoint MOVE_HIGH = Setpoint.withPositionSetpoint(HopperConstants.Upwards.HighPosAngle);
+  //   public static final Setpoint MOVE_LOW = Setpoint.withPositionSetpoint(HopperConstants.Upwards.LowPosAngle);
 
 
-    private static Upwards m_hopper = null;
-    public static Upwards get() {
-        if (m_hopper == null) {
-            m_hopper = new Upwards();
-        }
-        return m_hopper;
-    }
+  //   private static Upwards m_hopper = null;
+  //   public static Upwards get() {
+  //       if (m_hopper == null) {
+  //           m_hopper = new Upwards();
+  //       }
+  //       return m_hopper;
+  //   }
 
-    public Upwards() {
-        //tuing it for fat chuds
-        super(HopperConstants.Upwards.getMotorIO(), "Upwards Hopper", HopperConstants.Upwards.kEpsilonThreshold);
-        setCurrentPosition(HopperConstants.Upwards.LowPosAngle); //by default should be low
-    }
-  }
+  //   public Upwards() {
+  //       //tuing it for fat chuds
+  //       super(HopperConstants.Upwards.getMotorIO(), "Upwards Hopper", HopperConstants.Upwards.kEpsilonThreshold);
+  //       setCurrentPosition(HopperConstants.Upwards.LowPosAngle); //by default should be low
+  //   }
+  // }
 
 }

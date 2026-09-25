@@ -34,13 +34,13 @@ public class SuperStructure {
         );
     }
     
-    public static Command upwardExtendingHopper() {
-        return Hopper.Upwards.get().setpointCommand(Hopper.Upwards.MOVE_HIGH);
-    }
+    // public static Command upwardExtendingHopper() {
+    //     return Hopper.Upwards.get().setpointCommand(Hopper.Upwards.MOVE_HIGH);
+    // }
 
-    public static Command lowerExtendingHopper() {
-        return Hopper.Upwards.get().setpointCommand(Hopper.Upwards.MOVE_LOW);
-    }
+    // public static Command lowerExtendingHopper() {
+    //     return Hopper.Upwards.get().setpointCommand(Hopper.Upwards.MOVE_LOW);
+    // }
 
     public static Command AutoAlgin(){
         return ShootingCommands.AutoAlgin();

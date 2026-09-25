@@ -49,9 +49,9 @@ public class HoodConstants {
     public static final TalonFXConfiguration getTalonFXConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
         
-        config.Slot0.kP = 7;
-        config.Slot0.kI = 0;
-        config.Slot0.kD = 0;
+        config.Slot2.kP = 7;
+        config.Slot2.kI = 0;
+        config.Slot2.kD = 0;
 
         config.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
         config.CurrentLimits.StatorCurrentLimit = 25.0;
