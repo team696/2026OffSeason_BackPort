@@ -74,6 +74,7 @@ public class ShootingCommands {
     public static Command Stop(){
         return Commands.parallel(
             Shooter.get().setpointCommand(Shooter.IDLE),
+            Hood.get().setpointCommand(Hood.STOW),
             FeedRollers.get().setpointCommand(FeedRollers.IDLE)
         );
     }

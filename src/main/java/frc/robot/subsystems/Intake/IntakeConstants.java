@@ -131,7 +131,7 @@ public class IntakeConstants {
             config.CurrentLimits.SupplyCurrentLimit = 50.0;
             config.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
-            config.Slot1.kP = 3;
+            config.Slot1.kP = 0.8;
             config.Slot1.kV = 0.12;
 
             config.MotionMagic.MotionMagicCruiseVelocity = 100;

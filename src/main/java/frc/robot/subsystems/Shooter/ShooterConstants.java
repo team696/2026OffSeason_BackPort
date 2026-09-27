@@ -66,12 +66,16 @@ public class ShooterConstants {
 
         TalonFXConfiguration config_talon = new TalonFXConfiguration();
 
-        config_talon.Slot1.kP = 1;
+        config_talon.Slot1.kP = 0.3;
         config_talon.Slot1.kI = 0;
         config_talon.Slot1.kD = 0;
 
+        config_talon.Slot1.kV = 0.12;
+
         config_talon.MotionMagic.MotionMagicCruiseVelocity = 30.0;
         config_talon.MotionMagic.MotionMagicAcceleration = 300.0;
+        config_talon.MotionMagic.MotionMagicJerk = 1000.0;
+
 
         config_talon.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
         config_talon.CurrentLimits.StatorCurrentLimit = 90.0;
@@ -79,6 +83,7 @@ public class ShooterConstants {
         config_talon.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
         config_talon.CurrentLimits.SupplyCurrentLimit = 45.0;
         config_talon.Feedback.SensorToMechanismRatio = kGearing;
+
         config.mainConfig = config_talon;
         config.followerConfig = config_talon;
 

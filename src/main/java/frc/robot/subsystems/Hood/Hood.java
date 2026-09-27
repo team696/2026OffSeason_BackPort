@@ -4,7 +4,8 @@
 
   package frc.robot.subsystems.Hood;
 
-  import static edu.wpi.first.units.Units.Rotations;
+  import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Rotations;
 
   import edu.wpi.first.units.Units;
   import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -47,7 +48,7 @@
         @Override
       public void periodic() {
         super.periodic();
-        SmartDashboard.putNumber("Hood Angle", this.getPosition().in(Rotations));
+        SmartDashboard.putNumber("Hood Angle", this.getPosition().in(Degrees));
       }
 
 

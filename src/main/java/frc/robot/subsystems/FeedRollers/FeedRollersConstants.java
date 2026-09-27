@@ -13,6 +13,7 @@ import edu.wpi.first.units.measure.Time;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
 import frc.lib.io.MotorIOTalonFX;
 import frc.lib.io.MotorIOTalonFXSim;
@@ -42,6 +43,7 @@ public class FeedRollersConstants {
 
         config.followerIDs = new int[] {Ports.FEED_ROLLERS_FOLLOWER.id};
         config.followerBuses = new CANBus[] {Ports.FEED_ROLLERS_FOLLOWER.bus};
+        config.followerAlignment = new MotorAlignmentValue[] {MotorAlignmentValue.Opposed};
 
         TalonFXConfiguration config_talon = new TalonFXConfiguration();
         config_talon.Slot1.kP = 1;

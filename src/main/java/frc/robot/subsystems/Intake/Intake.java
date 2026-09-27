@@ -58,7 +58,7 @@ public class Intake{
 			return rollers;
 		}
 
-		public static final Setpoint IDLE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller.kIdleSpeed);
+		public static final Setpoint IDLE = Setpoint.COAST;
 		public static final Setpoint INTAKE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller.kIntakeSpeed);
 		public static final Setpoint OUTAKE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller.kOuttakeSpeed);
 		public Rollers(){
@@ -69,11 +69,6 @@ public class Intake{
     public void periodic() {
       super.periodic();
       SmartDashboard.putNumber("Intake Roller Velocity", this.getVelocity().in(RotationsPerSecond));
-
-        SmartDashboard.putString(
-        "Intake Roller Setpoint Type",
-        this.getSetpoint().toString()
-    );
     }
 
 	}

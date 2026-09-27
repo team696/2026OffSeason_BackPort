@@ -4,9 +4,13 @@
 
 package frc.robot.subsystems.Hopper;
 
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.bases.MotorSubsystem;
 import frc.lib.bases.ServoMotorSubsystem;
 import frc.lib.io.MotorIOTalonFX;
+import frc.robot.subsystems.Shooter.Shooter;
 import frc.lib.io.MotorIO.Setpoint;
 
 public class Hopper {
@@ -25,12 +29,17 @@ public class Hopper {
     public static final Setpoint INTAKE = Setpoint.withVoltageSetpoint(HopperConstants.Rollers.kIntakeVoltage);
     public static final Setpoint SLOW_INTAKE = Setpoint.withVoltageSetpoint(HopperConstants.Rollers.kSlowIntakeVoltage);
     public static final Setpoint OUTAKE = Setpoint.withVoltageSetpoint(HopperConstants.Rollers.kOuttakeVoltage);
-    public static final Setpoint IDLE = Setpoint.withVoltageSetpoint(HopperConstants.Rollers.kIdleVoltage);
+    public static final Setpoint IDLE = Setpoint.COAST;
 
     public Rollers(){
       super(HopperConstants.Rollers.getMotorIO(), "Hopper Rollers");
     }
 
+      @Override
+      public void periodic() {
+        super.periodic();
+        SmartDashboard.putNumber("Hopper Speed", this.getVelocity().in(RotationsPerSecond));
+      }
     
 
   }

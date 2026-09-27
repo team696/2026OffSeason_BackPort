@@ -54,14 +54,21 @@ public class SuperStructure {
         );
     }
 
-    public Command ShootingStop(){
+        public static Command ShootingTesting(){
+            return Commands.parallel(
+                ShootingCommands.testShot(),
+                SuperStructureConstants.runHopperRoller()
+            );
+        }
+
+    public static Command ShootingStop(){
         return Commands.parallel(
             ShootingCommands.Stop(),
             SuperStructureConstants.StopRoller()
         );
     }
 
-    public Command Passing(){
+    public static Command Passing(){
         return Commands.parallel(
             ShootingCommands.Pass(),
             SuperStructureConstants.runHopperRoller()

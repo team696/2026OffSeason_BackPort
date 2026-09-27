@@ -10,6 +10,7 @@ import static edu.wpi.first.units.Units.Seconds;
 import java.util.function.UnaryOperator;
 
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.bases.FlywheelMotorSubsystem;
 import frc.lib.io.MotorIOTalonFX;
@@ -54,6 +55,7 @@ public class FeedRollers extends FlywheelMotorSubsystem<MotorIOTalonFX> {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    super.periodic();
+    SmartDashboard.putNumber("FeedRollers Velocity", this.getVelocity().in(RotationsPerSecond));
   }
 }

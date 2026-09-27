@@ -31,8 +31,8 @@ public class Robot extends TimedRobot {
 
 	public Robot() {
 
-		Swerve.get();
-		 //Shooter.get(); //temp
+		//Swerve.get();
+		 Shooter.get(); //temp
 		 Intake.RackAndPinion.get(); //also temp
 		 //Intake.Rollers.get();
 		 //Hopper.Rollers.get();
@@ -43,11 +43,11 @@ public class Robot extends TimedRobot {
 		//Log.initialize(SEVERITY.EVERYTHING);
 		//Log.data("Swerve", Swerve.get(), SEVERITY.MINIMAL);
 
-		Auto.configureAutoBuilder();
-		Auto.initialize(new Auto.NamedCommand("Funny auto", new PathPlannerAuto("Test Auto")));
+		// Auto.configureAutoBuilder();
+		// Auto.initialize(new Auto.NamedCommand("Funny auto", new PathPlannerAuto("Test Auto")));
 
 		//Camera.get().setPipeline(PipelineConstants.APRIL_TAG);
-		Binds.Controller.bind();
+		//Binds.Controller.bind();
 	}
 
 	@Override
@@ -61,28 +61,31 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData("Testing Roller Outtake", Intake.Rollers.get().setpointCommand(Intake.Rollers.OUTAKE));
 		//SmartDashboard.putData("Stop Intake Roller", Intake.Rollers.get().setpointCommand(Intake.Rollers.IDLE));
 		SmartDashboard.putData("Stop intake", Intake.Rollers.get().setpointCommand(Intake.Rollers.IDLE));
-		SmartDashboard.putData("Testing Intake SuperStructure", SuperStructure.RunIntake());
-		SmartDashboard.putData("Testing Intake SuperStucure Idle", SuperStructure.StopIntake());
 		// SmartDashboard.putData("Hood Test", Hood.get().getTestShotCommand());
 		// SmartDashboard.putData("Hood Zero", Hood.get().setpointCommand(Hood.STOW));
-		// SmartDashboard.putData("Shooter Speed", Shooter.get().getTestShot());
-		// SmartDashboard.putData("Shooter Stop", Shooter.get().setpointCommand(Shooter.IDLE));
+		SmartDashboard.putData("Shooter TestShot", Shooter.get().getTestShot());
+		SmartDashboard.putData("Shooter Stop", Shooter.get().setpointCommand(Shooter.IDLE));
 
 		SmartDashboard.putData("Test Spin up ", ShootingCommands.testspinUp());
 
 
-		// SmartDashboard.putData("Hopper Roller Intake", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.INTAKE));
-		// SmartDashboard.putData("Hopper Roller Output", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.OUTAKE));
-		// SmartDashboard.putData("Hopper Roller Slow Intake", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.SLOW_INTAKE));
-		// SmartDashboard.putData("Hopper Roller Stop", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.IDLE));
+		SmartDashboard.putData("Hopper Roller Intake", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.INTAKE));
+		SmartDashboard.putData("Hopper Roller Output", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.OUTAKE));
+		SmartDashboard.putData("Hopper Roller Slow Intake", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.SLOW_INTAKE));
+		SmartDashboard.putData("Hopper Roller Stop", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.IDLE));
 		// SmartDashboard.putData("Upward Extending Out", Hopper.Upwards.get().setpointCommand(Hopper.Upwards.MOVE_HIGH));
 		// SmartDashboard.putData("Upward Extending In", Hopper.Upwards.get().setpointCommand(Hopper.Upwards.MOVE_LOW));
-		// SmartDashboard.putData("Test Feed Rollers", FeedRollers.get().setpointCommand(FeedRollers.RUNNING));
-		// SmartDashboard.putData("Feed Rollers stop", FeedRollers.get().setpointCommand(FeedRollers.IDLE));
-		// SmartDashboard.putNumber("Distance to Hub", Swerve.get().distTo(FieldLayout.kBlueHub));
+		SmartDashboard.putData("Test Feed Rollers", FeedRollers.RUNNING);
+		SmartDashboard.putData("Feed Rollers stop", FeedRollers.get().setpointCommand(FeedRollers.IDLE));
+		SmartDashboard.putNumber("Distance to Hub", Swerve.get().distTo(FieldLayout.kBlueHub));
 
 		// SmartDashboard.putData("Testing Shooting Sequence", SuperStructure.Shooting());
 		// SmartDashboard.putData("Testing Auto Algin Sequence", SuperStructure.AutoAlgin());
+
+		SmartDashboard.putData("Testing Intake SuperStructure", SuperStructure.RunIntake());
+		SmartDashboard.putData("Testing Intake SuperStucure Idle", SuperStructure.StopIntake());
+		SmartDashboard.putData("Testing Shooter SuperStructure", SuperStructure.ShootingTesting());
+		SmartDashboard.putData("Testing Shooter Stoping", SuperStructure.ShootingStop());
 	} 
 
 	@Override

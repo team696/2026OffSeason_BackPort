@@ -116,9 +116,9 @@ public class Rollers{
         
     public static final double kGearing  = 1;
 
-    public static final Voltage kIntakeVoltage = Volts.of(12.0); 
-	public static final Voltage kSlowIntakeVoltage = Volts.of(3.0); 
-	public static final Voltage kOuttakeVoltage = Volts.of(-12.0); 
+    public static final Voltage kIntakeVoltage = Volts.of(3.0); 
+	public static final Voltage kSlowIntakeVoltage = Volts.of(1.5); 
+	public static final Voltage kOuttakeVoltage = Volts.of(-3.0); 
 	public static final Voltage kIdleVoltage = Volts.of(0.0); 
 	public static final Voltage kPreloadSpeed = Volts.of(3.0); 
 
