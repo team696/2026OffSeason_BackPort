@@ -32,11 +32,13 @@ public class FeedRollers extends FlywheelMotorSubsystem<MotorIOTalonFX> {
     }
 
   public static Setpoint IDLE = Setpoint.withVelocitySetpoint(FeedRollersConstants.IdleSpeed , 1);
-  //public static Setpoint RUNNING;
-    public static Command RUNNING = get().followSetpointCommand(() -> {
-      AngularVelocity vel = Shooting.getState().getRegression().getShooterVeloicty(ShootingSetpoint.mInstance.getLookAheadDistance()).times(FeedRollersConstants.PercentOfLUT);
-      return Setpoint.withVelocitySetpoint(vel, 1);
-    }); 
+  // Returns a new Command every call, a single shared Command can't be used in more than one group
+    public static Command running() {
+      return get().followSetpointCommand(() -> {
+        AngularVelocity vel = Shooting.getState().getRegression().getShooterVeloicty(ShootingSetpoint.mInstance.getLookAheadDistance()).times(FeedRollersConstants.PercentOfLUT);
+        return Setpoint.withVelocitySetpoint(vel, 1);
+      });
+    }
   
     public FeedRollers() {
     super(

@@ -153,7 +153,9 @@ public class MotionComp {
         SwerveRequest.FieldCentricFacingAngle FCFARequest = new SwerveRequest.FieldCentricFacingAngle()
         .withDeadband(RobotConstants.DriveConstants.MaxSpeed *0.05)
         .withRotationalDeadband(RobotConstants.DriveConstants.MaxSpeed*0.05)
-        .withHeadingPID(3, 0, 0);
+        .withHeadingPID(3, 0, 0)
+        // Target angle is computed in field (blue) coordinates, so don't rotate it by the operator perspective (180 deg on red)
+        .withTargetDirectionPerspective(SwerveRequest.TargetDirectionPerspectiveValue.BlueAlliance);
  
        return Commands.run(()->{ 
         Swerve.get().fieldSim.getObject("Target Pose").setPose(getTarget().getX(),getTarget().getY(),  getTarget().getAngle()); 

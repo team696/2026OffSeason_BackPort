@@ -39,13 +39,13 @@ public class ShootingCommands {
     public static Command testShot(){
         return Commands.parallel(
             testspinUp(),
-            FeedRollers.RUNNING
+            FeedRollers.running()
         );
     }
 
     public static Command AutoAlgin(){
         Shooting.setState(ShootingState.HUB);
-        return Commands.run(()->{Shooting.mInstance.getMotionComp().PointToTarget();});
+        return Shooting.mInstance.getMotionComp().PointToTarget();
     }
 
     public static Command shoot(){
@@ -54,7 +54,7 @@ public class ShootingCommands {
             spinUp(),
             Commands.sequence(
                 Commands.waitUntil(Shooting.mInstance::shotVerified),
-                FeedRollers.RUNNING
+                FeedRollers.running()
             )
         );
     }
@@ -66,7 +66,7 @@ public class ShootingCommands {
             spinUp(),
             Commands.sequence(
                 Commands.waitUntil(Shooting.mInstance::shotVerified),
-                FeedRollers.RUNNING
+                FeedRollers.running()
             )
         );
     }

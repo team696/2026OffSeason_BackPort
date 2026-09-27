@@ -12,7 +12,9 @@ import static edu.wpi.first.units.Units.Rotations;
   import edu.wpi.first.wpilibj2.command.Command;
   import frc.lib.bases.ServoMotorSubsystem;
   import frc.lib.io.MotorIOTalonFX;
+  import frc.lib.io.MotorIO.Mode;
   import frc.lib.io.MotorIO.Setpoint;
+  import frc.lib.util.Util;
 
   public class Hood extends ServoMotorSubsystem<MotorIOTalonFX> {
 
@@ -44,6 +46,20 @@ import static edu.wpi.first.units.Units.Rotations;
           )
       );
   }
+
+    // The lib's homing runs a voltage setpoint from periodic(). A command that re-asks for home every loop
+    // (followSetpointCommand) would cancel it before it finishes, so skip those repeats while homing.
+    // The lib finishes homing with a MOTIONMAGIC setpoint, which still goes through.
+    @Override
+    public void applySetpoint(Setpoint setpoint) {
+      boolean homing = getSetpoint().mode.isVoltageControl();
+      boolean positionAtHome = setpoint.mode == Mode.POSITIONPID
+          && Util.epsilonEquals(setpoint.baseUnits, HoodConstants.kMinAngle.baseUnitMagnitude(), epsilonThreshold.baseUnitMagnitude());
+      if (homing && positionAtHome) {
+        return;
+      }
+      super.applySetpoint(setpoint);
+    }
 
         @Override
       public void periodic() {

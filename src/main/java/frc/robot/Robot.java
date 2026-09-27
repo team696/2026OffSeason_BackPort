@@ -75,12 +75,12 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData("Hopper Roller Stop", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.IDLE));
 		// SmartDashboard.putData("Upward Extending Out", Hopper.Upwards.get().setpointCommand(Hopper.Upwards.MOVE_HIGH));
 		// SmartDashboard.putData("Upward Extending In", Hopper.Upwards.get().setpointCommand(Hopper.Upwards.MOVE_LOW));
-		SmartDashboard.putData("Test Feed Rollers", FeedRollers.RUNNING);
+		SmartDashboard.putData("Test Feed Rollers", FeedRollers.running());
 		SmartDashboard.putData("Feed Rollers stop", FeedRollers.get().setpointCommand(FeedRollers.IDLE));
 		SmartDashboard.putNumber("Distance to Hub", Swerve.get().distTo(FieldLayout.kBlueHub));
 
 		// SmartDashboard.putData("Testing Shooting Sequence", SuperStructure.Shooting());
-		// SmartDashboard.putData("Testing Auto Algin Sequence", SuperStructure.AutoAlgin());
+		SmartDashboard.putData("Testing Auto Algin Sequence", SuperStructure.AutoAlgin());
 
 		SmartDashboard.putData("Testing Intake SuperStructure", SuperStructure.RunIntake());
 		SmartDashboard.putData("Testing Intake SuperStucure Idle", SuperStructure.StopIntake());

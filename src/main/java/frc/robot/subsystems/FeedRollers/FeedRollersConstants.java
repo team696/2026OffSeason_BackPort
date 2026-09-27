@@ -50,6 +50,11 @@ public class FeedRollersConstants {
         config_talon.Slot1.kI = 0;
         config_talon.Slot1.kD = 0;
 
+        config_talon.Slot1.kV = 0.12;
+
+        // MotionMagicVelocity needs an acceleration or the roller never ramps up
+        config_talon.MotionMagic.MotionMagicAcceleration = 300.0;
+
         config_talon.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
         config_talon.CurrentLimits.StatorCurrentLimit = 90.0;
 
