@@ -6,7 +6,6 @@ package frc.robot.shooting.regression;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;

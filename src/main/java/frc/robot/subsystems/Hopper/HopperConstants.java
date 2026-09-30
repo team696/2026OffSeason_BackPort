@@ -11,21 +11,17 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Current;
-import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Voltage;
 
-import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
 import frc.lib.io.MotorIOTalonFX;
 import frc.lib.io.MotorIOTalonFX.MotorIOTalonFXConfig;
 import frc.lib.io.MotorIOTalonFXSim;
-import frc.lib.sim.LinearSim;
 import frc.lib.sim.RollerSim;
-import frc.lib.sim.LinearSim.LinearSimConstants;
 import frc.lib.sim.RollerSim.RollerSimConstants;
-import frc.lib.util.Util.DistanceAngleConverter;
 import frc.robot.Ports;
 import frc.robot.Robot;
 
@@ -112,6 +108,13 @@ public class HopperConstants {
 //     }
 
 
+public class Hopper_Pivot{
+    public static final double kGearing = 1;
+
+    public static final Angle kLowestAngle = Units.Degrees.of(0.0);
+    public static final Angle kHighest = Units.Degrees.of(15.0);
+}
+
 public class Rollers{    
         
     public static final double kGearing  = 1;
@@ -131,6 +134,8 @@ public class Rollers{
         config.Slot0.kP = 1;
         config.Slot0.kI = 0;
         config.Slot0.kD = 0;
+
+        config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         config.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
         config.CurrentLimits.StatorCurrentLimit = 90.0;

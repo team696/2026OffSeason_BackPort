@@ -13,11 +13,11 @@ import java.util.List;
 public class TrendLines {
 
     public static final LinearLineCalculator HUB_TREND_LINE = LinearLineCalculator.bestFit(List.of(
-        Pair.of(0.0,0.0)
+        Pair.of(1.0,30.0)
     ));
 
     public static final LinearLineCalculator FERRY_TREND_LINE = LinearLineCalculator.bestFit(List.of(
-        Pair.of(0.0,0.0)
+        Pair.of(1.0,30.0)
     ));
 
 }

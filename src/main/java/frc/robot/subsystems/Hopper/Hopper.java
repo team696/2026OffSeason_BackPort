@@ -8,9 +8,7 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.bases.MotorSubsystem;
-import frc.lib.bases.ServoMotorSubsystem;
 import frc.lib.io.MotorIOTalonFX;
-import frc.robot.subsystems.Shooter.Shooter;
 import frc.lib.io.MotorIO.Setpoint;
 
 public class Hopper {

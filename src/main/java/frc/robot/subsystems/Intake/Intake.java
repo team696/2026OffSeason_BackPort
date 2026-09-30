@@ -7,7 +7,6 @@ package frc.robot.subsystems.Intake;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
-import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.bases.MotorSubsystem;
 import frc.lib.bases.ServoMotorSubsystem;

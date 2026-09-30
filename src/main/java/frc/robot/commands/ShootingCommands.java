@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.lib.io.MotorIO.Setpoint;
 import frc.robot.shooting.Shooting;
 import frc.robot.shooting.ShootingSetpoint;
 import frc.robot.shooting.ShootingState;
@@ -39,7 +38,7 @@ public class ShootingCommands {
     public static Command testShot(){
         return Commands.parallel(
             testspinUp(),
-            FeedRollers.running()
+            FeedRollers.get().setpointCommand(FeedRollers.RUNNING)
         );
     }
 
@@ -54,7 +53,7 @@ public class ShootingCommands {
             spinUp(),
             Commands.sequence(
                 Commands.waitUntil(Shooting.mInstance::shotVerified),
-                FeedRollers.running()
+                FeedRollers.get().setpointCommand(FeedRollers.RUNNING)
             )
         );
     }
@@ -66,7 +65,7 @@ public class ShootingCommands {
             spinUp(),
             Commands.sequence(
                 Commands.waitUntil(Shooting.mInstance::shotVerified),
-                FeedRollers.running()
+                FeedRollers.get().setpointCommand(FeedRollers.RUNNING)
             )
         );
     }

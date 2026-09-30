@@ -11,7 +11,6 @@ import static edu.wpi.first.units.Units.Seconds;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -27,7 +26,6 @@ import frc.lib.sim.RollerSim.RollerSimConstants;
 import frc.lib.util.tunablenumbers.TunableNumber;
 import frc.robot.Ports;
 import frc.robot.Robot;
-import frc.robot.subsystems.Hood.HoodConstants;
 
 /** Add your docs here. */  
 public class ShooterConstants {

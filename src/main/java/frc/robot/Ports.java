@@ -7,16 +7,17 @@ public enum Ports {
 	INTAKE_ROLLERS_FOLLOWER(10, RobotConstants.RIOBUS),
 	INTAKE_RACK_AND_PINION(11, RobotConstants.RIOBUS),
 	HOPPER_ROLLERS(12, RobotConstants.RIOBUS),
-	FEEDER_ROLLERS(13, RobotConstants.RIOBUS),
-	FEED_ROLLERS_FOLLOWER(14,RobotConstants.RIOBUS),
-	TUNNEL_ROLLERS_MAIN(15, RobotConstants.RIOBUS),
-	TUNNEL_ROLLERS_FOLLOWER(16, RobotConstants.RIOBUS),
-	SHOOTER_MAIN(17, RobotConstants.RIOBUS),
-	SHOOTER_FOLLOWER(18, RobotConstants.RIOBUS),
-	HOOD(19, RobotConstants.RIOBUS),
-	CANDLE(20 ,RobotConstants.RIOBUS);
-	// HOPPER_UPWARDS_MAIN(22, RobotConstants.RIOBUS),
-	// HOPPER_UPWARDS_FOLLOWER(23, RobotConstants.RIOBUS);
+	HOPPER_PIVOT(13, RobotConstants.RIOBUS),
+	FEEDER_ROLLERS(14, RobotConstants.RIOBUS),
+	SHOOTER_MAIN(15, RobotConstants.RIOBUS),
+	SHOOTER_FOLLOWER(16, RobotConstants.RIOBUS),
+	HOOD(17, RobotConstants.RIOBUS),
+	CANDLE(18 ,RobotConstants.RIOBUS),
+	FEED_ROLLERS_FOLLOWER(19,RobotConstants.RIOBUS);
+	// HOPPER_UPWARDS_MAIN(19, RobotConstants.RIOBUS),
+	// HOPPER_UPWARDS_FOLLOWER(20, RobotConstants.RIOBUS);
+	
+
 
 	public final int id;
 	public final CANBus bus;

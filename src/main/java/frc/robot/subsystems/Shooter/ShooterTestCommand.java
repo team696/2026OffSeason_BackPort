@@ -14,7 +14,6 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.lib.io.MotorIOTalonFX;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ShooterTestCommand extends Command {
@@ -36,9 +35,9 @@ public class ShooterTestCommand extends Command {
 
   public ShooterTestCommand(TalonFX feedrollers, TalonFX shooter) {
     this.m_feedrollers = feedrollers;
-    this.m_current_feedrollers = feedrollers.getTorqueCurrent();
+    this.m_current_feedrollers = feedrollers.getStatorCurrent();
     this.m_shooter = shooter;
-    this.m_current_shooters = m_shooter.getTorqueCurrent();
+    this.m_current_shooters = m_shooter.getStatorCurrent();
   }
 
   // Called when the command is initially scheduled.

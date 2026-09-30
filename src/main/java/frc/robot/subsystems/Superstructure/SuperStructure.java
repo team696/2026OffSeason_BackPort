@@ -6,9 +6,7 @@ package frc.robot.subsystems.Superstructure;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.subsystems.Hopper.Hopper;
 import frc.robot.subsystems.Intake.Intake;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.ShootingCommands;
 
 /** Add your docs here. */
@@ -54,12 +52,12 @@ public class SuperStructure {
         );
     }
 
-        public static Command ShootingTesting(){
-            return Commands.parallel(
-                ShootingCommands.testShot(),
-                SuperStructureConstants.runHopperRoller()
-            );
-        }
+    public static Command ShootingTesting(){
+        return Commands.parallel(
+            ShootingCommands.testShot(),
+            SuperStructureConstants.runHopperRoller()
+        );
+    }
 
     public static Command ShootingStop(){
         return Commands.parallel(

@@ -5,20 +5,10 @@
 package frc.robot.subsystems.FeedRollers;
 
 import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.Seconds;
-
-import java.util.function.UnaryOperator;
-
-import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.bases.FlywheelMotorSubsystem;
 import frc.lib.io.MotorIOTalonFX;
-import frc.lib.io.MotorIO;
-import frc.lib.io.MotorIO.Mode;
 import frc.lib.io.MotorIO.Setpoint;
-import frc.robot.shooting.Shooting;
-import frc.robot.shooting.ShootingSetpoint;
 
 public class FeedRollers extends FlywheelMotorSubsystem<MotorIOTalonFX> {
   /** Creates a new FeedRollers. */
@@ -32,13 +22,14 @@ public class FeedRollers extends FlywheelMotorSubsystem<MotorIOTalonFX> {
     }
 
   public static Setpoint IDLE = Setpoint.withVelocitySetpoint(FeedRollersConstants.IdleSpeed , 1);
+  public static Setpoint RUNNING = Setpoint.withVelocitySetpoint(FeedRollersConstants.RunningSpeed, 1);
   // Returns a new Command every call, a single shared Command can't be used in more than one group
-    public static Command running() {
-      return get().followSetpointCommand(() -> {
-        AngularVelocity vel = Shooting.getState().getRegression().getShooterVeloicty(ShootingSetpoint.mInstance.getLookAheadDistance()).times(FeedRollersConstants.PercentOfLUT);
-        return Setpoint.withVelocitySetpoint(vel, 1);
-      });
-    }
+    // public static Command running() {
+    //   return get().followSetpointCommand(() -> {
+    //     AngularVelocity vel = Shooting.getState().getRegression().getShooterVeloicty(ShootingSetpoint.mInstance.getLookAheadDistance()).times(FeedRollersConstants.PercentOfLUT).times(-1);
+    //     return Setpoint.withVelocitySetpoint(vel, 1);
+    //   });
+    // }
   
     public FeedRollers() {
     super(
@@ -48,10 +39,6 @@ public class FeedRollers extends FlywheelMotorSubsystem<MotorIOTalonFX> {
       FeedRollersConstants.debounder
     );
 
-    //define custom setpoint RUNNING
-    //dfiene the unuary opprator first
-
-    //Setpoint running = new Setpoint();
     applySetpoint(IDLE);
   }
 

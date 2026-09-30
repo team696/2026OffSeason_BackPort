@@ -10,7 +10,6 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.measure.Voltage;
 
 import static edu.wpi.first.units.Units.Amps;
 
@@ -100,7 +99,7 @@ public class IntakeConstants {
         constants.maxHeight = kOutDistance;
         constants.simGravity = false;
         constants.startingHeight = kInDistance;
-        constants.motor = DCMotor.getKrakenX60Foc(1);
+        constants.motor = DCMotor.getKrakenX60(1);
         constants.carriageMass = Units.Pounds.of(8);
         constants.converter = converter;
         
@@ -118,8 +117,8 @@ public class IntakeConstants {
         // public static final Voltage kOuttakeVoltage = Units.Volts.of(-5.0);
 
         public static final AngularVelocity kIdleSpeed = Units.RotationsPerSecond.of(0.0);
-        public static final AngularVelocity kIntakeSpeed = Units.RotationsPerSecond.of(50.0);
-        public static final AngularVelocity kOuttakeSpeed = Units.RotationsPerSecond.of(-50.0);
+        public static final AngularVelocity kIntakeSpeed = Units.RotationsPerSecond.of(60.0);
+        public static final AngularVelocity kOuttakeSpeed = Units.RotationsPerSecond.of(-60.0);
 
         public static TalonFXConfiguration getTaloFXConfig(){
             TalonFXConfiguration config = new TalonFXConfiguration();
@@ -131,7 +130,7 @@ public class IntakeConstants {
             config.CurrentLimits.SupplyCurrentLimit = 50.0;
             config.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
-            config.Slot1.kP = 0.8;
+            config.Slot1.kP = 0.3;
             config.Slot1.kV = 0.12;
 
             config.MotionMagic.MotionMagicCruiseVelocity = 100;

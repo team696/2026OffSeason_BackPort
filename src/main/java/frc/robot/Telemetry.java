@@ -84,8 +84,17 @@ public class Telemetry {
 
     private final double[] m_poseArray = new double[3];
 
+    /* This runs on the odometry thread (up to 250 Hz on a CANivore), so only publish at ~50 Hz to save rio CPU */
+    private static final double kPublishPeriodSeconds = 0.02;
+    private double m_lastPublishTime = 0.0;
+
     /** Accept the swerve drive state and telemeterize it to SmartDashboard and SignalLogger. */
     public void telemeterize(SwerveDriveState state) {
+        if (state.Timestamp - m_lastPublishTime < kPublishPeriodSeconds) {
+            return;
+        }
+        m_lastPublishTime = state.Timestamp;
+
         /* Telemeterize the swerve drive state */
         drivePose.set(state.Pose);
         driveSpeeds.set(state.Speeds);

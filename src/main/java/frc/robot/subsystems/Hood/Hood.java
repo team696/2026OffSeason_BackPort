@@ -5,7 +5,6 @@
   package frc.robot.subsystems.Hood;
 
   import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Rotations;
 
   import edu.wpi.first.units.Units;
   import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

@@ -22,13 +22,12 @@ import frc.lib.sim.RollerSim;
 import frc.lib.sim.RollerSim.RollerSimConstants;
 import frc.robot.Ports;
 import frc.robot.Robot;
-import frc.robot.shooting.ShootingState;
-import frc.robot.shooting.regression.LookUpTables;
 
 /** Add your docs here. */
 public class FeedRollersConstants {
 
     public static AngularVelocity IdleSpeed = RotationsPerSecond.of(0);
+    public static AngularVelocity RunningSpeed = RotationsPerSecond.of(30.0*0.7*-1);
     public static final AngularVelocity epsilonThreshold = RotationsPerSecond.of(0.1);
     public static final Time debounder = Second.of(0.0);
     public static final double kGearing = 1;
@@ -46,14 +45,16 @@ public class FeedRollersConstants {
         config.followerAlignment = new MotorAlignmentValue[] {MotorAlignmentValue.Opposed};
 
         TalonFXConfiguration config_talon = new TalonFXConfiguration();
-        config_talon.Slot1.kP = 1;
+        config_talon.Slot1.kP = 0.3;
         config_talon.Slot1.kI = 0;
         config_talon.Slot1.kD = 0;
 
         config_talon.Slot1.kV = 0.12;
 
         // MotionMagicVelocity needs an acceleration or the roller never ramps up
+        config_talon.MotionMagic.MotionMagicCruiseVelocity = 100.0;
         config_talon.MotionMagic.MotionMagicAcceleration = 300.0;
+        config_talon.MotionMagic.MotionMagicJerk = 1000.0;
 
         config_talon.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
         config_talon.CurrentLimits.StatorCurrentLimit = 90.0;
