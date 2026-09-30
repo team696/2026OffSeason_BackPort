@@ -276,12 +276,12 @@ public class MotorIOTalonFX extends MotorIO {
 			return new MotionMagicExpoVoltage(mechanismPosition)
 					.withSlot(slot)
 					.withEnableFOC(true)
-					.withUpdateFreqHz(Hertz.of(1000));
+					.withUpdateFreqHz(Hertz.of(100));
 		}
 
 		public ControlRequest getVelocityRequest(AngularVelocity mechanismVelocity, int slot) {
 			return new MotionMagicVelocityVoltage(mechanismVelocity)
-					.withUpdateFreqHz(Hertz.of(1000.0))
+					.withUpdateFreqHz(Hertz.of(100.0))
 					.withEnableFOC(true)
 					.withSlot(slot);
 		}
