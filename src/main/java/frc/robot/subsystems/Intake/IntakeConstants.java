@@ -117,8 +117,8 @@ public class IntakeConstants {
         // public static final Voltage kOuttakeVoltage = Units.Volts.of(-5.0);
 
         public static final AngularVelocity kIdleSpeed = Units.RotationsPerSecond.of(0.0);
-        public static final AngularVelocity kIntakeSpeed = Units.RotationsPerSecond.of(60.0);
-        public static final AngularVelocity kOuttakeSpeed = Units.RotationsPerSecond.of(-60.0);
+        public static final AngularVelocity kIntakeSpeed = Units.RotationsPerSecond.of(30.0);
+        public static final AngularVelocity kOuttakeSpeed = Units.RotationsPerSecond.of(-30.0);
 
         public static TalonFXConfiguration getTaloFXConfig(){
             TalonFXConfiguration config = new TalonFXConfiguration();
@@ -151,10 +151,6 @@ public class IntakeConstants {
             config.mainConfig = getTaloFXConfig();
             config.mainID = Ports.INTAKE_ROLLERS_MAIN.id;
             config.mainBus = Ports.INTAKE_ROLLERS_MAIN.bus;
-            config.followerConfig = getTaloFXConfig();
-            config.followerAlignment = new MotorAlignmentValue[] {MotorAlignmentValue.Opposed};
-            config.followerIDs = new int[] {Ports.INTAKE_ROLLERS_FOLLOWER.id};
-            config.followerBuses = new CANBus[] {Ports.INTAKE_ROLLERS_FOLLOWER.bus};
             return config;
         }
 
@@ -182,5 +178,76 @@ public class IntakeConstants {
 
     }
 
+
+        public class Roller2{
+        public static final double kGearing = 3;
+
+       //public static final Voltage kIdleVoltage = Units.Volts.of(0.0);
+        // public static final Voltage kIntakeVoltage = Units.Volts.of(5.0);
+        // public static final Voltage kOuttakeVoltage = Units.Volts.of(-5.0);
+
+        public static final AngularVelocity kIdleSpeed = Units.RotationsPerSecond.of(0.0);
+        public static final AngularVelocity kIntakeSpeed = Units.RotationsPerSecond.of(-30.0);
+        public static final AngularVelocity kOuttakeSpeed = Units.RotationsPerSecond.of(30.0);
+
+        public static TalonFXConfiguration getTaloFXConfig(){
+            TalonFXConfiguration config = new TalonFXConfiguration();
+
+            config.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
+            config.CurrentLimits.StatorCurrentLimit = 80;
+
+            config.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
+            config.CurrentLimits.SupplyCurrentLimit = 50.0;
+            config.CurrentLimits.SupplyCurrentLowerTime = 0.1;
+
+            config.Slot1.kP = 0.3;
+            config.Slot1.kV = 0.12;
+
+            config.MotionMagic.MotionMagicCruiseVelocity = 100;
+            config.MotionMagic.MotionMagicAcceleration = 50;
+            config.MotionMagic.MotionMagicJerk = 1000;
+
+            config.Voltage.PeakForwardVoltage = 12.0;
+	        config.Voltage.PeakReverseVoltage = -12.0;
+
+            config.Feedback.SensorToMechanismRatio = kGearing;
+
+
+            return config;
+        }
+
+        public static MotorIOTalonFXConfig getIOConfig(){
+            MotorIOTalonFXConfig config = new MotorIOTalonFXConfig();
+            config.mainConfig = getTaloFXConfig();
+            config.mainID = Ports.INTAKE_ROLLERS_FOLLOWER.id;
+            config.mainBus = Ports.INTAKE_ROLLERS_FOLLOWER.bus;
+            return config;
+        }
+
+        public static MotorIOTalonFX getMotorIO(){
+            if(Robot.isReal()){
+                return new MotorIOTalonFX(getIOConfig());
+            }else{
+                return new MotorIOTalonFXSim(getIOConfig(), new RollerSim(getSimConstants()));
+            }
+        }
+
+        public static RollerSimConstants getSimConstants() {
+            RollerSimConstants simConstants = new RollerSimConstants();
+
+            simConstants.motor = DCMotor.getKrakenX60(1);
+            simConstants.gearing = kGearing;
+            simConstants.momentOfInertia = 0.0001618297;
+
+            return simConstants;
+        }
+
+
+
+
+
+    }
+
+    
 
 }

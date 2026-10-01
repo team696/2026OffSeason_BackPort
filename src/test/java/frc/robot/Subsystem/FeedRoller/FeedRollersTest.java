@@ -37,7 +37,7 @@ class FeedRollersTest extends SubsystemTestBase {
 
     @Test
     void runningSpeedIsSeventyPercentOfShotSpeedReversed() {
-        assertEquals(-21.0, FeedRollersConstants.RunningSpeed.in(RotationsPerSecond), kEpsilon);
+        assertEquals(-70.0, FeedRollersConstants.RunningSpeed.in(RotationsPerSecond), kEpsilon);
         assertEquals(0.7, FeedRollersConstants.PercentOfLUT, kEpsilon);
     }
 

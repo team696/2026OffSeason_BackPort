@@ -28,6 +28,29 @@ public class SuperStructureConstants {
         );
     }
 
+    public static Command IntakeRollers(){
+        return Commands.parallel(
+            Intake.Rollers.get().setpointCommand(Intake.Rollers.INTAKE),
+            Intake.Rollers2.get().setpointCommand(Intake.Rollers2.INTAKE)
+        );
+    }
+
+    public static Command OutakeRollers(){
+        return Commands.parallel(
+            Intake.Rollers.get().setpointCommand(Intake.Rollers.OUTAKE),
+            Intake.Rollers2.get().setpointCommand(Intake.Rollers2.OUTAKE)
+        );
+    }
+
+    public static Command StopIntakeRollers(){
+        return Commands.parallel(
+            Intake.Rollers.get().setpointCommand(Intake.Rollers.IDLE),
+            Intake.Rollers2.get().setpointCommand(Intake.Rollers2.IDLE)
+        );
+    }
+
+
+
 
 
 }

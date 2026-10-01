@@ -20,6 +20,7 @@ import frc.lib.io.MotorIOTalonFXSim;
 import frc.lib.io.MotorIOTalonFX.MotorIOTalonFXConfig;
 import frc.lib.sim.RollerSim;
 import frc.lib.sim.RollerSim.RollerSimConstants;
+import frc.lib.util.tunablenumbers.TunableNumber;
 import frc.robot.Ports;
 import frc.robot.Robot;
 
@@ -32,6 +33,7 @@ public class FeedRollersConstants {
     public static final Time debounder = Second.of(0.0);
     public static final double kGearing = 1;
     public static final double PercentOfLUT = 0.7;
+    public static final TunableNumber testSpeed = new TunableNumber("Feed Rollers Test Speed", 0.0);
 
 
     public static MotorIOTalonFXConfig getConfig() {

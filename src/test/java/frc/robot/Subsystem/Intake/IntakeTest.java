@@ -11,6 +11,7 @@ import frc.lib.io.MotorIO.Setpoint;
 import frc.robot.Subsystem.SubsystemTestBase;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeConstants;
+import frc.robot.subsystems.Superstructure.SuperStructureConstants;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -22,6 +23,7 @@ class IntakeTest extends SubsystemTestBase {
         warmUp(() -> {
             Intake.RackAndPinion.get();
             Intake.Rollers.get();
+            Intake.Rollers2.get();
         });
     }
 
@@ -77,12 +79,27 @@ class IntakeTest extends SubsystemTestBase {
         assertSame(Setpoint.COAST, Intake.Rollers.IDLE);
     }
 
+    @Test
+    void roller2SetpointsUseRoller2Constants() {
+        assertEquals(Mode.VELOCITY, Intake.Rollers2.INTAKE.mode);
+        assertEquals(Mode.VELOCITY, Intake.Rollers2.OUTAKE.mode);
+        assertEquals(IntakeConstants.Roller2.kIntakeSpeed.baseUnitMagnitude(), Intake.Rollers2.INTAKE.baseUnits, kEpsilon);
+        assertEquals(IntakeConstants.Roller2.kOuttakeSpeed.baseUnitMagnitude(), Intake.Rollers2.OUTAKE.baseUnits, kEpsilon);
+        assertSame(Setpoint.COAST, Intake.Rollers2.IDLE);
+    }
+
+    @Test
+    void rollersAreSeparateMotors() {
+        assertTrue(IntakeConstants.Roller.getIOConfig().mainID != IntakeConstants.Roller2.getIOConfig().mainID);
+    }
+
     // ---- behavior in sim ----
 
     @Test
     void getReturnsSameInstance() {
         assertSame(Intake.RackAndPinion.get(), Intake.RackAndPinion.get());
         assertSame(Intake.Rollers.get(), Intake.Rollers.get());
+        assertSame(Intake.Rollers2.get(), Intake.Rollers2.get());
     }
 
     @Test
@@ -115,5 +132,21 @@ class IntakeTest extends SubsystemTestBase {
             "Intake rollers never reached intake speed, last read " + rollers.getVelocity().in(RotationsPerSecond));
 
         schedule(rollers.setpointCommand(Intake.Rollers.IDLE));
+    }
+
+    // the intake/outtake/stop groups crashed robotInit when both halves required Rollers
+    @Test
+    void rollerGroupsDriveBothRollers() {
+        schedule(SuperStructureConstants.IntakeRollers());
+        assertSame(Intake.Rollers.INTAKE, Intake.Rollers.get().getSetpoint());
+        assertSame(Intake.Rollers2.INTAKE, Intake.Rollers2.get().getSetpoint());
+
+        schedule(SuperStructureConstants.OutakeRollers());
+        assertSame(Intake.Rollers.OUTAKE, Intake.Rollers.get().getSetpoint());
+        assertSame(Intake.Rollers2.OUTAKE, Intake.Rollers2.get().getSetpoint());
+
+        schedule(SuperStructureConstants.StopIntakeRollers());
+        assertSame(Intake.Rollers.IDLE, Intake.Rollers.get().getSetpoint());
+        assertSame(Intake.Rollers2.IDLE, Intake.Rollers2.get().getSetpoint());
     }
 }

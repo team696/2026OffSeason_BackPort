@@ -6,6 +6,7 @@ package frc.robot.subsystems.FeedRollers;
 
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.bases.FlywheelMotorSubsystem;
 import frc.lib.io.MotorIOTalonFX;
 import frc.lib.io.MotorIO.Setpoint;
@@ -40,6 +41,14 @@ public class FeedRollers extends FlywheelMotorSubsystem<MotorIOTalonFX> {
     );
 
     applySetpoint(IDLE);
+  }
+
+  public Command getTestSpeedCommand() {
+    return followSetpointCommand(() ->
+        Setpoint.withVelocitySetpoint(
+            RotationsPerSecond.of(FeedRollersConstants.testSpeed.getAsDouble()), 1
+        )
+    );
   }
 
   @Override

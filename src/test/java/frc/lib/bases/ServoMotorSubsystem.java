@@ -69,7 +69,7 @@ public class ServoMotorSubsystem<IO extends MotorIO> extends MotorSubsystem<IO> 
 	public void periodic() {
 		super.periodic();
 		if (isHomingSubsystem) {
-			if (mNeedsToHome && setpointNearHome() && nearHomingLocation()) {
+			if (mNeedsToHome && !mHoming && setpointNearHome() && nearHomingLocation()) {
 				mHoming = true;
 				useSoftLimits(false);
 				mHomingDelay =

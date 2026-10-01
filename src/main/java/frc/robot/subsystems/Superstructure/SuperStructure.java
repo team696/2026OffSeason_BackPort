@@ -14,21 +14,21 @@ public class SuperStructure {
     public static Command RunIntake() {
         return Commands.parallel(
             Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.EXTEND),
-            Intake.Rollers.get().setpointCommand(Intake.Rollers.INTAKE)
+            SuperStructureConstants.IntakeRollers()
         );
     }
 
     public static Command Outtake() {
         return Commands.parallel(
             Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.EXTEND),
-            Intake.Rollers.get().setpointCommand(Intake.Rollers.OUTAKE)
+            SuperStructureConstants.OutakeRollers()
         );
     }
 
     public static Command StopIntake(){
         return Commands.parallel(
             Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.RETRACT),
-            Intake.Rollers.get().setpointCommand(Intake.Rollers.IDLE)
+            SuperStructureConstants.StopIntakeRollers()
         );
     }
     

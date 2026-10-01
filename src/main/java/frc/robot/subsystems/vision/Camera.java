@@ -24,12 +24,12 @@ public class Camera extends CameraSubsystem{
 
     //If set to this, it will use Localization to map its position on the field
     public Command switchToAprilTagPipeline(){
-        return runOnce(() -> setPipeline(CameraConstants.PipelineConstants.APRIL_TAG));
+        return runOnce(() -> setPipeline(CameraConstants.PipelineConstants.APRIL_TAG)).ignoringDisable(true);
     }
 
     //Once changed to this, it can detect objects based off of the Limelight detection
     public Command switchToNueralNetworkPipeline(){
-        return runOnce(()-> setPipeline(CameraConstants.PipelineConstants.GAME_PIECE));
+        return runOnce(()-> setPipeline(CameraConstants.PipelineConstants.GAME_PIECE)).ignoringDisable(true);
     }
 
     

@@ -37,7 +37,7 @@ public class ShooterConstants {
 
     public static final AngularVelocity epsilonThreshold = RotationsPerSecond.of(0.1);
 
-    public static final double kGearing = 1;
+    public static final double kGearing = 45.0/22.0;
 
 
     public static RollerSimConstants getSimConstants() {
@@ -64,11 +64,11 @@ public class ShooterConstants {
 
         TalonFXConfiguration config_talon = new TalonFXConfiguration();
 
-        config_talon.Slot1.kP = 0.3;
+        config_talon.Slot1.kP = 0.5;
         config_talon.Slot1.kI = 0;
         config_talon.Slot1.kD = 0;
 
-        config_talon.Slot1.kV = 0.12;
+        config_talon.Slot1.kV = 0.35;
 
         config_talon.MotionMagic.MotionMagicCruiseVelocity = 30.0;
         config_talon.MotionMagic.MotionMagicAcceleration = 300.0;

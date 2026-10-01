@@ -72,4 +72,28 @@ public class Intake{
 
 	}
 
+  	public static class Rollers2 extends MotorSubsystem<MotorIOTalonFX>{
+		private static Rollers2 rollers = null;
+		public static synchronized Rollers2 get(){
+			if(rollers == null){
+				rollers = new Rollers2();
+			}
+			return rollers;
+		}
+
+		public static final Setpoint IDLE = Setpoint.COAST;
+		public static final Setpoint INTAKE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller2.kIntakeSpeed);
+		public static final Setpoint OUTAKE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller2.kOuttakeSpeed);
+		public Rollers2(){
+			super(IntakeConstants.Roller2.getMotorIO(), "Intake Roller 2");
+		}
+
+    @Override
+    public void periodic() {
+      super.periodic();
+      SmartDashboard.putNumber("Intake Roller 2 Velocity", this.getVelocity().in(RotationsPerSecond));
+    }
+
+	}
+
 }
