@@ -4,14 +4,64 @@
 
 package frc.robot.subsystems.Hopper;
 
+import static edu.wpi.first.units.Units.Degree;
+import static edu.wpi.first.units.Units.Rotation;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import java.util.function.UnaryOperator;
+
+import edu.wpi.first.units.AngleUnit;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import frc.lib.bases.MotorSubsystem;
+import frc.lib.bases.ServoMotorSubsystem;
 import frc.lib.io.MotorIOTalonFX;
+import frc.lib.io.MotorIO;
+import frc.lib.io.MotorIO.Mode;
 import frc.lib.io.MotorIO.Setpoint;
+import frc.robot.subsystems.Hopper.HopperConstants.HopperPivot;
 
 public class Hopper {
+
+  public static class Pivot extends ServoMotorSubsystem<MotorIOTalonFX> {
+    private static Pivot pivot = null;
+    public static synchronized Pivot get(){
+      if(pivot == null){
+        pivot = new Pivot();
+      }
+      return pivot;
+    }
+
+    public Pivot(){
+      super(HopperConstants.HopperPivot.getMotorIO(), "Hopper Pivot", HopperPivot.kEpsilon);
+    }
+
+    public static final Setpoint UP = Setpoint.withPositionVelocitySetpoint(HopperPivot.kHighest, HopperPivot.kUpCruiseVelocity);
+    public static final Setpoint DOWN = Setpoint.withPositionVelocitySetpoint(HopperPivot.kLowestAngle, HopperPivot.kDownCruiseVelocity);
+
+    /* 
+    @Override
+    public void applySetpoint(Setpoint setpoint) {
+      if (setpoint.mode.isPositionControl()) {
+        boolean goingUp = setpoint.baseUnits > getPosition().baseUnitMagnitude();
+        AngularVelocity cruiseVelocity =
+            goingUp ? HopperPivot.kUpCruiseVelocity : HopperPivot.kDownCruiseVelocity;
+        io.changeMainConfig(config -> {
+          config.MotionMagic.MotionMagicCruiseVelocity = cruiseVelocity.in(RotationsPerSecond);
+          return config;
+        });
+      }
+      super.applySetpoint(setpoint);
+    } */
+
+      @Override
+      public void periodic() {
+        super.periodic();
+        SmartDashboard.putNumber("Hopper Pivot Location", this.getPosition().in(Rotation));
+      } 
+  }
 
   public static class Rollers extends MotorSubsystem<MotorIOTalonFX>{
 

@@ -4,22 +4,27 @@
 
 package frc.robot.subsystems.Hopper;
 
-import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Degree;
+import static edu.wpi.first.units.Units.Inch;
+import static edu.wpi.first.units.Units.Rotation;
+import static edu.wpi.first.units.Units.Volts;
+
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Voltage;
-
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.MotorAlignmentValue;
-
 import frc.lib.io.MotorIOTalonFX;
 import frc.lib.io.MotorIOTalonFX.MotorIOTalonFXConfig;
 import frc.lib.io.MotorIOTalonFXSim;
+import frc.lib.sim.PivotSim.PivotSimConstants;
+import frc.lib.sim.PivotSim;
 import frc.lib.sim.RollerSim;
 import frc.lib.sim.RollerSim.RollerSimConstants;
 import frc.robot.Ports;
@@ -108,11 +113,71 @@ public class HopperConstants {
 //     }
 
 
-public class Hopper_Pivot{
+public class HopperPivot{
     public static final double kGearing = 1;
+    public static final Angle kEpsilon = Degree.of(0.1);
 
     public static final Angle kLowestAngle = Units.Degrees.of(0.0);
     public static final Angle kHighest = Units.Degrees.of(15.0);
+
+    public static final AngularVelocity kUpCruiseVelocity = Units.DegreesPerSecond.of(30.0);
+    public static final AngularVelocity kDownCruiseVelocity = Units.DegreesPerSecond.of(10.0);
+
+    public static final TalonFXConfiguration getTalonFXConfig(){
+        TalonFXConfiguration config = new TalonFXConfiguration();
+
+        config.Slot0.kP = 1;
+        config.Slot0.kI = 0;
+        config.Slot0.kD = 0;
+
+        config.MotionMagic.MotionMagicCruiseVelocity = kDownCruiseVelocity.in(Units.RotationsPerSecond);
+        config.MotionMagic.MotionMagicExpo_kV = 0.12;
+        config.MotionMagic.MotionMagicExpo_kA = 0.1;
+
+
+        //TODO
+        config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
+        config.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
+        config.CurrentLimits.StatorCurrentLimit = 90.0;
+
+        config.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
+        config.CurrentLimits.SupplyCurrentLimit = 45.0;
+
+        config.Feedback.SensorToMechanismRatio = kGearing;
+
+        return config;
+    }
+
+
+    public static MotorIOTalonFXConfig getIOConfig(){
+        MotorIOTalonFXConfig config = new MotorIOTalonFXConfig();
+        config.mainConfig = getTalonFXConfig();
+        config.mainID = Ports.HOPPER_PIVOT.id;
+        config.mainBus = Ports.HOPPER_PIVOT.bus;
+        config.time = Units.Seconds;
+        config.unit = Units.Degrees;
+        return config;
+    }
+
+    public static MotorIOTalonFX getMotorIO(){
+        if(Robot.isReal()){
+            return new MotorIOTalonFX(getIOConfig());
+        }
+        else{
+            return new MotorIOTalonFXSim(getIOConfig(), new PivotSim(getSimConstants()));
+        }
+    }
+
+    public static PivotSimConstants getSimConstants(){
+        PivotSimConstants constants = new PivotSimConstants();
+		constants.gearing = kGearing;
+		constants.motor = DCMotor.getKrakenX60(1);
+        constants.armLength = Inch.of(19.5);
+        constants.mechanismStartPos = Rotation.of(0);
+        //Pivot sim is not done, if needed please fill out
+		return constants;
+    }
 }
 
 public class Rollers{    
