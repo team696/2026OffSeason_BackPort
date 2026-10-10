@@ -60,6 +60,7 @@ public class Intake{
 		public static final Setpoint IDLE = Setpoint.COAST;
 		public static final Setpoint INTAKE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller.kIntakeSpeed);
 		public static final Setpoint OUTAKE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller.kOuttakeSpeed);
+    public static final Setpoint SLOW_INTAKE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller.kSlowIntakeSpeed);
 		public Rollers(){
 			super(IntakeConstants.Roller.getMotorIO(), "Intake Roller");
 		}
@@ -84,6 +85,7 @@ public class Intake{
 		public static final Setpoint IDLE = Setpoint.COAST;
 		public static final Setpoint INTAKE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller2.kIntakeSpeed);
 		public static final Setpoint OUTAKE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller2.kOuttakeSpeed);
+    public static final Setpoint SLOW_INTAKE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller2.kSlowIntakeSpeed);
 		public Rollers2(){
 			super(IntakeConstants.Roller2.getMotorIO(), "Intake Roller 2");
 		}

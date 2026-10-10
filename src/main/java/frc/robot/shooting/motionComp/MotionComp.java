@@ -29,7 +29,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Controls;
 import frc.robot.RobotConstants;
 import frc.robot.shooting.Shooting;
-import frc.robot.shooting.regression.AirtimeRegression;
 import frc.robot.subsystems.drive.Swerve;
 
 /** Add your docs here. */
@@ -83,19 +82,25 @@ public class MotionComp {
 
     }
 
+    private ChassisSpeeds getFieldSpeeds() {
+        return ChassisSpeeds.fromRobotRelativeSpeeds(getCurrentSpeeds(), getCurrentPose().getRotation());
+    }
+
     public ChassisSpeeds FindDirectionTangentialVelocity() {
-        double vel_x = getCurrentSpeeds().vxMetersPerSecond
-            + (m_shooterOffset.getX() * getCurrentSpeeds().omegaRadiansPerSecond * phi().getCos());
-        double vel_y = getCurrentSpeeds().vyMetersPerSecond
-            + (m_shooterOffset.getX() * getCurrentSpeeds().omegaRadiansPerSecond * phi().getSin());
+        ChassisSpeeds fieldSpeeds = getFieldSpeeds();
+        double vel_x = fieldSpeeds.vxMetersPerSecond
+            + (m_shooterOffset.getX() * fieldSpeeds.omegaRadiansPerSecond * phi().getCos());
+        double vel_y = fieldSpeeds.vyMetersPerSecond
+            + (m_shooterOffset.getX() * fieldSpeeds.omegaRadiansPerSecond * phi().getSin());
         ChassisSpeeds Shooter_Velocity = new ChassisSpeeds(vel_x, vel_y,0.0);
-        
+
         return Shooter_Velocity;
     }
 
     public Translation2d updatedPose(Distance distance){
-        double x_pose = ProgressLookAheadPos().getX() + FindDirectionTangentialVelocity().vxMetersPerSecond * AirtimeRegression.distanceToTimeToHub.get(distance.in(Meters));
-        double y_pose = ProgressLookAheadPos().getY() + FindDirectionTangentialVelocity().vyMetersPerSecond * AirtimeRegression.distanceToTimeToHub.get(distance.in(Meters));
+        double airtime = Shooting.getState().getDistanceToFuelAirTimeMap().get(distance.in(Meters));
+        double x_pose = ProgressLookAheadPos().getX() + FindDirectionTangentialVelocity().vxMetersPerSecond * airtime;
+        double y_pose = ProgressLookAheadPos().getY() + FindDirectionTangentialVelocity().vyMetersPerSecond * airtime;
         Translation2d newPose = new Translation2d(x_pose, y_pose);
 
         return newPose;
@@ -149,10 +154,19 @@ public class MotionComp {
        return new Rotation2d(Math.atan2(pose.getY(), pose.getX()));
     }
     
+    // How fast the aim angle is moving (rad/s) as the robot drives, so heading doesn't lag behind it
+    public double getTargetRateFeedforward() {
+        Translation2d r = getTarget().minus(getBaseTranslation());
+        ChassisSpeeds fieldSpeeds = getFieldSpeeds();
+        double distSq = r.getNorm() * r.getNorm();
+        if (distSq < 1e-6) return 0.0;
+        return (r.getY() * fieldSpeeds.vxMetersPerSecond - r.getX() * fieldSpeeds.vyMetersPerSecond) / distSq;
+    }
+
     public Command PointToTarget(){
         SwerveRequest.FieldCentricFacingAngle FCFARequest = new SwerveRequest.FieldCentricFacingAngle()
         .withDeadband(RobotConstants.DriveConstants.MaxSpeed *0.05)
-        .withRotationalDeadband(RobotConstants.DriveConstants.MaxSpeed*0.05)
+        .withRotationalDeadband(0.02)
         .withHeadingPID(3, 0, 0)
         // Target angle is computed in field (blue) coordinates, so don't rotate it by the operator perspective (180 deg on red)
         .withTargetDirectionPerspective(SwerveRequest.TargetDirectionPerspectiveValue.BlueAlliance);
@@ -164,7 +178,8 @@ public class MotionComp {
             FCFARequest
             .withVelocityX(Controls.xboxController.leftJoyY.getAsDouble()/2*RobotConstants.DriveConstants.MaxSpeed)
             .withVelocityY(Controls.xboxController.leftJoyX.getAsDouble()/2*RobotConstants.DriveConstants.MaxSpeed)
-            .withTargetDirection(atan2(getTarget().minus(getBaseTranslation()))));});
+            .withTargetDirection(atan2(getTarget().minus(getBaseTranslation())))
+            .withTargetRateFeedforward(getTargetRateFeedforward()));});
     }
 
 

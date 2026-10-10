@@ -29,9 +29,9 @@ import frc.robot.Robot;
 
 /** Add your docs here. */
 public class HoodConstants {
-    public static final double kGearing = 1;
+    public static final double kGearing = 2.0;
     
-    public static final Angle kMaxAngle = Units.Degrees.of(145);
+    public static final Angle kMaxAngle = Units.Degrees.of(540);
     public static final Angle kMinAngle = Units.Degrees.of(0);
     public static final TunableNumber testAngle = new TunableNumber("Test Angle", 0.0);
     public static DoubleSupplier testAngleSupplier = () -> SmartDashboard.getNumber("Test Angle", HoodConstants.kMinAngle.in(Units.Degrees));
@@ -53,8 +53,10 @@ public class HoodConstants {
         config.Slot2.kI = 0;
         config.Slot2.kD = 0;
 
+        config.Slot2.kV = 0.24;
+
         config.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
-        config.CurrentLimits.StatorCurrentLimit = 25.0;
+        config.CurrentLimits.StatorCurrentLimit = 50.0;
 
         config.Voltage.PeakForwardVoltage = 12;
         config.Voltage.PeakReverseVoltage = -12;

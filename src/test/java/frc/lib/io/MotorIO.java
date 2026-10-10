@@ -134,6 +134,7 @@ public abstract class MotorIO implements Sendable {
 	 * @param mechanismPosition Mechanism position to go to.
 	 */
 	protected abstract void setPositionSetpoint(Angle mechanismPosition);
+	protected abstract void setPositionVelocitySetpoint(Angle mechanismPosition, AngularVelocity velocity);
 
 	public abstract void setMainConfig(TalonFXConfiguration configuration);
 
@@ -554,6 +555,14 @@ public abstract class MotorIO implements Sendable {
 		public static Setpoint withPositionSetpoint(Angle positionSetpoint) {
 			UnaryOperator<MotorIO> applier = (MotorIO io) -> {
 				io.setPositionSetpoint(positionSetpoint);
+				return io;
+			};
+			return new Setpoint(applier, Mode.POSITIONPID, positionSetpoint.baseUnitMagnitude());
+		}
+
+		public static Setpoint withPositionVelocitySetpoint(Angle positionSetpoint, AngularVelocity velocity) {
+			UnaryOperator<MotorIO> applier = (MotorIO io) -> {
+				io.setPositionVelocitySetpoint(positionSetpoint, velocity);
 				return io;
 			};
 			return new Setpoint(applier, Mode.POSITIONPID, positionSetpoint.baseUnitMagnitude());

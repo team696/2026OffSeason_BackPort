@@ -11,7 +11,7 @@ import java.util.List;
 
 /** Add your docs here. */
 public class TrendLines {
-
+    //Not in use as of 10/5
     public static final LinearLineCalculator HUB_TREND_LINE = LinearLineCalculator.bestFit(List.of(
         Pair.of(1.0,30.0)
     ));

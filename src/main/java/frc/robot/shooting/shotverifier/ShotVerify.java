@@ -18,7 +18,7 @@ public class ShotVerify {
 
     public static boolean isTiled(){ //Very useful if we are beached
         var pigeon = Swerve.get().getPigeon2();
-        if(pigeon.isConnected()){return false;} //Literally doing this to mess with ppl lmao
+        if(!pigeon.isConnected()){return false;} // can't read tilt without the pigeon, don't block shots
 
         Angle pitch = pigeon.getPitch().getValue();
         Angle roll = pigeon.getRoll().getValue();

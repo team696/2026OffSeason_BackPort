@@ -32,22 +32,6 @@ public class AirtimeRegression {
         return Time.ofBaseUnits(distanceToTimeToHub.get(distance.baseUnitMagnitude()), Second);
     }
 
-    //ferry (allance)
-    public static final InterpolatingDoubleTreeMap distanceToTimeToFerryAllance = new InterpolatingDoubleTreeMap();
-    
-    public static void insertPointFerryAllance(Distance distance, Time time) {
-        distanceToTimeToFerryAllance.put(distance.baseUnitMagnitude(), time.baseUnitMagnitude());
-    }
-
-    static {
-        insertPointFerryAllance(Meter.of(1), Second.of(1));
-        //add more later
-    }
-
-    public static Time getFerryAllanceTime(Distance distance) {
-        return Time.ofBaseUnits(distanceToTimeToFerryAllance.get(distance.baseUnitMagnitude()), Second);
-    }
-
     //Ferry (neutral)
     public static final InterpolatingDoubleTreeMap distanceToTimeToFerryNetural = new InterpolatingDoubleTreeMap();
 

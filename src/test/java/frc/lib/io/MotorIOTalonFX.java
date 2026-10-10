@@ -276,18 +276,22 @@ public class MotorIOTalonFX extends MotorIO {
 			return new MotionMagicExpoVoltage(mechanismPosition)
 					.withSlot(slot)
 					.withEnableFOC(true)
-					.withUpdateFreqHz(Hertz.of(1000));
+					.withUpdateFreqHz(Hertz.of(100));
 		}
 
 		public ControlRequest getVelocityRequest(AngularVelocity mechanismVelocity, int slot) {
 			return new MotionMagicVelocityVoltage(mechanismVelocity)
-					.withUpdateFreqHz(Hertz.of(1000.0))
+					.withUpdateFreqHz(Hertz.of(100.0))
 					.withEnableFOC(true)
 					.withSlot(slot);
 		}
 
 		public ControlRequest getPositionRequest(Angle mechanismPosition, int slot) {
 			return new PositionVoltage(mechanismPosition).withSlot(slot).withEnableFOC(true);
+		}
+
+		public ControlRequest getPositionVelocityRequest(Angle mechanismPosition, AngularVelocity velocity, int slot) {
+			return new PositionVoltage(mechanismPosition).withVelocity(velocity).withSlot(slot).withEnableFOC(true);
 		}
 	}
 
@@ -298,5 +302,10 @@ public class MotorIOTalonFX extends MotorIO {
 
 	public TalonFX getMain() {
 		return main;
+	}
+
+	@Override
+	protected void setPositionVelocitySetpoint(Angle mechanismPosition, AngularVelocity velocity) {
+		setControl(requestGetter.getPositionVelocityRequest(mechanismPosition, velocity, 2));
 	}
 }

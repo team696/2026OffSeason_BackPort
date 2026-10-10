@@ -35,6 +35,13 @@ public class SuperStructureConstants {
         );
     }
 
+    public static Command SlowIntakeRollers(){
+        return Commands.parallel(
+            Intake.Rollers.get().setpointCommand(Intake.Rollers.SLOW_INTAKE),
+            Intake.Rollers2.get().setpointCommand(Intake.Rollers2.SLOW_INTAKE)
+        );
+    }
+
     public static Command OutakeRollers(){
         return Commands.parallel(
             Intake.Rollers.get().setpointCommand(Intake.Rollers.OUTAKE),

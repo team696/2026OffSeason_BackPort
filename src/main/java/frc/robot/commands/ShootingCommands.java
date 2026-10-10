@@ -4,11 +4,15 @@
 
 package frc.robot.commands;
 
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
+import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.shooting.Shooting;
 import frc.robot.shooting.ShootingSetpoint;
 import frc.robot.shooting.ShootingState;
+import frc.robot.shooting.motionComp.MotionComp;
 import frc.robot.subsystems.FeedRollers.FeedRollers;
 import frc.robot.subsystems.Hood.Hood;
 import frc.robot.subsystems.Shooter.Shooter;
@@ -42,24 +46,16 @@ public class ShootingCommands {
         );
     }
 
+    // State is set when the command starts (beforeStarting), not when it's built,
+    // otherwise whichever command was constructed last wins for every binding
     public static Command AutoAlgin(){
-        Shooting.setState(ShootingState.HUB);
-        return Shooting.mInstance.getMotionComp().PointToTarget();
+        return Commands.parallel(
+            Shooting.mInstance.getMotionComp().PointToTarget(),
+            spinUp()
+        ).beforeStarting(() -> Shooting.setState(ShootingState.HUB));
     }
 
     public static Command shoot(){
-        Shooting.setState(ShootingState.HUB);
-        return Commands.parallel(
-            spinUp(),
-            Commands.sequence(
-                Commands.waitUntil(Shooting.mInstance::shotVerified),
-                FeedRollers.get().setpointCommand(FeedRollers.RUNNING)
-            )
-        );
-    }
-
-    public static Command Pass(){
-        Shooting.setState(ShootingState.NEUTRAL_FERRY);
         return Commands.parallel(
             Shooting.mInstance.getMotionComp().PointToTarget(),
             spinUp(),
@@ -67,7 +63,20 @@ public class ShootingCommands {
                 Commands.waitUntil(Shooting.mInstance::shotVerified),
                 FeedRollers.get().setpointCommand(FeedRollers.RUNNING)
             )
-        );
+        ).beforeStarting(() -> Shooting.setState(ShootingState.HUB));
+    }
+
+
+    // side is NEUTRAL_FERRY_LEFT or NEUTRAL_FERRY_RIGHT
+    public static Command Pass(ShootingState side){
+        return Commands.parallel(
+            Shooting.mInstance.getMotionComp().PointToTarget(),
+            spinUp(),
+            Commands.sequence(
+                Commands.waitUntil(Shooting.mInstance::shotVerified),
+                FeedRollers.get().setpointCommand(FeedRollers.RUNNING)
+            )
+        ).beforeStarting(() -> Shooting.setState(side));
     }
 
     public static Command Stop(){

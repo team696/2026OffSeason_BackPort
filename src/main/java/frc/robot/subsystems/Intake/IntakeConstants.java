@@ -117,8 +117,9 @@ public class IntakeConstants {
         // public static final Voltage kOuttakeVoltage = Units.Volts.of(-5.0);
 
         public static final AngularVelocity kIdleSpeed = Units.RotationsPerSecond.of(0.0);
-        public static final AngularVelocity kIntakeSpeed = Units.RotationsPerSecond.of(30.0);
-        public static final AngularVelocity kOuttakeSpeed = Units.RotationsPerSecond.of(-30.0);
+        public static final AngularVelocity kIntakeSpeed = Units.RotationsPerSecond.of(60.0);
+        public static final AngularVelocity kOuttakeSpeed = Units.RotationsPerSecond.of(-60.0);
+                public static final AngularVelocity kSlowIntakeSpeed = Units.RotationsPerSecond.of(30.0);
 
         public static TalonFXConfiguration getTaloFXConfig(){
             TalonFXConfiguration config = new TalonFXConfiguration();
@@ -180,15 +181,16 @@ public class IntakeConstants {
 
 
         public class Roller2{
-        public static final double kGearing = 3;
+        public static final double kGearing = 1;
 
        //public static final Voltage kIdleVoltage = Units.Volts.of(0.0);
         // public static final Voltage kIntakeVoltage = Units.Volts.of(5.0);
         // public static final Voltage kOuttakeVoltage = Units.Volts.of(-5.0);
 
         public static final AngularVelocity kIdleSpeed = Units.RotationsPerSecond.of(0.0);
-        public static final AngularVelocity kIntakeSpeed = Units.RotationsPerSecond.of(-30.0);
-        public static final AngularVelocity kOuttakeSpeed = Units.RotationsPerSecond.of(30.0);
+        public static final AngularVelocity kIntakeSpeed = Units.RotationsPerSecond.of(-60.0);
+        public static final AngularVelocity kOuttakeSpeed = Units.RotationsPerSecond.of(60.0);
+        public static final AngularVelocity kSlowIntakeSpeed = Units.RotationsPerSecond.of(-30.0);
 
         public static TalonFXConfiguration getTaloFXConfig(){
             TalonFXConfiguration config = new TalonFXConfiguration();

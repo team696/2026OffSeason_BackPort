@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
 import frc.lib.io.MotorIOTalonFX;
@@ -68,7 +69,7 @@ public class ShooterConstants {
         config_talon.Slot1.kI = 0;
         config_talon.Slot1.kD = 0;
 
-        config_talon.Slot1.kV = 0.35;
+        config_talon.Slot1.kV = 0.245;
 
         config_talon.MotionMagic.MotionMagicCruiseVelocity = 30.0;
         config_talon.MotionMagic.MotionMagicAcceleration = 300.0;
@@ -82,8 +83,11 @@ public class ShooterConstants {
         config_talon.CurrentLimits.SupplyCurrentLimit = 45.0;
         config_talon.Feedback.SensorToMechanismRatio = kGearing;
 
+        config_talon.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
         config.mainConfig = config_talon;
         config.followerConfig = config_talon;
+
 
         return config;
     }

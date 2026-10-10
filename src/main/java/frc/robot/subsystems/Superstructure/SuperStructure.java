@@ -6,8 +6,10 @@ package frc.robot.subsystems.Superstructure;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.commands.ShootingCommands;
+import frc.robot.shooting.ShootingState;
 
 /** Add your docs here. */
 public class SuperStructure {
@@ -45,10 +47,15 @@ public class SuperStructure {
     }
 
     public static Command Shooting(){
-        return Commands.parallel(
+        return Commands.sequence(
+            Commands.parallel(
             ShootingCommands.shoot(),
-            SuperStructureConstants.runHopperRoller(),
-            SuperStructureConstants.OscilateIntake()
+            SuperStructureConstants.runHopperRoller()),
+            Commands.waitSeconds(0.5),
+            Commands.parallel(
+            Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.RETRACT),
+            SuperStructureConstants.SlowIntakeRollers()
+            )
         );
     }
 
@@ -66,9 +73,9 @@ public class SuperStructure {
         );
     }
 
-    public static Command Passing(){
+    public static Command Passing(ShootingState side){
         return Commands.parallel(
-            ShootingCommands.Pass(),
+            ShootingCommands.Pass(side),
             SuperStructureConstants.runHopperRoller()
         );
     }

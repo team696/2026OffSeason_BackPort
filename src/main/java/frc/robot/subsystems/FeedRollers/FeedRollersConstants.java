@@ -31,7 +31,7 @@ public class FeedRollersConstants {
     public static AngularVelocity RunningSpeed = RotationsPerSecond.of(100.0*0.7*-1);
     public static final AngularVelocity epsilonThreshold = RotationsPerSecond.of(0.1);
     public static final Time debounder = Second.of(0.0);
-    public static final double kGearing = 1;
+    public static final double kGearing = 2;
     public static final double PercentOfLUT = 0.7;
     public static final TunableNumber testSpeed = new TunableNumber("Feed Rollers Test Speed", 0.0);
 

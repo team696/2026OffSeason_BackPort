@@ -20,10 +20,16 @@ public enum ShootingState {
         AirtimeRegression.distanceToTimeToHub, 
         Seconds.of(0.0) 
     ),
-    NEUTRAL_FERRY(
+    NEUTRAL_FERRY_LEFT(
         () -> FieldLayout.kBlueLeftNeutralFerry, 
         new ShootingRegression(NeturalZoneHoodLUT.neturalzonehoodLUT, NetrualZoneVelocityLUT.neturalzonevelocityLUT),
-        AirtimeRegression.distanceToTimeToHub, // TODO: Change this to your Ferry airtime map
+        AirtimeRegression.distanceToTimeToFerryNetural, // TODO: Change this to your Ferry airtime map
+        Seconds.of(0.0) 
+    ),
+    NEUTRAL_FERRY_RIGHT(
+        () -> FieldLayout.kBlueRightNeutralFerry, 
+        new ShootingRegression(NeturalZoneHoodLUT.neturalzonehoodLUT, NetrualZoneVelocityLUT.neturalzonevelocityLUT),
+        AirtimeRegression.distanceToTimeToFerryNetural, // TODO: Change this to your Ferry airtime map
         Seconds.of(0.0) 
     );
 
@@ -42,8 +48,7 @@ public enum ShootingState {
         this.distanceToAirTimeMap = distanceToAirTimeMap;
         this.lookAheadTimeOffset = lookAheadTimeOffset;
     }
-
-    // Renamed from getTarget to match what ShotVisualizer is looking for
+    
     public Translation2d getLocationTranslation(boolean isRedAlliance) {
         return FieldLayout.handleAllianceFlip(blueTarget.get(), isRedAlliance);
     }

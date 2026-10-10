@@ -22,6 +22,7 @@ import frc.robot.shooting.ShootingState;
 import frc.robot.subsystems.FeedRollers.FeedRollers;
 import frc.robot.subsystems.Hood.Hood;
 import frc.robot.subsystems.Hopper.Hopper;
+import frc.robot.subsystems.Hopper.HopperConstants.HopperPivot;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Superstructure.SuperStructure;
@@ -39,28 +40,36 @@ public class Robot extends TimedRobot {
 
 	public Robot() {
 
-		//Swerve.get();
-		 Shooter.get(); //temp
-		 Intake.RackAndPinion.get(); //also temp
-		 //Intake.Rollers.get();
-		 //Hopper.Rollers.get();
-		 //Hopper.Upwards.get();
-		 //FeedRollers.get();
-		 //Hood.get();
-
+		Swerve.get();
+		Shooter.get();
+		Intake.RackAndPinion.get();
+		Intake.Rollers.get();
+		Intake.Rollers2.get();
+		FeedRollers.get();
+		Hood.get();
+		Hopper.Pivot.get();
+		Hopper.Rollers.get();
 		//Log.initialize(SEVERITY.EVERYTHING);
 		//Log.data("Swerve", Swerve.get(), SEVERITY.MINIMAL);
 
-		// Auto.configureAutoBuilder();
-		// Auto.initialize(new Auto.NamedCommand("Funny auto", new PathPlannerAuto("Test Auto")));
+		Auto.configureAutoBuilder();
+		Auto.initialize(
+			new Auto.NamedCommand("Shoot", SuperStructure.Shooting()),
 
-		//Camera.get().setPipeline(PipelineConstants.APRIL_TAG);
-		//Binds.Controller.bind();
+			new Auto.NamedCommand("Stop Shooting", SuperStructure.ShootingStop()),
+
+			new Auto.NamedCommand("Intake", SuperStructure.RunIntake()),
+
+			new Auto.NamedCommand("Stop Intake", SuperStructure.StopIntake())
+		);
+
+		Camera.get().setPipeline(PipelineConstants.APRIL_TAG);
+		Binds.Controller.bind();
 	}
 
 	@Override
 	public void robotInit(){
-
+		
 		// ---------- Intake ----------
 		SmartDashboard.putData("Intake/Rack and Pinion/Extend", Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.EXTEND));
 		SmartDashboard.putData("Intake/Rack and Pinion/Half", Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.HALF));
@@ -69,31 +78,11 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData("Intake/Rollers/Outtake", SuperStructureConstants.OutakeRollers());
 		SmartDashboard.putData("Intake/Rollers/Stop", SuperStructureConstants.StopIntakeRollers());
 
-		// ---------- Hopper ----------
-		SmartDashboard.putData("Hopper/Rollers/Intake", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.INTAKE));
-		SmartDashboard.putData("Hopper/Rollers/Slow Intake", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.SLOW_INTAKE));
-		SmartDashboard.putData("Hopper/Rollers/Outtake", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.OUTAKE));
-		SmartDashboard.putData("Hopper/Rollers/Stop", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.IDLE));
-
-		// ---------- Feed Rollers ----------
-		SmartDashboard.putData("Feed Rollers/Run", FeedRollers.get().setpointCommand(FeedRollers.RUNNING));
-		SmartDashboard.putData("Feed Rollers/Test Speed", FeedRollers.get().getTestSpeedCommand());
-		SmartDashboard.putData("Feed Rollers/Stop", FeedRollers.get().setpointCommand(FeedRollers.IDLE));
-
 		// ---------- Shooter ----------
 		SmartDashboard.putData("Shooter/Test Shot", Shooter.get().getTestShot());
 		SmartDashboard.putData("Shooter/Shot", Shooter.get().setpointCommand(Shooter.SHOT));
 		SmartDashboard.putData("Shooter/Ferry", Shooter.get().setpointCommand(Shooter.FERRY));
 		SmartDashboard.putData("Shooter/Stop", Shooter.get().setpointCommand(Shooter.IDLE));
-
-		// ---------- Hood ----------
-		SmartDashboard.putData("Hood/Test Angle", Hood.get().getTestShotCommand());
-		SmartDashboard.putData("Hood/Max Angle", Hood.get().setpointCommand(Hood.MAX_ANGLE));
-		SmartDashboard.putData("Hood/Stow", Hood.get().setpointCommand(Hood.STOW));
-
-		// ---------- Vision ----------
-		SmartDashboard.putData("Vision/AprilTag Pipeline", Camera.get().switchToAprilTagPipeline());
-		SmartDashboard.putData("Vision/Neural Network Pipeline", Camera.get().switchToNueralNetworkPipeline());
 
 		// ---------- Superstructure ----------
 		// shoot/Pass/AutoAlgin pick their ShootingState when they're created, not when clicked,
@@ -110,16 +99,48 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData("Superstructure/Auto Align", withState(ShootingState.HUB, SuperStructure.AutoAlgin()));
 		SmartDashboard.putData("Superstructure/Shooting", withState(ShootingState.HUB, SuperStructure.Shooting()));
 		SmartDashboard.putData("Superstructure/Shooting Testing", SuperStructure.ShootingTesting());
-		SmartDashboard.putData("Superstructure/Passing", withState(ShootingState.NEUTRAL_FERRY, SuperStructure.Passing()));
+		SmartDashboard.putData("Superstructure/Passing Left", withState(ShootingState.NEUTRAL_FERRY_LEFT, SuperStructure.Passing(ShootingState.NEUTRAL_FERRY_LEFT)));
+		SmartDashboard.putData("Superstructure/Passing Right", withState(ShootingState.NEUTRAL_FERRY_RIGHT, SuperStructure.Passing(ShootingState.NEUTRAL_FERRY_RIGHT)));
 		SmartDashboard.putData("Superstructure/Shooting Stop", SuperStructure.ShootingStop());
+		/* 
+		// ---------- Hopper ----------
+		SmartDashboard.putData("Hopper/Rollers/Intake", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.INTAKE));
+		SmartDashboard.putData("Hopper/Rollers/Slow Intake", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.SLOW_INTAKE));
+		SmartDashboard.putData("Hopper/Rollers/Outtake", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.OUTAKE));
+		SmartDashboard.putData("Hopper/Rollers/Stop", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.IDLE));
+
+		SmartDashboard.putData("Hopper/Pivot/Up", Hopper.Pivot.get().setpointCommand(Hopper.Pivot.UP));
+		SmartDashboard.putData("Hopper/Pivot/Down", Hopper.Pivot.get().setpointCommand(Hopper.Pivot.DOWN));
+		SmartDashboard.putData("Hopper/Pivot/Test Angle", Hopper.Pivot.get().getTestAngleCommand());
+		SmartDashboard.putData("Hopper/Pivot/Stop", Hopper.Pivot.get().setpointCommand(Hopper.Pivot.STOP));
+
+		// ---------- Feed Rollers ----------
+		SmartDashboard.putData("Feed Rollers/Run", FeedRollers.get().setpointCommand(FeedRollers.RUNNING));
+		SmartDashboard.putData("Feed Rollers/Test Speed", FeedRollers.get().getTestSpeedCommand());
+		SmartDashboard.putData("Feed Rollers/Stop", FeedRollers.get().setpointCommand(FeedRollers.IDLE));
+
+
+
+		// ---------- Hood ----------
+		SmartDashboard.putData("Hood/Test Angle", Hood.get().getTestShotCommand());
+		SmartDashboard.putData("Hood/Max Angle", Hood.get().setpointCommand(Hood.MAX_ANGLE));
+		SmartDashboard.putData("Hood/Stow", Hood.get().setpointCommand(Hood.STOW));
+
+		// ---------- Vision ----------
+		SmartDashboard.putData("Vision/AprilTag Pipeline", Camera.get().switchToAprilTagPipeline());
+		SmartDashboard.putData("Vision/Neural Network Pipeline", Camera.get().switchToNueralNetworkPipeline());
+
+		
 
 		// ---------- Shooting Commands ----------
 		SmartDashboard.putData("Shooting Commands/Spin Up", withState(ShootingState.HUB, ShootingCommands.spinUp()));
 		SmartDashboard.putData("Shooting Commands/Test Spin Up", ShootingCommands.testspinUp());
 		SmartDashboard.putData("Shooting Commands/Test Shot", ShootingCommands.testShot());
 		SmartDashboard.putData("Shooting Commands/Shoot", withState(ShootingState.HUB, ShootingCommands.shoot()));
-		SmartDashboard.putData("Shooting Commands/Pass", withState(ShootingState.NEUTRAL_FERRY, ShootingCommands.Pass()));
+		SmartDashboard.putData("Shooting Commands/Pass Left", withState(ShootingState.NEUTRAL_FERRY_LEFT, ShootingCommands.Pass(ShootingState.NEUTRAL_FERRY_LEFT)));
+		SmartDashboard.putData("Shooting Commands/Pass Right", withState(ShootingState.NEUTRAL_FERRY_RIGHT, ShootingCommands.Pass(ShootingState.NEUTRAL_FERRY_RIGHT)));
 		SmartDashboard.putData("Shooting Commands/Stop", ShootingCommands.Stop());
+		*/
 	}
 
 	// Sets the ShootingState when the button is clicked, then runs the command
@@ -140,6 +161,7 @@ public class Robot extends TimedRobot {
 		addDashboardMotor("Shooter/Leader", Ports.SHOOTER_MAIN);
 		addDashboardMotor("Shooter/Follower", Ports.SHOOTER_FOLLOWER);
 		addDashboardMotor("Hood/Data", Ports.HOOD);
+		addDashboardMotor("Hopper/Pivot/Data", Ports.HOPPER_PIVOT);
 	}
 
 	private void addDashboardMotor(String folder, Ports port) {

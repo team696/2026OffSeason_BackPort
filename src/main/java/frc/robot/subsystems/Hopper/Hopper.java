@@ -4,22 +4,15 @@
 
 package frc.robot.subsystems.Hopper;
 
-import static edu.wpi.first.units.Units.Degree;
 import static edu.wpi.first.units.Units.Rotation;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
-import java.util.function.UnaryOperator;
-
-import edu.wpi.first.units.AngleUnit;
-import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.AngularVelocity;
 import frc.lib.bases.MotorSubsystem;
 import frc.lib.bases.ServoMotorSubsystem;
 import frc.lib.io.MotorIOTalonFX;
-import frc.lib.io.MotorIO;
-import frc.lib.io.MotorIO.Mode;
 import frc.lib.io.MotorIO.Setpoint;
 import frc.robot.subsystems.Hopper.HopperConstants.HopperPivot;
 
@@ -40,21 +33,14 @@ public class Hopper {
 
     public static final Setpoint UP = Setpoint.withPositionVelocitySetpoint(HopperPivot.kHighest, HopperPivot.kUpCruiseVelocity);
     public static final Setpoint DOWN = Setpoint.withPositionVelocitySetpoint(HopperPivot.kLowestAngle, HopperPivot.kDownCruiseVelocity);
+    public static final Setpoint STOP = Setpoint.withNeutralSetpoint();
 
-    /* 
-    @Override
-    public void applySetpoint(Setpoint setpoint) {
-      if (setpoint.mode.isPositionControl()) {
-        boolean goingUp = setpoint.baseUnits > getPosition().baseUnitMagnitude();
-        AngularVelocity cruiseVelocity =
-            goingUp ? HopperPivot.kUpCruiseVelocity : HopperPivot.kDownCruiseVelocity;
-        io.changeMainConfig(config -> {
-          config.MotionMagic.MotionMagicCruiseVelocity = cruiseVelocity.in(RotationsPerSecond);
-          return config;
-        });
-      }
-      super.applySetpoint(setpoint);
-    } */
+    // Goes to whatever "Hopper Pivot Test Angle" is set to on the dashboard (degrees)
+    public Command getTestAngleCommand() {
+      return followSetpointCommand(() ->
+          Setpoint.withPositionSetpoint(Units.Degrees.of(HopperConstants.HopperPivot.testAngle.getAsDouble()))
+      );
+    }
 
       @Override
       public void periodic() {
