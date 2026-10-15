@@ -81,13 +81,13 @@ public class ShooterConstants {
 
 
         config_talon.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
-        config_talon.CurrentLimits.StatorCurrentLimit = 200.0;
+        config_talon.CurrentLimits.StatorCurrentLimit = 120.0;
 
         config_talon.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
         // 45 A (and Phoenix's default drop to 40 A after 1 s) couldn't keep up with balls going through:
         // the drum hit 40 rps then sagged to 32 while feeding. Two motors at 60 A = up to 120 A from the
         // battery during a burst - lower these if the robot browns out while driving and shooting.
-        config_talon.CurrentLimits.SupplyCurrentLimit = 160.0;
+        config_talon.CurrentLimits.SupplyCurrentLimit = 70.0;
         config_talon.CurrentLimits.SupplyCurrentLowerLimit = 50.0;
         config_talon.CurrentLimits.SupplyCurrentLowerTime = 2.0;
         config_talon.Feedback.SensorToMechanismRatio = kGearing;

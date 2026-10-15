@@ -59,10 +59,10 @@ public class FeedRollersConstants {
         config_talon.MotionMagic.MotionMagicJerk = 1000.0;
 
         config_talon.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
-        config_talon.CurrentLimits.StatorCurrentLimit = 90.0;
+        config_talon.CurrentLimits.StatorCurrentLimit = 80.0;
 
         config_talon.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
-        config_talon.CurrentLimits.SupplyCurrentLimit = 45.0;
+        config_talon.CurrentLimits.SupplyCurrentLimit = 40.0;
 
         config_talon.Feedback.SensorToMechanismRatio = kGearing;
 

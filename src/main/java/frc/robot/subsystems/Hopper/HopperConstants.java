@@ -228,10 +228,10 @@ public class Rollers{
         config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         config.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
-        config.CurrentLimits.StatorCurrentLimit = 160.0;
+        config.CurrentLimits.StatorCurrentLimit = 80.0;
 
         config.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
-        config.CurrentLimits.SupplyCurrentLimit = 90.0;
+        config.CurrentLimits.SupplyCurrentLimit = 40.0;
 
         config.Feedback.SensorToMechanismRatio = kGearing;
 

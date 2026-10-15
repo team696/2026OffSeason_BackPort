@@ -69,7 +69,10 @@ public class HoodConstants {
         config.Slot0.kV = config.Slot2.kV;
 
         config.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
-        config.CurrentLimits.StatorCurrentLimit = 50.0;
+        config.CurrentLimits.StatorCurrentLimit = 40.0;
+
+        config.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
+        config.CurrentLimits.SupplyCurrentLimit = 30.0;
 
         config.Voltage.PeakForwardVoltage = 12;
         config.Voltage.PeakReverseVoltage = -12;

@@ -57,9 +57,12 @@ public class TunerConstants {
     private static final TalonFXConfiguration driveInitialConfigs = new TalonFXConfiguration()
         .withCurrentLimits(
             new CurrentLimitsConfigs()
-                // Default supply current limit is 70 A, but it can be lowered to avoid brownouts.
-                // Supply current limits can be larger than the breaker current rating.
+                // Stator stays at kSlipCurrent (120 A) for pushing; at stall that only pulls ~40 A
+                // from the battery, so this supply limit doesn't cost pushing force.
+                // 70 A burst for acceleration, then hold ~55 A per module to avoid brownouts.
                 .withSupplyCurrentLimit(Amps.of(70))
+                .withSupplyCurrentLowerLimit(Amps.of(55))
+                .withSupplyCurrentLowerTime(Seconds.of(1.0))
                 .withSupplyCurrentLimitEnable(true)
         );
     private static final TalonFXConfiguration steerInitialConfigs = new TalonFXConfiguration()
