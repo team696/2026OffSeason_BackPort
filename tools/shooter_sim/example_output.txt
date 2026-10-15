@@ -1,0 +1,96 @@
+  3.0 m @ 32.5 rps hood 2.67: exit angle at home could be 52.7 or 64.5 deg -> using steep
+Calibrated LAUNCH_AT_HOME_DEG = 64.5 from 3.0 m @ 32.5 rps hood 2.67 (SLIP_EFFICIENCY held at 0.9) -> hood 2.7-33.0 deg = exit 61.8-31.5 deg
+  -> ball leaves at 86% of drum surface speed
+====================================================================================================
+Contact: hood | wheel 3.0 in | Ball: 5.91 in, 215 g | shooter inertia 35.2 kg*cm^2 | gearing 2.045:1 | max usable 42.5 drum rps
+SymPy: w_after / w_before = sqrt(I)*R_b*sqrt(eta_e)/sqrt(I*R_b**2*eta_e + I_b*c**2*eta_s**2*k**2*r_w**2 + R_b**2*c**2*eta_s**2*m*r_w**2)  ->  0.9579 (4.2% speed drop per ball)
+Exit speed at 30 rps: 6.19 m/s, at 42.5 rps: 8.78 m/s
+RPS below = DRUM rps (real wheel speed). Phoenix reports this only if SensorToMechanismRatio matches the real gearing.
+Hood: 12T->24T x 10T->180T = 36.0:1 | real travel 30.0 deg (540 deg read at kGearing 2.0) | search 2.7-33.0 deg
+      -> set HoodConstants.kGearing = 36.0 so the hood reads real degrees
+Corrections: rps x1.0 +0.0 (hub +0.0, ferry +0.0) | hood x1.0 +0.0 (hub +0.0, ferry +0.0) | dist +0.0 m | aim hub x+0.0 z+0.0, ferry x+0.0 | airtime x1.0 +0.0 s
+====================================================================================================
+
+HUB
+   1.50 m : NO VALID SHOT (out of range for hood 2.7-33.0 deg, <= 42.5 rps)
+   2.00 m : NO VALID SHOT (out of range for hood 2.7-33.0 deg, <= 42.5 rps)
+   2.25 m : hood   2.7 deg (launch  61.8, hood motor  0.27 rot)   29.10 rps (motor  59.52)  exit  6.01 m/s  tof 0.73 s  apex 2.02 m  entry 37.1 deg  miss(1sig) 17.3 cm
+   2.50 m : hood   2.7 deg (launch  61.8, hood motor  0.27 rot)   30.21 rps (motor  61.80)  exit  6.24 m/s  tof 0.80 s  apex 2.12 m  entry 41.8 deg  miss(1sig) 16.7 cm
+   3.00 m : hood   3.7 deg (launch  60.8, hood motor  0.37 rot)   32.32 rps (motor  66.10)  exit  6.67 m/s  tof 0.89 s  apex 2.31 m  entry 45.6 deg  miss(1sig) 17.0 cm
+   3.50 m : hood   5.7 deg (launch  58.8, hood motor  0.57 rot)   34.17 rps (motor  69.88)  exit  7.05 m/s  tof 0.94 s  apex 2.42 m  entry 45.6 deg  miss(1sig) 18.0 cm
+   4.00 m : hood   6.7 deg (launch  57.8, hood motor  0.67 rot)   36.08 rps (motor  73.80)  exit  7.45 m/s  tof 1.01 s  apex 2.57 m  entry 46.8 deg  miss(1sig) 18.6 cm
+   4.50 m : hood   7.7 deg (launch  56.8, hood motor  0.77 rot)   37.92 rps (motor  77.57)  exit  7.83 m/s  tof 1.06 s  apex 2.69 m  entry 47.4 deg  miss(1sig) 19.3 cm
+   5.00 m : hood   8.7 deg (launch  55.8, hood motor  0.87 rot)   39.70 rps (motor  81.19)  exit  8.19 m/s  tof 1.11 s  apex 2.80 m  entry 47.7 deg  miss(1sig) 19.9 cm
+   5.50 m : hood   9.7 deg (launch  54.8, hood motor  0.97 rot)   41.41 rps (motor  84.71)  exit  8.55 m/s  tof 1.16 s  apex 2.94 m  entry 47.7 deg  miss(1sig) 20.5 cm
+
+NEUTRAL ZONE FERRY
+   3.00 m : NO VALID SHOT (out of range for hood 2.7-33.0 deg, <= 42.5 rps)
+   4.50 m : hood   3.7 deg (launch  60.8, hood motor  0.37 rot)   34.40 rps (motor  70.36)  exit  7.10 m/s  tof 1.32 s  apex 2.51 m  entry 66.1 deg  miss(1sig) 17.2 cm
+   6.00 m : hood  10.7 deg (launch  53.8, hood motor  1.07 rot)   38.28 rps (motor  78.31)  exit  7.90 m/s  tof 1.35 s  apex 2.59 m  entry 60.2 deg  miss(1sig) 19.5 cm
+   7.50 m : hood  17.7 deg (launch  46.8, hood motor  1.77 rot)   42.43 rps (motor  86.79)  exit  8.76 m/s  tof 1.35 s  apex 2.56 m  entry 54.3 deg  miss(1sig) 21.1 cm
+
+OPPOSITE SIDE FERRY
+   7.00 m : hood  15.7 deg (launch  48.8, hood motor  1.57 rot)   40.93 rps (motor  83.71)  exit  8.45 m/s  tof 1.34 s  apex 2.55 m  entry 56.0 deg  miss(1sig) 20.6 cm
+   9.00 m : NO VALID SHOT (out of range for hood 2.7-33.0 deg, <= 42.5 rps)
+  11.00 m : NO VALID SHOT (out of range for hood 2.7-33.0 deg, <= 42.5 rps)
+  13.00 m : NO VALID SHOT (out of range for hood 2.7-33.0 deg, <= 42.5 rps)
+
+// ---------------- LookUpTables.java ----------------
+        // ScoringVelocityLUT
+            scoringvelocityLUT.put(2.25, 29.10); // m, RPS
+            scoringvelocityLUT.put(2.5, 30.21); // m, RPS
+            scoringvelocityLUT.put(3.0, 32.32); // m, RPS
+            scoringvelocityLUT.put(3.5, 34.17); // m, RPS
+            scoringvelocityLUT.put(4.0, 36.08); // m, RPS
+            scoringvelocityLUT.put(4.5, 37.92); // m, RPS
+            scoringvelocityLUT.put(5.0, 39.70); // m, RPS
+            scoringvelocityLUT.put(5.5, 41.41); // m, RPS
+        // ScoringHoodLUT
+            scoringhoodLUT.put(2.25, 2.67); // m, Degrees
+            scoringhoodLUT.put(2.5, 2.67); // m, Degrees
+            scoringhoodLUT.put(3.0, 3.67); // m, Degrees
+            scoringhoodLUT.put(3.5, 5.67); // m, Degrees
+            scoringhoodLUT.put(4.0, 6.67); // m, Degrees
+            scoringhoodLUT.put(4.5, 7.67); // m, Degrees
+            scoringhoodLUT.put(5.0, 8.67); // m, Degrees
+            scoringhoodLUT.put(5.5, 9.67); // m, Degrees
+        // NetrualZoneVelocityLUT
+            neturalzonevelocityLUT.put(4.5, 34.40); // m, RPS
+            neturalzonevelocityLUT.put(6.0, 38.28); // m, RPS
+            neturalzonevelocityLUT.put(7.5, 42.43); // m, RPS
+        // NeturalZoneHoodLUT
+            neturalzonehoodLUT.put(4.5, 3.67); // m, Degrees
+            neturalzonehoodLUT.put(6.0, 10.67); // m, Degrees
+            neturalzonehoodLUT.put(7.5, 17.67); // m, Degrees
+        // OppositeSideVelocityLUT
+            oppositesidevelocityLUT.put(7.0, 40.93); // m, RPS
+        // OppositeSideHoodLUT
+            oppositesidehoodLUT.put(7.0, 15.67); // m, Degrees
+
+// ---------------- AirtimeRegression.java ----------------
+        // hub
+        insertPointHub(Meter.of(2.25), Second.of(0.731));
+        insertPointHub(Meter.of(2.5), Second.of(0.795));
+        insertPointHub(Meter.of(3.0), Second.of(0.887));
+        insertPointHub(Meter.of(3.5), Second.of(0.940));
+        insertPointHub(Meter.of(4.0), Second.of(1.006));
+        insertPointHub(Meter.of(4.5), Second.of(1.064));
+        insertPointHub(Meter.of(5.0), Second.of(1.114));
+        insertPointHub(Meter.of(5.5), Second.of(1.159));
+        // ferry neutral
+        insertPointFerryNeutral(Meter.of(4.5), Second.of(1.322));
+        insertPointFerryNeutral(Meter.of(6.0), Second.of(1.350));
+        insertPointFerryNeutral(Meter.of(7.5), Second.of(1.346));
+
+(saved to C:\Users\hahnb\Desktop\Robotics_stuff\2026OffSeason_WPIlib_2026_ver\tools\shooter_sim\lut_output.txt)
+
+BURST @ 3.5 m, 6.0 balls/s, commanded 34.17 rps / hood 5.7 deg
+  spin-up from 0 to within 1.0 rps: 0.14 s
+  ball  1  t= 0.14s  wheel 33.21 rps  miss  -22.6 cm  SCORE
+  ball  2  t= 0.31s  wheel 33.81 rps  miss   -8.5 cm  SCORE
+  ball  3  t= 0.48s  wheel 33.81 rps  miss   -8.5 cm  SCORE
+  ball  4  t= 0.64s  wheel 33.81 rps  miss   -8.5 cm  SCORE
+  ball  5  t= 0.81s  wheel 33.81 rps  miss   -8.5 cm  SCORE
+  ball  6  t= 0.98s  wheel 33.81 rps  miss   -8.5 cm  SCORE
+  ball  7  t= 1.14s  wheel 33.81 rps  miss   -8.5 cm  SCORE
+  ball  8  t= 1.31s  wheel 33.81 rps  miss   -8.5 cm  SCORE

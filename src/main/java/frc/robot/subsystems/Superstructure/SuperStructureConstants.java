@@ -13,7 +13,11 @@ import frc.robot.subsystems.Intake.Intake;
 public class SuperStructureConstants {
 
     public static Command runHopperRoller(){
-        return Hopper.Rollers.get().setpointCommand(Hopper.Rollers.INTAKE);
+        // Runs while the command is active, stops the hopper when it ends/is cancelled
+        return Hopper.Rollers.get().startEnd(
+            () -> Hopper.Rollers.get().applySetpoint(Hopper.Rollers.INTAKE),
+            () -> Hopper.Rollers.get().applySetpoint(Hopper.Rollers.IDLE)
+        );
     }
 
     public static Command StopRoller(){

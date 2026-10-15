@@ -36,11 +36,13 @@ public class MotionComp {
     private final Transform2d m_shooterOffset = RobotConstants.SHOOTER_OFFSET;
     //private Pose2d m_currLookAhead = new Pose2d();
 
-    //TODO: need to update relase time
+
     public static final Time SHOOTER_DELAY = Seconds.of(0.125);
     public static final AngularVelocity YAW_INSTABILITY = DegreesPerSecond.of(180);
-    public static final Angle ERROR_TOLERANCE = Degrees.of(0.1);
-    public static final double STATIC_SHOT_THRESHOLD = 0.09;
+    public static final Angle ERROR_TOLERANCE = Degrees.of(1);
+    public static final double STATIC_SHOT_THRESHOLD = 0.1;
+    // Shots were landing consistently right, so aim this much to the left (positive = counterclockwise = left)
+    public static final Rotation2d AIM_OFFSET = Rotation2d.fromDegrees(3.0);
 
     private boolean m_rejectLookAhead = false;
 
@@ -58,10 +60,6 @@ public class MotionComp {
     public Translation2d getTarget() {
         boolean isRed = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red;
         return Shooting.getState().getLocationTranslation(isRed);
-    }
-
-    private Distance getRobotDistance(){
-        return Meters.of(getCurrentPose().getTranslation().getDistance(getTarget()));
     }
 
     
@@ -97,11 +95,21 @@ public class MotionComp {
         return Shooter_Velocity;
     }
 
-    public Translation2d updatedPose(Distance distance){
-        double airtime = Shooting.getState().getDistanceToFuelAirTimeMap().get(distance.in(Meters));
-        double x_pose = ProgressLookAheadPos().getX() + FindDirectionTangentialVelocity().vxMetersPerSecond * airtime;
-        double y_pose = ProgressLookAheadPos().getY() + FindDirectionTangentialVelocity().vyMetersPerSecond * airtime;
-        Translation2d newPose = new Translation2d(x_pose, y_pose);
+    public static final int AIRTIME_ITERATIONS = 5;
+
+    // Airtime depends on the compensated distance, which depends on airtime, so iterate until they agree
+    public Translation2d updatedPose(){
+        Translation2d start = ProgressLookAheadPos().getTranslation();
+        ChassisSpeeds shooterVelocity = FindDirectionTangentialVelocity();
+        Translation2d target = getTarget();
+
+        Translation2d newPose = start;
+        for (int i = 0; i < AIRTIME_ITERATIONS; i++) {
+            double airtime = Shooting.getState().getDistanceToFuelAirTimeMap().get(newPose.getDistance(target));
+            newPose = new Translation2d(
+                start.getX() + shooterVelocity.vxMetersPerSecond * airtime,
+                start.getY() + shooterVelocity.vyMetersPerSecond * airtime);
+        }
 
         return newPose;
     }
@@ -109,8 +117,8 @@ public class MotionComp {
 
     public Angle getDriveError(Translation2d hubTarget) {
         Rotation2d currentAngle = getCurrentPose().getRotation();
-        Translation2d lookAhead = updatedPose(getRobotDistance());
-        Rotation2d targetAngle = hubTarget.minus(lookAhead).getAngle(); 
+        Translation2d lookAhead = updatedPose();
+        Rotation2d targetAngle = hubTarget.minus(lookAhead).getAngle().plus(AIM_OFFSET);
         return targetAngle.minus(currentAngle).getMeasure(); 
     }
 
@@ -144,7 +152,7 @@ public class MotionComp {
         if (m_rejectLookAhead) {
             return getCurrentPose().getTranslation();
         } else {
-            return updatedPose(getRobotDistance());
+            return updatedPose();
         }
 
         
@@ -178,7 +186,7 @@ public class MotionComp {
             FCFARequest
             .withVelocityX(Controls.xboxController.leftJoyY.getAsDouble()/2*RobotConstants.DriveConstants.MaxSpeed)
             .withVelocityY(Controls.xboxController.leftJoyX.getAsDouble()/2*RobotConstants.DriveConstants.MaxSpeed)
-            .withTargetDirection(atan2(getTarget().minus(getBaseTranslation())))
+            .withTargetDirection(atan2(getTarget().minus(getBaseTranslation())).plus(AIM_OFFSET))
             .withTargetRateFeedforward(getTargetRateFeedforward()));});
     }
 

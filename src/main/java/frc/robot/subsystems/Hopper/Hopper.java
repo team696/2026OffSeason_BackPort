@@ -32,8 +32,9 @@ public class Hopper {
     }
 
     public static final Setpoint UP = Setpoint.withPositionVelocitySetpoint(HopperPivot.kHighest, HopperPivot.kUpCruiseVelocity);
-    public static final Setpoint DOWN = Setpoint.withPositionVelocitySetpoint(HopperPivot.kLowestAngle, HopperPivot.kDownCruiseVelocity);
+    public static final Setpoint ZERO = Setpoint.withPositionVelocitySetpoint(HopperPivot.kLowestAngle, HopperPivot.kDownCruiseVelocity);
     public static final Setpoint STOP = Setpoint.withNeutralSetpoint();
+    public static final Setpoint NOVOLTAGE = Setpoint.COAST;
 
     // Goes to whatever "Hopper Pivot Test Angle" is set to on the dashboard (degrees)
     public Command getTestAngleCommand() {
@@ -63,7 +64,7 @@ public class Hopper {
     public static final Setpoint INTAKE = Setpoint.withVoltageSetpoint(HopperConstants.Rollers.kIntakeVoltage);
     public static final Setpoint SLOW_INTAKE = Setpoint.withVoltageSetpoint(HopperConstants.Rollers.kSlowIntakeVoltage);
     public static final Setpoint OUTAKE = Setpoint.withVoltageSetpoint(HopperConstants.Rollers.kOuttakeVoltage);
-    public static final Setpoint IDLE = Setpoint.COAST;
+    public static final Setpoint IDLE = Setpoint.withVoltageSetpoint(HopperConstants.Rollers.kIdleVoltage);
 
     public Rollers(){
       super(HopperConstants.Rollers.getMotorIO(), "Hopper Rollers");

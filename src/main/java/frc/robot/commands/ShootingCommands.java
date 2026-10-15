@@ -16,6 +16,7 @@ import frc.robot.shooting.motionComp.MotionComp;
 import frc.robot.subsystems.FeedRollers.FeedRollers;
 import frc.robot.subsystems.Hood.Hood;
 import frc.robot.subsystems.Shooter.Shooter;
+import frc.robot.subsystems.Shooter.ShooterConstants;
 
 /** Add your docs here. */
 public class ShootingCommands {
@@ -39,10 +40,18 @@ public class ShootingCommands {
     }
 
     
+    /** Waits until the drum is at its target speed. Put this right before the feed rollers start. */
+    public static Command waitUntilShooterAtSpeed() {
+        return Commands.waitUntil(() -> Shooter.get().spunUp(ShooterConstants.kFeedTolerance));
+    }
+
     public static Command testShot(){
         return Commands.parallel(
             testspinUp(),
-            FeedRollers.get().setpointCommand(FeedRollers.RUNNING)
+            Commands.sequence(
+                waitUntilShooterAtSpeed(),
+                FeedRollers.get().setpointCommand(FeedRollers.RUNNING)
+            )
         );
     }
 
@@ -61,10 +70,23 @@ public class ShootingCommands {
             spinUp(),
             Commands.sequence(
                 Commands.waitUntil(Shooting.mInstance::shotVerified),
+                waitUntilShooterAtSpeed(),
                 FeedRollers.get().setpointCommand(FeedRollers.RUNNING)
             )
         ).beforeStarting(() -> Shooting.setState(ShootingState.HUB));
     }
+
+    public static Command NoVerifyShoot(){
+         return Commands.parallel(
+            Shooting.mInstance.getMotionComp().PointToTarget(),
+            spinUp(),
+            Commands.sequence(
+                waitUntilShooterAtSpeed(),
+                FeedRollers.get().setpointCommand(FeedRollers.RUNNING)
+            )
+        ).beforeStarting(() -> Shooting.setState(ShootingState.HUB));
+    }
+
 
 
     // side is NEUTRAL_FERRY_LEFT or NEUTRAL_FERRY_RIGHT
@@ -74,6 +96,7 @@ public class ShootingCommands {
             spinUp(),
             Commands.sequence(
                 Commands.waitUntil(Shooting.mInstance::shotVerified),
+                waitUntilShooterAtSpeed(),
                 FeedRollers.get().setpointCommand(FeedRollers.RUNNING)
             )
         ).beforeStarting(() -> Shooting.setState(side));

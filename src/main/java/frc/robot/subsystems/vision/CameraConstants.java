@@ -43,19 +43,19 @@ public class CameraConstants {
         // Necessary for stuff like object detection and simulation
         // Done in meters since Limelight uses meters on their dashboard 
         public static final Pose3d OFFSET_FROM_CENTER = new Pose3d(
-            Meters.of(0.0),   // x — forward/back from center
-            Meters.of(-11),   // y — left/right from center
-            Meters.of(0.0),   // z — height from ground
+            Meters.of(0.33),   // x — forward/back from center
+            Meters.of(0.0),   // y — left/right from center
+            Meters.of(0.39),   // z — height from ground
             new Rotation3d(
                 Degrees.of(0.0),   // roll
-                Degrees.of(5.0),   // pitch — angle camera tilts up/down
-                Degrees.of(180.0))); // yaw — angle camera faces left/right
+                Degrees.of(15.0),   // pitch — angle camera tilts up/down
+                Degrees.of(0.0))); // yaw — angle camera faces left/right
 
 
             //Standard Limelight set up, even a monkey can understand
             public static CameraIOConfig getCameraConfig(){
                 CameraIOConfig config = new CameraIOConfig();
-                config.name = "limelight-left";
+                config.name = "limelight-front";
                 config.robotToCameraOffset = OFFSET_FROM_CENTER;
                 config.aprilTagVisionStdDevs = DEFAULT_STD_DEVIATION;
                 return config;

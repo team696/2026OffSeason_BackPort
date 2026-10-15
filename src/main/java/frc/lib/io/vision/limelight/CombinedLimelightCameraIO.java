@@ -14,6 +14,7 @@ import edu.wpi.first.units.BaseUnits;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.lib.bases.CameraSubsystem.CameraIOConfig;
 import frc.lib.util.FieldLayout;
 import frc.lib.util.vision.LimelightHelpers;
@@ -22,11 +23,15 @@ import frc.lib.util.vision.LimelightHelpers.RawDetection;
 import frc.lib.util.vision.VisionEstimate;
 import frc.lib.util.vision.VisionGamePiece;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.Swerve;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class CombinedLimelightCameraIO extends LimelightCameraIO {
+
+	// MegaTag2 estimates are unreliable while spinning fast
+	private static final double MAX_MT2_YAW_RATE_DEG_PER_SEC = 720.0;
 
 	private Optional<VisionEstimate> lastEstimate = Optional.empty();
 	private final NetworkTable table;
@@ -56,15 +61,32 @@ public class CombinedLimelightCameraIO extends LimelightCameraIO {
 		return new Translation2d(distAwayX, distAwayY);
 	}
 
+	private double getYawRate() {
+		return Swerve.get().getPigeon2().getAngularVelocityZWorld().getValueAsDouble();
+	}
+
 	private void updateGyro() {
 		LimelightHelpers.SetRobotOrientation_NoFlush(
-				config.name, Drive.mInstance.getPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+				config.name, Drive.mInstance.getPose().getRotation().getDegrees(), getYawRate(), 0, 0, 0, 0);
 	}
 
 	// spotless:off
-	
+
 	@Override
 	public Optional<List<VisionEstimate>> getLastEstimates() {
+		// Disabled: MegaTag1 seeds the full pose (including heading) so MegaTag2 gets a correct field heading
+		if (DriverStation.isDisabled()) {
+			PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue(config.name);
+			if (mt1 != null && mt1.tagCount >= 2) {
+				Swerve.get().resetPose(mt1.pose);
+			}
+			return Optional.empty();
+		}
+
+		// Enabled: MegaTag2 for x/y, heading stays on the Pigeon
+		if (Math.abs(getYawRate()) > MAX_MT2_YAW_RATE_DEG_PER_SEC) {
+			return Optional.empty();
+		}
 		PoseEstimate limelightEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(config.name);
 		if (limelightEstimate == null
 				|| (limelightEstimate.pose.getX() == 0

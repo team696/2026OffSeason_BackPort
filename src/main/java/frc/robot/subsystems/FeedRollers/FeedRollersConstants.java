@@ -28,7 +28,7 @@ import frc.robot.Robot;
 public class FeedRollersConstants {
 
     public static AngularVelocity IdleSpeed = RotationsPerSecond.of(0);
-    public static AngularVelocity RunningSpeed = RotationsPerSecond.of(100.0*0.7*-1);
+    public static AngularVelocity RunningSpeed = RotationsPerSecond.of(70.0);
     public static final AngularVelocity epsilonThreshold = RotationsPerSecond.of(0.1);
     public static final Time debounder = Second.of(0.0);
     public static final double kGearing = 2;
@@ -44,7 +44,7 @@ public class FeedRollersConstants {
 
         config.followerIDs = new int[] {Ports.FEED_ROLLERS_FOLLOWER.id};
         config.followerBuses = new CANBus[] {Ports.FEED_ROLLERS_FOLLOWER.bus};
-        config.followerAlignment = new MotorAlignmentValue[] {MotorAlignmentValue.Opposed};
+        config.followerAlignment = new MotorAlignmentValue[] {MotorAlignmentValue.Aligned};
 
         TalonFXConfiguration config_talon = new TalonFXConfiguration();
         config_talon.Slot1.kP = 0.3;

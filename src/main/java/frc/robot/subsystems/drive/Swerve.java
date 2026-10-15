@@ -98,6 +98,11 @@ public final class Swerve extends TunerSwerveDrivetrain implements Sendable, Sub
         return this.run(() -> this.setControl(requestSupplier.get()));
     }
 
+    //Resets the gyro so the way the robot is facing becomes forward (uses the alliance operator perspective)
+    public Command resetGyro() {
+        return this.runOnce(this::seedFieldCentric);
+    }
+
     @Override
     public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds) {
         // Wrap timestamp with Utils.fpgaToCurrentTime

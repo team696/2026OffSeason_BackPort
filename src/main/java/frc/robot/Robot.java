@@ -5,6 +5,8 @@
 package frc.robot;
 
 
+import static edu.wpi.first.units.Units.Degrees;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -19,6 +21,7 @@ import frc.robot.Log.SEVERITY;
 import frc.robot.commands.ShootingCommands;
 import frc.robot.shooting.Shooting;
 import frc.robot.shooting.ShootingState;
+import frc.robot.shooting.ShotTuning;
 import frc.robot.subsystems.FeedRollers.FeedRollers;
 import frc.robot.subsystems.Hood.Hood;
 import frc.robot.subsystems.Hopper.Hopper;
@@ -49,6 +52,8 @@ public class Robot extends TimedRobot {
 		Hood.get();
 		Hopper.Pivot.get();
 		Hopper.Rollers.get();
+		Camera.get();
+		ShotTuning.init(); // puts the shooting fudge factors on SmartDashboard
 		//Log.initialize(SEVERITY.EVERYTHING);
 		//Log.data("Swerve", Swerve.get(), SEVERITY.MINIMAL);
 
@@ -69,7 +74,10 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotInit(){
-		
+
+		SmartDashboard.putData("Superstructure/Run Hopper Roller", SuperStructureConstants.runHopperRoller());
+		SmartDashboard.putData("Superstructure/Stop Hopper Roller", SuperStructureConstants.StopRoller());
+		/* 
 		// ---------- Intake ----------
 		SmartDashboard.putData("Intake/Rack and Pinion/Extend", Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.EXTEND));
 		SmartDashboard.putData("Intake/Rack and Pinion/Half", Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.HALF));
@@ -92,6 +100,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData("Superstructure/Stop Intake", SuperStructure.StopIntake());
 		SmartDashboard.putData("Superstructure/Intake Rollers", SuperStructureConstants.IntakeRollers());
 		SmartDashboard.putData("Superstructure/Outtake Rollers", SuperStructureConstants.OutakeRollers());
+		SmartDashboard.putData("Superstructure/Slow Intake",SuperStructureConstants.SlowIntakeRollers());
 		SmartDashboard.putData("Superstructure/Stop Intake Rollers", SuperStructureConstants.StopIntakeRollers());
 		SmartDashboard.putData("Superstructure/Oscillate Intake", SuperStructureConstants.OscilateIntake());
 		SmartDashboard.putData("Superstructure/Run Hopper Roller", SuperStructureConstants.runHopperRoller());
@@ -102,7 +111,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData("Superstructure/Passing Left", withState(ShootingState.NEUTRAL_FERRY_LEFT, SuperStructure.Passing(ShootingState.NEUTRAL_FERRY_LEFT)));
 		SmartDashboard.putData("Superstructure/Passing Right", withState(ShootingState.NEUTRAL_FERRY_RIGHT, SuperStructure.Passing(ShootingState.NEUTRAL_FERRY_RIGHT)));
 		SmartDashboard.putData("Superstructure/Shooting Stop", SuperStructure.ShootingStop());
-		/* 
+		
 		// ---------- Hopper ----------
 		SmartDashboard.putData("Hopper/Rollers/Intake", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.INTAKE));
 		SmartDashboard.putData("Hopper/Rollers/Slow Intake", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.SLOW_INTAKE));
@@ -110,7 +119,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData("Hopper/Rollers/Stop", Hopper.Rollers.get().setpointCommand(Hopper.Rollers.IDLE));
 
 		SmartDashboard.putData("Hopper/Pivot/Up", Hopper.Pivot.get().setpointCommand(Hopper.Pivot.UP));
-		SmartDashboard.putData("Hopper/Pivot/Down", Hopper.Pivot.get().setpointCommand(Hopper.Pivot.DOWN));
+		SmartDashboard.putData("Hopper/Pivot/Down", Hopper.Pivot.get().setpointCommand(Hopper.Pivot.ZERO));
 		SmartDashboard.putData("Hopper/Pivot/Test Angle", Hopper.Pivot.get().getTestAngleCommand());
 		SmartDashboard.putData("Hopper/Pivot/Stop", Hopper.Pivot.get().setpointCommand(Hopper.Pivot.STOP));
 
@@ -172,12 +181,14 @@ public class Robot extends TimedRobot {
 	public void robotPeriodic() {
 		CommandScheduler.getInstance().run();
 
+		SmartDashboard.putNumber("Distance to Blue Hub (m)", Swerve.get().distTo(FieldLayout.kBlueHub));
+
 		for (Map.Entry<String, TalonFX> entry : dashboardMotors.entrySet()) {
 			String folder = entry.getKey() + "/";
 			TalonFX motor = entry.getValue();
 			SmartDashboard.putBoolean(folder + "Connected", motor.isConnected());
 			SmartDashboard.putNumber(folder + "Velocity (rps)", motor.getVelocity().getValueAsDouble());
-			SmartDashboard.putNumber(folder + "Position (rot)", motor.getPosition().getValueAsDouble());
+			SmartDashboard.putNumber(folder + "Position (deg)", motor.getPosition().getValue().in(Degrees));
 			SmartDashboard.putNumber(folder + "Stator Current (A)", motor.getStatorCurrent().getValueAsDouble());
 			SmartDashboard.putNumber(folder + "Supply Current (A)", motor.getSupplyCurrent().getValueAsDouble());
 			SmartDashboard.putNumber(folder + "Voltage (V)", motor.getMotorVoltage().getValueAsDouble());

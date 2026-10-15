@@ -8,10 +8,12 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
+import frc.robot.subsystems.Hood.HoodConstants;
 
 /** Add your docs here. */
 public class ShootingRegression {
@@ -26,8 +28,12 @@ public class ShootingRegression {
         this.shooterVeloictyMap = shooterVelocityMap;
     }
 
+    // Hub and passing both go through here, so keep every shot inside the hood's shooting range
     public Angle getHoodAngle(Distance input){
-        return Degrees.of(hoodAngleMap.get(input.in(Meters)));
+        return Degrees.of(MathUtil.clamp(
+            hoodAngleMap.get(input.in(Meters)),
+            HoodConstants.kMinShootingAngle.in(Degrees),
+            HoodConstants.kMaxAngle.in(Degrees)));
     }
 
     public AngularVelocity getShooterVeloicty(Distance input){

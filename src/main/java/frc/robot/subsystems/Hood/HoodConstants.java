@@ -29,10 +29,15 @@ import frc.robot.Robot;
 
 /** Add your docs here. */
 public class HoodConstants {
-    public static final double kGearing = 2.0;
-    
-    public static final Angle kMaxAngle = Units.Degrees.of(540);
-    public static final Angle kMinAngle = Units.Degrees.of(0);
+    // 12T motor pulley -> 24T pulley, 10T (10 DP) pinion on that shaft -> 180T hood sector = 36:1
+    public static final double kGearing = (24.0 / 12.0) * (180.0 / 10.0);
+
+    // 0 = home (bottom hard stop), ~33 deg measured max travel. Also the max for passing shots.
+    public static final Angle kMaxAngle = Units.Degrees.of(33.0);
+    public static final Angle kMinAngle = Units.Degrees.of(0.0);
+    // Lowest angle used for shooting: the old "48 deg" minimum was in 2:1 units, 48 / 18 = 2.67 real deg
+    public static final Angle kMinShootingAngle = Units.Degrees.of(48.0 / 18.0);
+    public static final Angle Zero = Units.Degrees.of(0);
     public static final TunableNumber testAngle = new TunableNumber("Test Angle", 0.0);
     public static DoubleSupplier testAngleSupplier = () -> SmartDashboard.getNumber("Test Angle", HoodConstants.kMinAngle.in(Units.Degrees));
 
@@ -49,11 +54,19 @@ public class HoodConstants {
     public static final TalonFXConfiguration getTalonFXConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
         
-        config.Slot2.kP = 7;
+        // Gains are per mechanism rotation, so they scale with kGearing; these are the old
+        // values (kP 7, kV 0.24 at 2:1) multiplied by 18 to keep the same motor-side behavior.
+        config.Slot2.kP = 126;
         config.Slot2.kI = 0;
         config.Slot2.kD = 0;
 
-        config.Slot2.kV = 0.24;
+        config.Slot2.kV = 4.32;
+
+        // The lib finishes homing with a slot 0 Motion Magic setpoint, so slot 0 needs the same gains
+        config.Slot0.kP = config.Slot2.kP;
+        config.Slot0.kI = config.Slot2.kI;
+        config.Slot0.kD = config.Slot2.kD;
+        config.Slot0.kV = config.Slot2.kV;
 
         config.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
         config.CurrentLimits.StatorCurrentLimit = 50.0;

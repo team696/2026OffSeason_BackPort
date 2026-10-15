@@ -22,7 +22,7 @@ public class RobotConstants {
 	public static final CANBus CANIVORE_BUS = new CANBus("cv");
 
 	public static final Transform2d SHOOTER_OFFSET =
-			new Transform2d(Inches.of(11.28).unaryMinus(), BaseUnits.DistanceUnit.zero(), Rotation2d.kPi);
+			new Transform2d(Inches.of(7), BaseUnits.DistanceUnit.zero(), Rotation2d.kZero); // 7in forward of center, shooting out the front
 
 	public static FieldType currentFieldType = FieldType.Andymark;
 	public static boolean isRedAlliance = false;

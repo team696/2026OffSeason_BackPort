@@ -24,8 +24,15 @@ public class AirtimeRegression {
 
     //data for the hub
     static {
-        insertPointHub(Meter.of(1), Second.of(1));
-        //add more later
+        // simulated time of flight, tools/shooter_sim/shooter_sim.py
+        insertPointHub(Meter.of(2.25), Second.of(0.731));
+        insertPointHub(Meter.of(2.5), Second.of(0.795));
+        insertPointHub(Meter.of(3.0), Second.of(0.887));
+        insertPointHub(Meter.of(3.5), Second.of(0.940));
+        insertPointHub(Meter.of(4.0), Second.of(1.006));
+        insertPointHub(Meter.of(4.5), Second.of(1.064));
+        insertPointHub(Meter.of(5.0), Second.of(1.114));
+        insertPointHub(Meter.of(5.5), Second.of(1.159));
     }
 
     public static Time getHubShotTime(Distance distance) {
@@ -40,8 +47,10 @@ public class AirtimeRegression {
     }
 
     static {
-        insertPointFerryNeutral(Meter.of(1), Second.of(1));
-        //add more later
+        // simulated time of flight, tools/shooter_sim/shooter_sim.py
+        insertPointFerryNeutral(Meter.of(4.5), Second.of(1.322));
+        insertPointFerryNeutral(Meter.of(6.0), Second.of(1.350));
+        insertPointFerryNeutral(Meter.of(7.5), Second.of(1.346));
     }
 
     public static Time getFerryAllanceNeutral(Distance distance) {

@@ -11,9 +11,7 @@
   import edu.wpi.first.wpilibj2.command.Command;
   import frc.lib.bases.ServoMotorSubsystem;
   import frc.lib.io.MotorIOTalonFX;
-  import frc.lib.io.MotorIO.Mode;
   import frc.lib.io.MotorIO.Setpoint;
-  import frc.lib.util.Util;
 
   public class Hood extends ServoMotorSubsystem<MotorIOTalonFX> {
 
@@ -26,35 +24,36 @@
       }
 
 
-      public static final Setpoint STOW = Setpoint.withPositionSetpoint(HoodConstants.kMinAngle);
-      public static final Setpoint MAX_ANGLE = Setpoint.withPositionSetpoint(HoodConstants.kMaxAngle);
+      // Motion Magic so every move follows the speed/accel limits in HoodConstants instead of slamming
+      public static final Setpoint STOW = Setpoint.withPositionSetpoint(HoodConstants.kMinAngle,2);
+      public static final Setpoint MAX_ANGLE = Setpoint.withPositionSetpoint(HoodConstants.kMaxAngle,2);
+      public static final Setpoint ZERO = Setpoint.withPositionSetpoint(HoodConstants.Zero,2);
       public static Setpoint TEST_ANGLE = Setpoint.withPositionSetpoint(Units.Degrees.of(HoodConstants.testAngle.getAsDouble()));
 
 
     /** Creates a new Hood. */
     private Hood() {
       super(HoodConstants.getMotorIO(), "Hood", HoodConstants.kEpsilonThreshold, HoodConstants.getServoConfig());
+      // Hood rests on its bottom hard stop (home, 0 deg) at boot
       setCurrentPosition(HoodConstants.kMinAngle);
 
     }
 
     public Command getTestShotCommand() {
       return followSetpointCommand(() -> 
-          Setpoint.withPositionSetpoint(
-              Units.Degrees.of(HoodConstants.testAngle.getAsDouble())
+          Setpoint.withMotionMagicSetpoint(
+              Units.Degrees.of(HoodConstants.testAngle.getAsDouble()),2
           )
       );
   }
 
     // The lib's homing runs a voltage setpoint from periodic(). A command that re-asks for home every loop
     // (followSetpointCommand) would cancel it before it finishes, so skip those repeats while homing.
-    // The lib finishes homing with a MOTIONMAGIC setpoint, which still goes through.
+    // The lib finishes homing with its own MOTIONMAGIC setpoint at home, so only STOW/ZERO themselves are skipped.
     @Override
     public void applySetpoint(Setpoint setpoint) {
       boolean homing = getSetpoint().mode.isVoltageControl();
-      boolean positionAtHome = setpoint.mode == Mode.POSITIONPID
-          && Util.epsilonEquals(setpoint.baseUnits, HoodConstants.kMinAngle.baseUnitMagnitude(), epsilonThreshold.baseUnitMagnitude());
-      if (homing && positionAtHome) {
+      if (homing && (setpoint == STOW || setpoint == ZERO)) {
         return;
       }
       super.applySetpoint(setpoint);

@@ -14,7 +14,7 @@ import frc.robot.subsystems.drive.Swerve;
 public class ShotVerify {
 
     public static final Angle ACCEPTABLE_TILT = Degrees.of(5);
-    public static final Angle SHOT_ALIGNMENT_TOLERANCE = Degrees.of(2.0);
+    public static final Angle SHOT_ALIGNMENT_TOLERANCE = Degrees.of(7.0);
 
     public static boolean isTiled(){ //Very useful if we are beached
         var pigeon = Swerve.get().getPigeon2();

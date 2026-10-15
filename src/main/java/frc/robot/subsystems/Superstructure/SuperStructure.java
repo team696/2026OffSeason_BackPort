@@ -7,6 +7,10 @@ package frc.robot.subsystems.Superstructure;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.units.Units;
+import frc.robot.subsystems.FeedRollers.FeedRollers;
+import frc.robot.subsystems.Hopper.Hopper;
+import frc.robot.subsystems.Hopper.HopperConstants;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.commands.ShootingCommands;
 import frc.robot.shooting.ShootingState;
@@ -17,7 +21,7 @@ public class SuperStructure {
         return Commands.parallel(
             Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.EXTEND),
             SuperStructureConstants.IntakeRollers()
-        );
+        ).alongWith(Hopper.Rollers.get().setpointCommand(Hopper.Rollers.SLOW_INTAKE));
     }
 
     public static Command Outtake() {
@@ -47,22 +51,22 @@ public class SuperStructure {
     }
 
     public static Command Shooting(){
-        return Commands.sequence(
-            Commands.parallel(
+        return Commands.parallel(
             ShootingCommands.shoot(),
-            SuperStructureConstants.runHopperRoller()),
             Commands.waitSeconds(0.5),
-            Commands.parallel(
-            Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.RETRACT),
-            SuperStructureConstants.SlowIntakeRollers()
-            )
-        );
+                Commands.parallel(
+                    Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.HALF),
+                    SuperStructureConstants.SlowIntakeRollers(),
+                    SuperStructureConstants.runHopperRoller()
+                )
+            );
     }
 
     public static Command ShootingTesting(){
         return Commands.parallel(
             ShootingCommands.testShot(),
-            SuperStructureConstants.runHopperRoller()
+            // Give the shooter 0.5s to spin up before the hopper starts feeding
+            SuperStructureConstants.runHopperRoller().beforeStarting(Commands.waitSeconds(0.5))
         );
     }
 

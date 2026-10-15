@@ -17,6 +17,8 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import frc.lib.io.MotorIOTalonFX;
 import frc.lib.io.MotorIOTalonFXSim;
 import frc.lib.io.MotorIOTalonFX.MotorIOTalonFXConfig;
@@ -32,11 +34,11 @@ import frc.robot.Robot;
 public class IntakeConstants {
 
    public class RackAndPinion{
-    public static final double kGearing  = 30.0 / 12.0;
+    public static final double kGearing  = 4.0*(30.0 / 12.0);
 
 
     public static final Distance kInDistance = Units.Inches.of(-0.01);
-    public static final Distance kOutDistance = Units.Inches.of(14);
+    public static final Distance kOutDistance = Units.Inches.of(3.55);
 
     public static final Distance kRadius = Units.Inches.of(34.0 / 20.0).div(2.0); //pitch radius
 	public static final DistanceAngleConverter converter = new DistanceAngleConverter(kRadius);
@@ -54,11 +56,15 @@ public class IntakeConstants {
     public static final TalonFXConfiguration getTalonFXConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
 
-        config.Slot2.kP = 2;
+        config.Slot2.kP = 8;
         config.Slot2.kI = 0;
         config.Slot2.kD = 0;
 
+        //config.Slot2.kS = 0.3;
+
         config.Feedback.SensorToMechanismRatio = kGearing;
+
+        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
@@ -110,7 +116,7 @@ public class IntakeConstants {
 
 
     public class Roller{
-        public static final double kGearing = 1;
+        public static final double kGearing = 2;
 
        //public static final Voltage kIdleVoltage = Units.Volts.of(0.0);
         // public static final Voltage kIntakeVoltage = Units.Volts.of(5.0);

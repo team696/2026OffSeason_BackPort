@@ -11,7 +11,9 @@ import static edu.wpi.first.units.Units.Rotation;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.MomentOfInertiaUnit;
@@ -125,9 +127,10 @@ public class HopperPivot{
 
     public static final Angle kLowestAngle = Units.Degrees.of(0.0);
     public static final Angle kHighest = Units.Degrees.of(5.0);
+    public static final Angle kUpangle = Units.Degrees.of(-15.0);
 
     public static final AngularVelocity kUpCruiseVelocity = Units.DegreesPerSecond.of(30.0);
-    public static final AngularVelocity kDownCruiseVelocity = Units.DegreesPerSecond.of(10.0);
+    public static final AngularVelocity kDownCruiseVelocity = Units.DegreesPerSecond.of(5.0);
 
     public static final TunableNumber testAngle = new TunableNumber("Hopper Pivot Test Angle", 0.0);
 
@@ -136,10 +139,17 @@ public class HopperPivot{
     public static final TalonFXConfiguration getTalonFXConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
 
-        // UP/DOWN are position-velocity setpoints, which the lib runs on slot 2
-        config.Slot2.kP = 20;
+       
+        config.Slot2.kP = 360;
         config.Slot2.kI = 0;
         config.Slot2.kD = 0;
+
+        config.Slot2.GravityType = GravityTypeValue.Elevator_Static;
+        config.Slot2.kG = 0.25;
+        // Volts to break static friction; tune by raising voltage slowly until it just starts moving.
+        config.Slot2.kS = 0.1;
+
+        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
         config.MotionMagic.MotionMagicCruiseVelocity = kDownCruiseVelocity.in(Units.RotationsPerSecond);
         config.MotionMagic.MotionMagicExpo_kV = 0.12;

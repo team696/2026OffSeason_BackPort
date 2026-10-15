@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -109,20 +110,24 @@ class SuperStructureTest extends SubsystemTestBase {
 
     @Test
     void shootingTestingUsesDashboardSpeedAndAngle() {
-        setTestShot(25.0, 30.0);
+        setTestShot(25.0, 20.0);
         Command testing = SuperStructure.ShootingTesting();
         schedule(testing);
         assertTrue(testing.isScheduled(), "ShootingTesting ended right away");
 
-        assertSame(FeedRollers.RUNNING, FeedRollers.get().getSetpoint());
-        assertSame(Hopper.Rollers.INTAKE, Hopper.Rollers.get().getSetpoint());
+        // feed rollers must wait for the shooter and hood before feeding
+        assertNotSame(FeedRollers.RUNNING, FeedRollers.get().getSetpoint(), "Fed before the shooter was at speed");
         assertEquals(RotationsPerSecond.of(25.0).baseUnitMagnitude(), Shooter.get().getSetpoint().baseUnits, 1e-6,
             "Shooter setpoint should be the dashboard Test Speed");
 
         runUntil(() -> Shooter.get().nearVelocity(RotationsPerSecond.of(25.0), RotationsPerSecond.of(2.0)), 4.0,
             "Shooter never reached Test Speed, at " + Shooter.get().getVelocity().in(RotationsPerSecond) + " RPS");
-        runUntil(() -> Hood.get().nearPosition(Degrees.of(30.0), Degrees.of(2.0)), 4.0,
+        runUntil(() -> Hood.get().nearPosition(Degrees.of(20.0), Degrees.of(2.0)), 4.0,
             "Hood never reached Test Angle, at " + Hood.get().getPosition().in(Degrees) + " deg");
+        runUntil(() -> FeedRollers.get().getSetpoint() == FeedRollers.RUNNING, 2.0,
+            "Feed rollers never started after the shooter and hood were ready");
+        runUntil(() -> Hopper.Rollers.get().getSetpoint() == Hopper.Rollers.INTAKE, 2.0,
+            "Hopper never started feeding");
 
         schedule(SuperStructure.ShootingStop());
         setTestShot(0.0, 0.0);
@@ -130,16 +135,16 @@ class SuperStructureTest extends SubsystemTestBase {
 
     @Test
     void shootingTestingFollowsDashboardChanges() {
-        setTestShot(20.0, 20.0);
+        setTestShot(20.0, 10.0);
         schedule(SuperStructure.ShootingTesting());
         runUntil(() -> Shooter.get().nearVelocity(RotationsPerSecond.of(20.0), RotationsPerSecond.of(2.0)), 4.0,
             "Shooter never reached the first Test Speed");
 
-        // change the numbers while it's running, like tuning from the dashboard
-        setTestShot(35.0, 40.0);
+        // change the numbers while it's running, like tuning from the dashboard (hood travel is 0-33 deg)
+        setTestShot(35.0, 25.0);
         runUntil(() -> Shooter.get().nearVelocity(RotationsPerSecond.of(35.0), RotationsPerSecond.of(2.0)), 4.0,
             "Shooter didn't follow the new Test Speed, at " + Shooter.get().getVelocity().in(RotationsPerSecond) + " RPS");
-        runUntil(() -> Hood.get().nearPosition(Degrees.of(40.0), Degrees.of(2.0)), 4.0,
+        runUntil(() -> Hood.get().nearPosition(Degrees.of(25.0), Degrees.of(2.0)), 4.0,
             "Hood didn't follow the new Test Angle, at " + Hood.get().getPosition().in(Degrees) + " deg");
 
         schedule(SuperStructure.ShootingStop());

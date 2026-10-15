@@ -1,0 +1,47 @@
+
+// ---------------- LookUpTables.java ----------------
+        // ScoringVelocityLUT
+            scoringvelocityLUT.put(2.25, 29.10); // m, RPS
+            scoringvelocityLUT.put(2.5, 30.21); // m, RPS
+            scoringvelocityLUT.put(3.0, 32.32); // m, RPS
+            scoringvelocityLUT.put(3.5, 34.17); // m, RPS
+            scoringvelocityLUT.put(4.0, 36.08); // m, RPS
+            scoringvelocityLUT.put(4.5, 37.92); // m, RPS
+            scoringvelocityLUT.put(5.0, 39.70); // m, RPS
+            scoringvelocityLUT.put(5.5, 41.41); // m, RPS
+        // ScoringHoodLUT
+            scoringhoodLUT.put(2.25, 2.67); // m, Degrees
+            scoringhoodLUT.put(2.5, 2.67); // m, Degrees
+            scoringhoodLUT.put(3.0, 3.67); // m, Degrees
+            scoringhoodLUT.put(3.5, 5.67); // m, Degrees
+            scoringhoodLUT.put(4.0, 6.67); // m, Degrees
+            scoringhoodLUT.put(4.5, 7.67); // m, Degrees
+            scoringhoodLUT.put(5.0, 8.67); // m, Degrees
+            scoringhoodLUT.put(5.5, 9.67); // m, Degrees
+        // NetrualZoneVelocityLUT
+            neturalzonevelocityLUT.put(4.5, 34.40); // m, RPS
+            neturalzonevelocityLUT.put(6.0, 38.28); // m, RPS
+            neturalzonevelocityLUT.put(7.5, 42.43); // m, RPS
+        // NeturalZoneHoodLUT
+            neturalzonehoodLUT.put(4.5, 3.67); // m, Degrees
+            neturalzonehoodLUT.put(6.0, 10.67); // m, Degrees
+            neturalzonehoodLUT.put(7.5, 17.67); // m, Degrees
+        // OppositeSideVelocityLUT
+            oppositesidevelocityLUT.put(7.0, 40.93); // m, RPS
+        // OppositeSideHoodLUT
+            oppositesidehoodLUT.put(7.0, 15.67); // m, Degrees
+
+// ---------------- AirtimeRegression.java ----------------
+        // hub
+        insertPointHub(Meter.of(2.25), Second.of(0.731));
+        insertPointHub(Meter.of(2.5), Second.of(0.795));
+        insertPointHub(Meter.of(3.0), Second.of(0.887));
+        insertPointHub(Meter.of(3.5), Second.of(0.940));
+        insertPointHub(Meter.of(4.0), Second.of(1.006));
+        insertPointHub(Meter.of(4.5), Second.of(1.064));
+        insertPointHub(Meter.of(5.0), Second.of(1.114));
+        insertPointHub(Meter.of(5.5), Second.of(1.159));
+        // ferry neutral
+        insertPointFerryNeutral(Meter.of(4.5), Second.of(1.322));
+        insertPointFerryNeutral(Meter.of(6.0), Second.of(1.350));
+        insertPointFerryNeutral(Meter.of(7.5), Second.of(1.346));

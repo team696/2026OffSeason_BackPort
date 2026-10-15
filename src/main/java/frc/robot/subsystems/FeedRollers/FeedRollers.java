@@ -22,7 +22,7 @@ public class FeedRollers extends FlywheelMotorSubsystem<MotorIOTalonFX> {
       return roller;
     }
 
-  public static Setpoint IDLE = Setpoint.withVelocitySetpoint(FeedRollersConstants.IdleSpeed , 1);
+  public static Setpoint IDLE = Setpoint.COAST;
   public static Setpoint RUNNING = Setpoint.withVelocitySetpoint(FeedRollersConstants.RunningSpeed, 1);
   // Returns a new Command every call, a single shared Command can't be used in more than one group
     // public static Command running() {
