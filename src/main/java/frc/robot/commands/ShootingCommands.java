@@ -4,11 +4,14 @@
 
 package frc.robot.commands;
 
+import javax.lang.model.util.ElementScanner14;
+
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import frc.robot.shooting.Shooting;
 import frc.robot.shooting.ShootingSetpoint;
 import frc.robot.shooting.ShootingState;
@@ -39,10 +42,17 @@ public class ShootingCommands {
 
     }
 
+    public static boolean atShooterSpeed() {
+        return Shooter.get().spunUp(ShooterConstants.kFeedTolerance);
+    }
+
+    public static boolean readyToShoot() {
+        return atShooterSpeed();  //TODO: Add Check for alignment to goal angle.
+    }
     
     /** Waits until the drum is at its target speed. Put this right before the feed rollers start. */
     public static Command waitUntilShooterAtSpeed() {
-        return Commands.waitUntil(() -> Shooter.get().spunUp(ShooterConstants.kFeedTolerance));
+        return Commands.waitUntil(ShootingCommands::atShooterSpeed);
     }
 
     public static Command testShot(){
@@ -68,13 +78,28 @@ public class ShootingCommands {
         return Commands.parallel(
             Shooting.mInstance.getMotionComp().PointToTarget(),
             spinUp(),
+            Commands.run(()->{
+                if (ShootingCommands.readyToShoot()) {
+                    FeedRollers.get().applySetpoint(FeedRollers.RUNNING);
+                } else {
+                    FeedRollers.get().applySetpoint(FeedRollers.IDLE);
+                }
+            }, FeedRollers.get())
+        ).beforeStarting(() -> Shooting.setState(ShootingState.HUB));
+    }
+    //Shooter.get().spunUp(ShooterConstants.kFeedTolerance)
+    /* 
+     public static Command shoot(){
+        return Commands.parallel(
+            Shooting.mInstance.getMotionComp().PointToTarget(),
+            spinUp(),
             Commands.sequence(
                 Commands.waitUntil(Shooting.mInstance::shotVerified),
                 waitUntilShooterAtSpeed(),
                 FeedRollers.get().setpointCommand(FeedRollers.RUNNING)
             )
         ).beforeStarting(() -> Shooting.setState(ShootingState.HUB));
-    }
+    }*/
 
     public static Command NoVerifyShoot(){
          return Commands.parallel(

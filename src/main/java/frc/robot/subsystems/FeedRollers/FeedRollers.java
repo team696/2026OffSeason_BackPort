@@ -32,7 +32,7 @@ public class FeedRollers extends FlywheelMotorSubsystem<MotorIOTalonFX> {
     //   });
     // }
   
-    public FeedRollers() {
+    private FeedRollers() {
     super(
       FeedRollersConstants.getMotorIO(),
       "FeedRollers",

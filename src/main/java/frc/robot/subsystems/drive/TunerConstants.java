@@ -64,6 +64,8 @@ public class TunerConstants {
                 .withSupplyCurrentLowerLimit(Amps.of(55))
                 .withSupplyCurrentLowerTime(Seconds.of(1.0))
                 .withSupplyCurrentLimitEnable(true)
+                .withStatorCurrentLimit(80)
+                .withStatorCurrentLimitEnable(true)
         );
     private static final TalonFXConfiguration steerInitialConfigs = new TalonFXConfiguration()
         .withCurrentLimits(
@@ -84,7 +86,7 @@ public class TunerConstants {
     // Measured robot speed (m/s) at 12 V applied output;
     // This is NOT the desired max robot speed - see MaxSpeed in RobotContainer instead;
     // This needs to be tuned to your individual robot
-    public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(5.5);
+    public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(4.5);
 
     public final static Telemetry logger = new Telemetry(TunerConstants.kSpeedAt12Volts.in(MetersPerSecond));
     // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
@@ -162,7 +164,7 @@ public class TunerConstants {
     private static final int kBackLeftDriveMotorId = 6;
     private static final int kBackLeftSteerMotorId = 5;
     private static final int kBackLeftEncoderId = 11;
-    private static final Angle kBackLeftEncoderOffset = Rotations.of(-0.480224609375);
+    private static final Angle kBackLeftEncoderOffset = Radians.of(-0.173);
     private static final boolean kBackLeftSteerMotorInverted = false;
     private static final boolean kBackLeftEncoderInverted = false;
 

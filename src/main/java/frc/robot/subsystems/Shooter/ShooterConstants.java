@@ -34,11 +34,11 @@ public class ShooterConstants {
     public static DoubleSupplier testShotSpeedSupplier = () -> SmartDashboard.getNumber("Test Speed", 0.0);
     public static final AngularVelocity IdleSpeed = RotationsPerSecond.of(0);
     public static final AngularVelocity FerrySpeed = RotationsPerSecond.of(20);
-    public static final AngularVelocity ShotSpeed = RotationsPerSecond.of(30);
+    public static final AngularVelocity ShotSpeed = RotationsPerSecond.of(28);
 
     public static final AngularVelocity epsilonThreshold = RotationsPerSecond.of(0.1);
     // feed rollers wait until the drum is within this of its target speed
-    public static final AngularVelocity kFeedTolerance = RotationsPerSecond.of(2.0);
+    public static final AngularVelocity kFeedTolerance = RotationsPerSecond.of(1.0);
 
     public static final double kGearing = 45.0/22.0;
 
@@ -67,29 +67,32 @@ public class ShooterConstants {
 
         TalonFXConfiguration config_talon = new TalonFXConfiguration();
 
-        // Volts per rps of error: pushes back when a ball slows the drum. Raise toward 4-5 if it
+        // Volts per rps of error: pushes back when a ball slows the drum. Lower if
         // still sags while feeding, lower it if the drum oscillates or whines at speed.
-        config_talon.Slot1.kP = 0.1;
+        config_talon.Slot1.kP = 0.3;
         config_talon.Slot1.kI = 0;
         config_talon.Slot1.kD = 0;
 
-        config_talon.Slot1.kV = 0.245;
+        config_talon.Voltage.PeakForwardVoltage = 12;
+        config_talon.Voltage.PeakReverseVoltage = -12;
+
+        config_talon.Slot1.kV = 0.25;
 
         config_talon.MotionMagic.MotionMagicCruiseVelocity = 30.0;
-        config_talon.MotionMagic.MotionMagicAcceleration = 30.0;
+        config_talon.MotionMagic.MotionMagicAcceleration = 100.0;
         config_talon.MotionMagic.MotionMagicJerk = 1000.0;
 
 
-        config_talon.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
+        config_talon.CurrentLimits.StatorCurrentLimitEnable = true;
         config_talon.CurrentLimits.StatorCurrentLimit = 120.0;
 
-        config_talon.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
+        config_talon.CurrentLimits.SupplyCurrentLimitEnable = true;
         // 45 A (and Phoenix's default drop to 40 A after 1 s) couldn't keep up with balls going through:
         // the drum hit 40 rps then sagged to 32 while feeding. Two motors at 60 A = up to 120 A from the
         // battery during a burst - lower these if the robot browns out while driving and shooting.
-        config_talon.CurrentLimits.SupplyCurrentLimit = 70.0;
+        config_talon.CurrentLimits.SupplyCurrentLimit = 80.0;
         config_talon.CurrentLimits.SupplyCurrentLowerLimit = 50.0;
-        config_talon.CurrentLimits.SupplyCurrentLowerTime = 2.0;
+        config_talon.CurrentLimits.SupplyCurrentLowerTime = 1;
         config_talon.Feedback.SensorToMechanismRatio = kGearing;
 
         config_talon.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;

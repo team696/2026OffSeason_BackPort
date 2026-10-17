@@ -68,10 +68,10 @@ public class IntakeConstants {
 
         config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
-        config.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
+        config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.CurrentLimits.StatorCurrentLimit = 60.0;
 
-        config.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
+        config.CurrentLimits.SupplyCurrentLimitEnable = true;
         config.CurrentLimits.SupplyCurrentLimit = 40.0;
 
         config.Feedback.SensorToMechanismRatio = kGearing;
@@ -130,10 +130,10 @@ public class IntakeConstants {
         public static TalonFXConfiguration getTaloFXConfig(){
             TalonFXConfiguration config = new TalonFXConfiguration();
 
-            config.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
+            config.CurrentLimits.StatorCurrentLimitEnable = true;
             config.CurrentLimits.StatorCurrentLimit = 60;
 
-            config.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
+            config.CurrentLimits.SupplyCurrentLimitEnable = true;
             config.CurrentLimits.SupplyCurrentLimit = 40.0;
             config.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
@@ -201,10 +201,10 @@ public class IntakeConstants {
         public static TalonFXConfiguration getTaloFXConfig(){
             TalonFXConfiguration config = new TalonFXConfiguration();
 
-            config.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
+            config.CurrentLimits.StatorCurrentLimitEnable = true;
             config.CurrentLimits.StatorCurrentLimit = 80;
 
-            config.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
+            config.CurrentLimits.SupplyCurrentLimitEnable = true;
             config.CurrentLimits.SupplyCurrentLimit = 50.0;
             config.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 

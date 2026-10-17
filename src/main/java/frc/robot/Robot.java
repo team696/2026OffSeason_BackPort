@@ -13,7 +13,10 @@ import java.util.Map;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.util.FieldLayout;
 import frc.robot.Auto.NamedCommand;
@@ -40,9 +43,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
 	private Command m_autonomousCommand;
+	private PowerDistribution pdh; 
 
 	public Robot() {
-
+		pdh = new PowerDistribution(1, ModuleType.kRev);
 		Swerve.get();
 		Shooter.get();
 		Intake.RackAndPinion.get();
@@ -74,7 +78,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotInit(){
-
+		DataLogManager.start();
 		SmartDashboard.putData("Superstructure/Run Hopper Roller", SuperStructureConstants.runHopperRoller());
 		SmartDashboard.putData("Superstructure/Stop Hopper Roller", SuperStructureConstants.StopRoller());
 		/* 
@@ -179,6 +183,9 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotPeriodic() {
+		SmartDashboard.putData(pdh);
+
+
 		CommandScheduler.getInstance().run();
 
 		SmartDashboard.putNumber("Distance to Blue Hub (m)", Swerve.get().distTo(FieldLayout.kBlueHub));

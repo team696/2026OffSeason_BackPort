@@ -25,7 +25,7 @@ public class Binds {
 
 	public static final class Controller {
 			private static final SwerveRequest.FieldCentric swerveFCDriveRequest = new SwerveRequest.FieldCentric()
-				.withDeadband(5. * 0.05).withRotationalDeadband(8 * 0.05)
+				.withDeadband(5. * 0.05).withRotationalDeadband(4 * 0.05)
 				.withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
 		public static final void bind() {
@@ -33,7 +33,7 @@ public class Binds {
 				(()->swerveFCDriveRequest
 				.withVelocityX(Math.pow(Controls.xboxController.leftJoyY.getAsDouble(),2)*Math.signum(Controls.xboxController.leftJoyY.getAsDouble())*TunerConstants.kSpeedAt12Volts.in(MetersPerSecond))
 				.withVelocityY(Math.pow(Controls.xboxController.leftJoyX.getAsDouble(),2)*Math.signum(Controls.xboxController.leftJoyX.getAsDouble())*TunerConstants.kSpeedAt12Volts.in(MetersPerSecond))
-				.withRotationalRate(Math.pow(Controls.xboxController.rightJoyX.getAsDouble(),2)*Math.signum(Controls.xboxController.rightJoyX.getAsDouble())*RotationsPerSecond.of(5.).in(RadiansPerSecond)))
+				.withRotationalRate(Math.pow(Controls.xboxController.rightJoyX.getAsDouble(),2)*Math.signum(Controls.xboxController.rightJoyX.getAsDouble())*RotationsPerSecond.of(3.).in(RadiansPerSecond)))
 			));
 
 			//Intake.RackAndPinion.get().setDefaultCommand(Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.RETRACT));

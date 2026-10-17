@@ -53,11 +53,10 @@ public class SuperStructure {
     public static Command Shooting(){
         return Commands.parallel(
             ShootingCommands.shoot(),
-            Commands.waitSeconds(0.5),
-                Commands.parallel(
-                    Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.HALF),
-                    SuperStructureConstants.SlowIntakeRollers(),
-                    SuperStructureConstants.runHopperRoller()
+            Commands.parallel(
+                Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.HALF),
+                SuperStructureConstants.SlowIntakeRollers(),
+                SuperStructureConstants.runHopperRoller()
                 )
             );
     }

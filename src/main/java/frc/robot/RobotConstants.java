@@ -19,7 +19,7 @@ public class RobotConstants {
 	public static final SEVERITY LOGGING_SEVERITY = SEVERITY.EVERYTHING; 
 
 	public static final CANBus RIOBUS = new CANBus("rio");
-	public static final CANBus CANIVORE_BUS = new CANBus("cv");
+	public static final CANBus CANIVORE_BUS = new CANBus("CANivore");
 
 	public static final Transform2d SHOOTER_OFFSET =
 			new Transform2d(Inches.of(7), BaseUnits.DistanceUnit.zero(), Rotation2d.kZero); // 7in forward of center, shooting out the front
