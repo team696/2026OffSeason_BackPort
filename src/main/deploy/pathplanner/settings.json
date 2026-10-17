@@ -4,8 +4,9 @@
   "holonomicMode": true,
   "pathFolders": [
     "New Folder",
-    "simple right side auto",
-    "simple left side auto"
+    "Right Side Double Swipe",
+    "simple left side auto",
+    "simple right side auto"
   ],
   "autoFolders": [
     "New Folder"

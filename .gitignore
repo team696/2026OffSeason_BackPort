@@ -185,3 +185,6 @@ compile_wpilibj2.commands.json
 
 # Eclipse generated file for annotation processors
 .factorypath
+
+# Local AI analysis reports, scripts, charts, and caches
+/artifacts/

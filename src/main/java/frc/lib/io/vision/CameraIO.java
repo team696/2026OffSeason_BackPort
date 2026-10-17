@@ -1,6 +1,7 @@
 package frc.lib.io.vision;
 
 import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -34,6 +35,10 @@ public abstract class CameraIO implements Sendable {
 	public Optional<List<VisionEstimate>> getLastEstimates() {
 		return Optional.empty();
 	}
+
+	public void logLocalizationSkipped(String reason) {}
+
+	public void logVisionSubmitted(VisionEstimate estimate, Vector<N3> deviations, Pose2d poseAfter) {}
 
 	public Vector<N3> getAprilTagStdDevs() {
 		return config.aprilTagVisionStdDevs;

@@ -86,10 +86,12 @@ public class CameraSubsystem extends SubsystemBase {
 	}
 
 	public void applyVisionEstimate(CameraIO camera, VisionEstimate estimate) {
+		Vector<N3> deviations = camera.getAprilTagStdDevs().times(estimate.getAverageDistance().in(Meters));
 		Drive.mInstance.addVisionUpdate(
 				estimate.getPose(),
 				estimate.getTimestamp(),
-				camera.getAprilTagStdDevs().times(estimate.getAverageDistance().in(Meters)));
+				deviations);
+		camera.logVisionSubmitted(estimate, deviations, Drive.mInstance.getPose());
 
 		if (estimate.getPose() != lastPose) {
 			if (Drive.mInstance
@@ -118,6 +120,8 @@ public class CameraSubsystem extends SubsystemBase {
 					}
 				});
 			}
+		} else {
+			for (CameraIO camera : config.cameras) camera.logLocalizationSkipped("PITCH_UNSTABLE");
 		}
 	}
 
@@ -130,6 +134,8 @@ public class CameraSubsystem extends SubsystemBase {
 			outputTelemetry();
 			updateDetection();
 			updateLocalization();
+		} else {
+			for (CameraIO camera : config.cameras) camera.logLocalizationSkipped("VISION_DISABLED");
 		}
 	}
 

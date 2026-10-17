@@ -45,6 +45,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
 	private Command m_autonomousCommand;
 	private PowerDistribution pdh; 
+	private PowerTelemetry powerTelemetry;
 
 	public Robot() {
 		pdh = new PowerDistribution(1, ModuleType.kRev);
@@ -80,6 +81,8 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit(){
 		DataLogManager.start();
+		DriverStation.startDataLog(DataLogManager.getLog());
+		powerTelemetry = new PowerTelemetry(pdh, DataLogManager.getLog());
 		SmartDashboard.putData("Superstructure/Run Hopper Roller", SuperStructureConstants.runHopperRoller());
 		SmartDashboard.putData("Superstructure/Stop Hopper Roller", SuperStructureConstants.StopRoller());
 		/* 
@@ -184,6 +187,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotPeriodic() {
+		powerTelemetry.record();
 		SmartDashboard.putData(pdh);
 
 

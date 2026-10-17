@@ -69,7 +69,7 @@ public class Auto {
 			var config = RobotConfig.fromGUISettings();
 			AutoBuilder.configure(
 				() -> Swerve.get().getState().Pose, // Supplier of current robot pose
-				Swerve.get()::resetPose,             // Consumer for seeding pose against auto
+				pose -> Swerve.get().resetPoseWithReason(pose, "PathPlannerStartingPose"),
 				() -> Swerve.get().getState().Speeds, // Supplier of current robot speeds
 				// Consumer of ChassisSpeeds and feedforwards to drive the robot
 				(speeds, feedforwards) -> {

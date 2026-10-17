@@ -47,6 +47,7 @@ public class Binds {
 
 			Controls.xboxController.LT.whileTrue(SuperStructure.RunIntake()).whileFalse(SuperStructureConstants.StopIntakeRollers());
 			Controls.xboxController.RT.whileTrue(SuperStructure.Shooting());
+			Controls.xboxController.Y.whileTrue(SuperStructure.ManualShooting());
 			Controls.xboxController.A.whileTrue(Swerve.get().resetGyro());
 			Controls.xboxController.LB.whileTrue(SuperStructure.Passing(ShootingState.NEUTRAL_FERRY_LEFT));
 			Controls.xboxController.RB.whileTrue(SuperStructure.Passing(ShootingState.NEUTRAL_FERRY_RIGHT));

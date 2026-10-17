@@ -48,31 +48,28 @@ public class TunerConstants {
     // When not Pro-licensed, Fused*/Sync* automatically fall back to Remote*
     private static final SteerFeedbackType kSteerFeedbackType = SteerFeedbackType.RemoteCANcoder; // FusedCANcoder is Phoenix Pro only
 
-    // The stator current at which the wheels start to slip;
-    // This needs to be tuned to your individual robot
-    private static final Current kSlipCurrent = Amps.of(120);
+    // Uniform 35% reduction from the previous drivetrain current limits.
+    private static final double kCurrentLimitScale = 0.65;
+    // CTRE uses SlipCurrent as the effective drive stator and torque-current limit.
+    private static final Current kSlipCurrent = Amps.of(120 * kCurrentLimitScale);
 
     // Initial configs for the drive and steer motors and the azimuth encoder; these cannot be null.
     // Some configs will be overwritten; check the `with*InitialConfigs()` API documentation.
     private static final TalonFXConfiguration driveInitialConfigs = new TalonFXConfiguration()
         .withCurrentLimits(
             new CurrentLimitsConfigs()
-                // Stator stays at kSlipCurrent (120 A) for pushing; at stall that only pulls ~40 A
-                // from the battery, so this supply limit doesn't cost pushing force.
-                // 70 A burst for acceleration, then hold ~55 A per module to avoid brownouts.
-                .withSupplyCurrentLimit(Amps.of(70))
-                .withSupplyCurrentLowerLimit(Amps.of(55))
+                .withSupplyCurrentLimit(Amps.of(40))
+                .withSupplyCurrentLowerLimit(Amps.of(55 * kCurrentLimitScale))
                 .withSupplyCurrentLowerTime(Seconds.of(1.0))
                 .withSupplyCurrentLimitEnable(true)
-                .withStatorCurrentLimit(80)
+                .withStatorCurrentLimit(kSlipCurrent)
                 .withStatorCurrentLimitEnable(true)
         );
     private static final TalonFXConfiguration steerInitialConfigs = new TalonFXConfiguration()
         .withCurrentLimits(
             new CurrentLimitsConfigs()
-                // Swerve azimuth does not require much torque output, so we can set a relatively low
-                // stator current limit to help avoid brownouts without impacting performance.
-                .withStatorCurrentLimit(Amps.of(60))
+                // Apply the same reduction to the steering stator-current budget.
+                .withStatorCurrentLimit(Amps.of(60 * kCurrentLimitScale))
                 .withStatorCurrentLimitEnable(true)
         );
     private static final CANcoderConfiguration encoderInitialConfigs = new CANcoderConfiguration();

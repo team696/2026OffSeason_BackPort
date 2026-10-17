@@ -8,13 +8,15 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.units.BaseUnits;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import frc.lib.bases.CameraSubsystem.CameraIOConfig;
 import frc.lib.util.FieldLayout;
 import frc.lib.util.vision.LimelightHelpers;
@@ -22,6 +24,8 @@ import frc.lib.util.vision.LimelightHelpers.PoseEstimate;
 import frc.lib.util.vision.LimelightHelpers.RawDetection;
 import frc.lib.util.vision.VisionEstimate;
 import frc.lib.util.vision.VisionGamePiece;
+import frc.lib.util.vision.VisionTelemetry;
+import frc.lib.util.vision.VisionTelemetry.Decision;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.Swerve;
 import java.util.ArrayList;
@@ -30,15 +34,13 @@ import java.util.Optional;
 
 public class CombinedLimelightCameraIO extends LimelightCameraIO {
 
-	// MegaTag2 estimates are unreliable while spinning fast
-	private static final double MAX_MT2_YAW_RATE_DEG_PER_SEC = 720.0;
+	private static final double MAX_VISION_YAW_RATE_DEG_PER_SEC = 720.0;
 
-	private Optional<VisionEstimate> lastEstimate = Optional.empty();
-	private final NetworkTable table;
+	private final VisionTelemetry diagnostics;
 
 	public CombinedLimelightCameraIO(CameraIOConfig config) {
 		super(config);
-		table = NetworkTableInstance.getDefault().getTable("Vision").getSubTable(config.name);
+		diagnostics = new VisionTelemetry(NetworkTableInstance.getDefault().getTable("Vision").getSubTable(config.name));
 	}
 
 	public Translation2d calcDistanceToGamePiece(double tx, double ty, Distance radius) {
@@ -72,26 +74,40 @@ public class CombinedLimelightCameraIO extends LimelightCameraIO {
 
 	// spotless:off
 
+	private static boolean isValidEstimate(PoseEstimate estimate) {
+		if (estimate == null || estimate.pose == null || estimate.tagCount < 1) {
+			return false;
+		}
+		// Reject the default origin pose without rejecting valid poses on either field axis.
+		return !(estimate.pose.getX() == 0.0
+				&& estimate.pose.getY() == 0.0
+				&& estimate.pose.getRotation().getRadians() == 0.0);
+	}
+
 	@Override
 	public Optional<List<VisionEstimate>> getLastEstimates() {
-		// Disabled: MegaTag1 seeds the full pose (including heading) so MegaTag2 gets a correct field heading
-		if (DriverStation.isDisabled()) {
-			PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue(config.name);
-			if (mt1 != null) {
-				Swerve.get().resetPose(mt1.pose);
+		boolean disabled = DriverStation.isDisabled();
+		double yawRate = getYawRate();
+		PoseEstimate limelightEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(config.name);
+		diagnostics.observe(limelightEstimate, Drive.mInstance.getPose(), Timer.getFPGATimestamp(), disabled);
+		// Disabled: MegaTag1 seeds the full pose, including heading.
+		if (disabled) {
+			if (isValidEstimate(limelightEstimate)) {
+				Swerve.get().resetPoseWithReason(limelightEstimate.pose, "DisabledVision:" + config.name);
+				diagnostics.decision(Decision.DISABLED_POSE_RESET, Drive.mInstance.getPose(), new double[0]);
+			} else {
+				logInvalidEstimate(limelightEstimate);
 			}
 			return Optional.empty();
 		}
 
-		// Enabled: MegaTag2 for x/y, heading stays on the Pigeon
-		if (Math.abs(getYawRate()) > MAX_MT2_YAW_RATE_DEG_PER_SEC) {
+		// Enabled: MegaTag1 for x/y; heading stays on the Pigeon through fusion standard deviations.
+		if (Math.abs(yawRate) > MAX_VISION_YAW_RATE_DEG_PER_SEC) {
+			diagnostics.decision(Decision.HIGH_YAW_RATE, Drive.mInstance.getPose(), new double[0]);
 			return Optional.empty();
 		}
-		PoseEstimate limelightEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(config.name); // _MegaTag2 TODO: Add a variable to properly fix this
-		if (limelightEstimate == null
-				|| (limelightEstimate.pose.getX() == 0
-						|| limelightEstimate.pose.getY() == 0
-						|| limelightEstimate.tagCount < 1)) {
+		if (!isValidEstimate(limelightEstimate)) {
+			logInvalidEstimate(limelightEstimate);
 			return Optional.empty();
 		}
 		int buffer[] = new int[limelightEstimate.rawFiducials.length];
@@ -102,6 +118,27 @@ public class CombinedLimelightCameraIO extends LimelightCameraIO {
 						FieldLayout.getAprilTagArrayFromIDs(buffer))
 				.withAverageDistance(Meters.of(limelightEstimate.avgTagDist));
 		return Optional.of(List.of(estimate));
+	}
+
+	private void logInvalidEstimate(PoseEstimate estimate) {
+		Decision reason = estimate == null ? Decision.NULL_ESTIMATE
+			: estimate.pose == null ? Decision.NULL_POSE
+			: estimate.tagCount < 1 ? Decision.NO_TAGS : Decision.ORIGIN_POSE;
+		diagnostics.decision(reason, Drive.mInstance.getPose(), new double[0]);
+	}
+
+	@Override
+	public void logLocalizationSkipped(String reason) {
+		diagnostics.observe(LimelightHelpers.getBotPoseEstimate_wpiBlue(config.name), Drive.mInstance.getPose(),
+			Timer.getFPGATimestamp(), DriverStation.isDisabled());
+		diagnostics.decision(Decision.valueOf(reason), Drive.mInstance.getPose(), new double[0]);
+		logGyro();
+	}
+
+	@Override
+	public void logVisionSubmitted(VisionEstimate estimate, Vector<N3> deviations, Pose2d poseAfter) {
+		diagnostics.decision(Decision.FUSION_SUBMITTED, poseAfter,
+			new double[] {deviations.get(0), deviations.get(1), deviations.get(2)});
 	}
 
 	@Override
@@ -134,10 +171,14 @@ public class CombinedLimelightCameraIO extends LimelightCameraIO {
 	@Override
 	public void update() {
 		updateGyro();
-		outputTelemetry();
+		logGyro();
 	}
 
-	public void outputTelemetry() {
-		lastEstimate.ifPresent((lastEstimate) -> lastEstimate.log(config.name + "/Last Estimate"));
+	private void logGyro() {
+		var pigeon = Swerve.get().getPigeon2();
+		var yaw = pigeon.getYaw();
+		var pitch = pigeon.getPitch();
+		diagnostics.gyro(yaw.getValueAsDouble(), pitch.getValueAsDouble(), getYawRate(),
+			yaw.getTimestamp().getLatency(), pitch.getTimestamp().getLatency());
 	}
 }

@@ -44,6 +44,14 @@ public class Intake{
     public void periodic() {
     super.periodic();
       SmartDashboard.putNumber("Rack and Pinion Pose", this.getPosition().in(Rotations));
+      Setpoint target = getSetpoint();
+      boolean positionControlled = target != null && target.mode.isPositionControl();
+      double targetRotations = positionControlled ? target.baseUnits / (2.0 * Math.PI) : Double.NaN;
+      SmartDashboard.putString("Intake/Rack and Pinion/Control Mode", target == null ? "NONE" : target.mode.name());
+      SmartDashboard.putBoolean("Intake/Rack and Pinion/Position Control Active", positionControlled);
+      SmartDashboard.putNumber("Intake/Rack and Pinion/Target Rotations", targetRotations);
+      SmartDashboard.putNumber("Intake/Rack and Pinion/Position Error Rotations",
+          targetRotations - getPosition().in(Rotations));
   }
 
   }

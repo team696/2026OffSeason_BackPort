@@ -16,6 +16,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -40,6 +44,12 @@ public final class Swerve extends TunerSwerveDrivetrain implements Sendable, Sub
     private static final Rotation2d kRedAlliancePerspectiveRotation = Rotation2d.k180deg;
     /* Keep track if we've ever applied the operator perspective before or not */
     private boolean m_hasAppliedOperatorPerspective = false;
+
+    private final NetworkTable resetDiagnostics = NetworkTableInstance.getDefault().getTable("Localization/Reset");
+    private final StructPublisher<Pose2d> resetBefore = resetDiagnostics.getStructTopic("PoseBefore", Pose2d.struct).publish();
+    private final StructPublisher<Pose2d> resetRequested = resetDiagnostics.getStructTopic("RequestedPose", Pose2d.struct).publish();
+    private final StructPublisher<Pose2d> resetAfter = resetDiagnostics.getStructTopic("PoseAfterRequest", Pose2d.struct).publish();
+    private long resetCount;
 
     public Field2d fieldSim = new Field2d();
     
@@ -100,7 +110,27 @@ public final class Swerve extends TunerSwerveDrivetrain implements Sendable, Sub
 
     //Resets the gyro so the way the robot is facing becomes forward (uses the alliance operator perspective)
     public Command resetGyro() {
-        return this.runOnce(this::seedFieldCentric);
+        return this.runOnce(() -> {
+            Pose2d before = getState().Pose;
+            seedFieldCentric();
+            logReset("DriverASeedFieldCentric", before, null);
+        });
+    }
+
+    public void resetPoseWithReason(Pose2d pose, String reason) {
+        Pose2d before = getState().Pose;
+        super.resetPose(pose);
+        logReset(reason, before, pose);
+    }
+
+    private void logReset(String reason, Pose2d before, Pose2d requested) {
+        resetBefore.set(before);
+        if (requested != null) resetRequested.set(requested);
+        resetAfter.set(getState().Pose);
+        resetDiagnostics.getEntry("RequestedPoseAvailable").setBoolean(requested != null);
+        resetDiagnostics.getEntry("Reason").setString(reason);
+        resetDiagnostics.getEntry("FpgaSeconds").setDouble(Timer.getFPGATimestamp());
+        resetDiagnostics.getEntry("Count").setInteger(++resetCount);
     }
 
     @Override

@@ -51,8 +51,17 @@ public class SuperStructure {
     }
 
     public static Command Shooting(){
+
+        return shootingWithIntake(ShootingCommands.shoot());
+    }
+
+    public static Command ManualShooting(){
+        return shootingWithIntake(ShootingCommands.manualShoot());
+    }
+
+    private static Command shootingWithIntake(Command shot){
         return Commands.parallel(
-            ShootingCommands.shoot(),
+            shot,
             Commands.parallel(
                 Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.HALF),
                 SuperStructureConstants.SlowIntakeRollers(),

@@ -4,6 +4,10 @@
 
 package frc.robot.commands;
 
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
+import java.util.Set;
 import javax.lang.model.util.ElementScanner14;
 
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -12,10 +16,14 @@ import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import frc.lib.io.MotorIO.Setpoint;
+import frc.robot.shooting.ShotTuning;
 import frc.robot.shooting.Shooting;
 import frc.robot.shooting.ShootingSetpoint;
 import frc.robot.shooting.ShootingState;
 import frc.robot.shooting.motionComp.MotionComp;
+import frc.robot.shooting.regression.LookUpTables.ScoringHoodLUT;
+import frc.robot.shooting.regression.LookUpTables.ScoringVelocityLUT;
 import frc.robot.subsystems.FeedRollers.FeedRollers;
 import frc.robot.subsystems.Hood.Hood;
 import frc.robot.subsystems.Shooter.Shooter;
@@ -23,6 +31,9 @@ import frc.robot.subsystems.Shooter.ShooterConstants;
 
 /** Add your docs here. */
 public class ShootingCommands {
+
+    // Close hub shot from the alliance zone between the hub and alliance wall.
+    public static final double MANUAL_SHOT_DISTANCE_METERS = 2.5;
 
     public static Command spinUp() {
         return Commands.parallel(
@@ -92,6 +103,31 @@ public class ShootingCommands {
             Shooter.get().applySetpoint(Shooter.IDLE);
             Hood.get().applySetpoint(Hood.STOW);
         });
+    }
+
+    public static Command manualShoot() {
+        // Snapshot the preset and existing hub tuning when Y is pressed.
+        return Commands.defer(() -> {
+            double rps = ShotTuning.applyRps(
+                ScoringVelocityLUT.scoringvelocityLUT.get(MANUAL_SHOT_DISTANCE_METERS), true);
+            double hoodDegrees = ShotTuning.applyHood(
+                ScoringHoodLUT.scoringhoodLUT.get(MANUAL_SHOT_DISTANCE_METERS), true);
+            return Commands.parallel(
+                Shooter.get().followSetpointCommand(() ->
+                    Setpoint.withVelocitySetpoint(RotationsPerSecond.of(rps))),
+                Hood.get().followSetpointCommand(() ->
+                    Setpoint.withMotionMagicSetpoint(Degrees.of(hoodDegrees), 2)),
+                Commands.run(() -> {
+                    FeedRollers.get().applySetpoint(
+                        readyToShoot() ? FeedRollers.RUNNING : FeedRollers.IDLE);
+                }, FeedRollers.get())
+            ).finallyDo(interrupted -> {
+                FeedRollers.get().applySetpoint(FeedRollers.IDLE);
+                Shooter.get().applySetpoint(Shooter.IDLE);
+                Hood.get().applySetpoint(Hood.STOW);
+            });
+        }, Set.of(Shooter.get(), Hood.get(), FeedRollers.get()))
+        .withName("Manual Shoot");
     }
     //Shooter.get().spunUp(ShooterConstants.kFeedTolerance)
     /* 
