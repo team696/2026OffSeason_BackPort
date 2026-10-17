@@ -19,9 +19,9 @@ public final class Controls {
 	public class xboxController{
 		public static CommandXboxController controller = new CommandXboxController(0);
 		
-		public static final DoubleSupplier leftJoyY = () -> -controller.getRawAxis(1);
-		public static final DoubleSupplier leftJoyX = () -> -controller.getRawAxis(0);
-		public static final DoubleSupplier rightJoyX = () -> -controller.getRawAxis(4);
+		public static final DoubleSupplier leftJoyY = () -> controller.getRawAxis(1);
+		public static final DoubleSupplier leftJoyX = () -> controller.getRawAxis(0);
+		public static final DoubleSupplier rightJoyX = () -> controller.getRawAxis(4);
 
 		public static final Trigger A = controller.a();
 		public static final Trigger B = controller.b();

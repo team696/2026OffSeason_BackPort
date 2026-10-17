@@ -85,7 +85,13 @@ public class ShootingCommands {
                     FeedRollers.get().applySetpoint(FeedRollers.IDLE);
                 }
             }, FeedRollers.get())
-        ).beforeStarting(() -> Shooting.setState(ShootingState.HUB));
+        ).beforeStarting(() -> Shooting.setState(ShootingState.HUB))
+        .finallyDo(interrupted -> {
+            // Apply cleanup directly: an enclosing auto may still own these subsystems.
+            FeedRollers.get().applySetpoint(FeedRollers.IDLE);
+            Shooter.get().applySetpoint(Shooter.IDLE);
+            Hood.get().applySetpoint(Hood.STOW);
+        });
     }
     //Shooter.get().spunUp(ShooterConstants.kFeedTolerance)
     /* 

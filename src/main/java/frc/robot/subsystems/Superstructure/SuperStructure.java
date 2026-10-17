@@ -58,7 +58,10 @@ public class SuperStructure {
                 SuperStructureConstants.SlowIntakeRollers(),
                 SuperStructureConstants.runHopperRoller()
                 )
-            );
+            ).finallyDo(interrupted -> {
+                Intake.Rollers.get().applySetpoint(Intake.Rollers.IDLE);
+                Intake.Rollers2.get().applySetpoint(Intake.Rollers2.IDLE);
+            });
     }
 
     public static Command ShootingTesting(){
@@ -72,7 +75,8 @@ public class SuperStructure {
     public static Command ShootingStop(){
         return Commands.parallel(
             ShootingCommands.Stop(),
-            SuperStructureConstants.StopRoller()
+            SuperStructureConstants.StopRoller(),
+            SuperStructureConstants.StopIntakeRollers()
         );
     }
 

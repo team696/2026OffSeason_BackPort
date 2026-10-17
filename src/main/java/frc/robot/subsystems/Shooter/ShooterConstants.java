@@ -34,7 +34,7 @@ public class ShooterConstants {
     public static DoubleSupplier testShotSpeedSupplier = () -> SmartDashboard.getNumber("Test Speed", 0.0);
     public static final AngularVelocity IdleSpeed = RotationsPerSecond.of(0);
     public static final AngularVelocity FerrySpeed = RotationsPerSecond.of(20);
-    public static final AngularVelocity ShotSpeed = RotationsPerSecond.of(28);
+    public static final AngularVelocity ShotSpeed = RotationsPerSecond.of(22);
 
     public static final AngularVelocity epsilonThreshold = RotationsPerSecond.of(0.1);
     // feed rollers wait until the drum is within this of its target speed

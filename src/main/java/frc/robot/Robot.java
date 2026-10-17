@@ -14,6 +14,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -206,7 +207,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {
 		m_autonomousCommand = Auto.getSelectedAuto();
-
+		DriverStation.getAlliance().ifPresent((alliance)->{ RobotConstants.isRedAlliance = alliance == DriverStation.Alliance.Red; });
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.schedule();
 		}
@@ -214,6 +215,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
+		DriverStation.getAlliance().ifPresent((alliance)->{ RobotConstants.isRedAlliance = alliance == DriverStation.Alliance.Red; });
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}

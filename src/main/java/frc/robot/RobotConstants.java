@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.units.BaseUnits;
+import edu.wpi.first.wpilibj.DriverStation;
 
 import com.ctre.phoenix6.CANBus;
 
@@ -25,7 +26,7 @@ public class RobotConstants {
 			new Transform2d(Inches.of(7), BaseUnits.DistanceUnit.zero(), Rotation2d.kZero); // 7in forward of center, shooting out the front
 
 	public static FieldType currentFieldType = FieldType.Andymark;
-	public static boolean isRedAlliance = false;
+	public static boolean isRedAlliance;
 	public static boolean isRedAlliance() {
         return isRedAlliance;
     }
