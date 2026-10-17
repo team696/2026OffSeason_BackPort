@@ -77,7 +77,7 @@ public class CombinedLimelightCameraIO extends LimelightCameraIO {
 		// Disabled: MegaTag1 seeds the full pose (including heading) so MegaTag2 gets a correct field heading
 		if (DriverStation.isDisabled()) {
 			PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue(config.name);
-			if (mt1 != null && mt1.tagCount >= 2) {
+			if (mt1 != null) {
 				Swerve.get().resetPose(mt1.pose);
 			}
 			return Optional.empty();
@@ -87,7 +87,7 @@ public class CombinedLimelightCameraIO extends LimelightCameraIO {
 		if (Math.abs(getYawRate()) > MAX_MT2_YAW_RATE_DEG_PER_SEC) {
 			return Optional.empty();
 		}
-		PoseEstimate limelightEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(config.name);
+		PoseEstimate limelightEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(config.name); // _MegaTag2 TODO: Add a variable to properly fix this
 		if (limelightEstimate == null
 				|| (limelightEstimate.pose.getX() == 0
 						|| limelightEstimate.pose.getY() == 0
