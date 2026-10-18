@@ -7,6 +7,9 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.Commands;
+
 import frc.robot.shooting.ShootingState;
 import frc.robot.subsystems.FeedRollers.FeedRollers;
 import frc.robot.subsystems.Hood.Hood;
@@ -51,7 +54,22 @@ public class Binds {
 			Controls.xboxController.A.whileTrue(Swerve.get().resetGyro());
 			Controls.xboxController.LB.whileTrue(SuperStructure.Passing(ShootingState.NEUTRAL_FERRY_LEFT));
 			Controls.xboxController.RB.whileTrue(SuperStructure.Passing(ShootingState.NEUTRAL_FERRY_RIGHT));
-			Controls.xboxController.B.whileTrue(Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.HALF));
+			Controls.xboxController.B.and(() -> !DriverStation.isTest())
+				.whileTrue(Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.HALF));
+			// Temporary Test-mode override: hold B to run only the two intake rollers.
+			Controls.xboxController.B.and(DriverStation::isTestEnabled).whileTrue(
+				Commands.startEnd(
+					() -> {
+						Intake.Rollers.get().applySetpoint(Intake.Rollers.INTAKE);
+						Intake.Rollers2.get().applySetpoint(Intake.Rollers2.INTAKE);
+					},
+					() -> {
+						Intake.Rollers.get().applySetpoint(Intake.Rollers.IDLE);
+						Intake.Rollers2.get().applySetpoint(Intake.Rollers2.IDLE);
+					},
+					Intake.Rollers.get(), Intake.Rollers2.get()
+				).withName("Test Intake Rollers Only")
+			);
 		}
 	}
 }
