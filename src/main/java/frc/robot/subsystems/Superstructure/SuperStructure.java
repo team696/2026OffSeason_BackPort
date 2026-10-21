@@ -64,7 +64,7 @@ public class SuperStructure {
             shot,
             Commands.parallel(
                 Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.HALF),
-                SuperStructureConstants.SlowIntakeRollers(),
+                SuperStructureConstants.StopIntakeRollers(),  //stop intake rollers during shooting AST 20261020
                 SuperStructureConstants.runHopperRoller()
                 )
             ).finallyDo(interrupted -> {

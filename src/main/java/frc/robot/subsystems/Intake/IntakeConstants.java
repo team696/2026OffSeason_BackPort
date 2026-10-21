@@ -34,16 +34,16 @@ import frc.robot.Robot;
 public class IntakeConstants {
 
    public class RackAndPinion{
-    public static final double kGearing  = 4.0*(30.0 / 12.0);
+    public static final double kGearing  = 4.0*4.0*(30.0 / 12.0); //Added another 4:1 stage AST 20261020
 
 
-    public static final Distance kInDistance = Units.Inches.of(-0.01);
-    public static final Distance kOutDistance = Units.Inches.of(3.55);
+    public static final Distance kInDistance = Units.Inches.of(-0.00);
+    public static final Distance kOutDistance = Units.Inches.of(3.53);
 
     public static final Distance kRadius = Units.Inches.of(34.0 / 20.0).div(2.0); //pitch radius
 	public static final DistanceAngleConverter converter = new DistanceAngleConverter(kRadius);
 
-    public static final Angle kEpsilonThreshold = converter.toAngle(Units.Inches.of(0.001));//Amount of error the motor is willing to accept
+    public static final Angle kEpsilonThreshold = converter.toAngle(Units.Inches.of(0.0001));//Amount of error the motor is willing to accept
 
     //Need these for the servo motor base class
     public static final Angle kInAngle = converter.toAngle(kInDistance);
@@ -51,16 +51,16 @@ public class IntakeConstants {
 
 
 
-    public static final Current kCurrentThreshold = Amps.of(50); 
+    public static final Current kCurrentThreshold = Amps.of(70); 
 
     public static final TalonFXConfiguration getTalonFXConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
 
-        config.Slot2.kP = 8;
-        config.Slot2.kI = 0;
+        config.Slot2.kP = 7;
+        config.Slot2.kI = 0.5;
         config.Slot2.kD = 0;
 
-        //config.Slot2.kS = 0.3;
+        config.Slot2.kS = 8;
 
         config.Feedback.SensorToMechanismRatio = kGearing;
 
@@ -69,10 +69,10 @@ public class IntakeConstants {
         config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         config.CurrentLimits.StatorCurrentLimitEnable = true;
-        config.CurrentLimits.StatorCurrentLimit = 60.0;
+        config.CurrentLimits.StatorCurrentLimit = 75.0;
 
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
-        config.CurrentLimits.SupplyCurrentLimit = 40.0;
+        config.CurrentLimits.SupplyCurrentLimit = 70.0;
 
         config.Feedback.SensorToMechanismRatio = kGearing;
 
