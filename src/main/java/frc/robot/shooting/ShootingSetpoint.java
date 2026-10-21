@@ -35,7 +35,7 @@ public class ShootingSetpoint {
 
     public Setpoint getShooterSetpoint() {
         boolean isHub = Shooting.getState() == ShootingState.HUB;
-        double lutRps = Shooting.getState().getRegression().getShooterVeloicty(getLutDistance()).in(RotationsPerSecond);
+        double lutRps = 20; //Shooting.getState().getRegression().getShooterVeloicty(getLutDistance()).in(RotationsPerSecond);
         double rps = ShotTuning.applyRps(lutRps, isHub);
         SmartDashboard.putNumber("Shooting/Target RPS", rps);
         return Setpoint.withVelocitySetpoint(RotationsPerSecond.of(rps));

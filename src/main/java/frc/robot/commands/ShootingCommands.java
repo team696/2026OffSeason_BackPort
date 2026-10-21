@@ -60,6 +60,7 @@ public class ShootingCommands {
     public static boolean readyToShoot() {
         return atShooterSpeed();  //TODO: Add Check for alignment to goal angle.
     }
+
     
     /** Waits until the drum is at its target speed. Put this right before the feed rollers start. */
     public static Command waitUntilShooterAtSpeed() {
@@ -101,7 +102,7 @@ public class ShootingCommands {
             // Apply cleanup directly: an enclosing auto may still own these subsystems.
             FeedRollers.get().applySetpoint(FeedRollers.IDLE);
             Shooter.get().applySetpoint(Shooter.IDLE);
-            Hood.get().applySetpoint(Hood.STOW);
+            Hood.get().applySetpoint(Hood.TEST_ANGLE);
         });
     }
 

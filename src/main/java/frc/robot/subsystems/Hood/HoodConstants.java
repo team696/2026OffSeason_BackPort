@@ -33,8 +33,8 @@ public class HoodConstants {
     public static final double kGearing = (24.0 / 12.0) * (180.0 / 10.0);
 
     // 0 = home (bottom hard stop), ~33 deg measured max travel. Also the max for passing shots.
-    public static final Angle kMaxAngle = Units.Degrees.of(33.0);
-    public static final Angle kMinAngle = Units.Degrees.of(0.0);
+    public static final Angle kMaxAngle = Units.Degrees.of(45.0);
+    public static final Angle kMinAngle = Units.Degrees.of(10);
     // Lowest angle used for shooting: the old "48 deg" minimum was in 2:1 units, 48 / 18 = 2.67 real deg
     public static final Angle kMinShootingAngle = Units.Degrees.of(48.0 / 18.0);
     public static final Angle Zero = Units.Degrees.of(0);
@@ -56,7 +56,7 @@ public class HoodConstants {
         
         // Gains are per mechanism rotation, so they scale with kGearing; these are the old
         // values (kP 7, kV 0.24 at 2:1) multiplied by 18 to keep the same motor-side behavior.
-        config.Slot2.kP = 126;
+        config.Slot2.kP = 5; //%126;
         config.Slot2.kI = 0;
         config.Slot2.kD = 0;
 

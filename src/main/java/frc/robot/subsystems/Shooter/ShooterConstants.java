@@ -34,7 +34,7 @@ public class ShooterConstants {
     public static DoubleSupplier testShotSpeedSupplier = () -> SmartDashboard.getNumber("Test Speed", 0.0);
     public static final AngularVelocity IdleSpeed = RotationsPerSecond.of(0);
     public static final AngularVelocity FerrySpeed = RotationsPerSecond.of(20);
-    public static final AngularVelocity ShotSpeed = RotationsPerSecond.of(22);
+    public static final AngularVelocity ShotSpeed = RotationsPerSecond.of(18);
 
     public static final AngularVelocity epsilonThreshold = RotationsPerSecond.of(0.1);
     // feed rollers wait until the drum is within this of its target speed
@@ -69,17 +69,17 @@ public class ShooterConstants {
 
         // Volts per rps of error: pushes back when a ball slows the drum. Lower if
         // still sags while feeding, lower it if the drum oscillates or whines at speed.
-        config_talon.Slot1.kP = 0.3;
+        config_talon.Slot1.kP = 0;
         config_talon.Slot1.kI = 0;
         config_talon.Slot1.kD = 0;
 
         config_talon.Voltage.PeakForwardVoltage = 12;
         config_talon.Voltage.PeakReverseVoltage = -12;
 
-        config_talon.Slot1.kV = 0.25;
+        config_talon.Slot1.kV = 1;
 
-        config_talon.MotionMagic.MotionMagicCruiseVelocity = 30.0;
-        config_talon.MotionMagic.MotionMagicAcceleration = 100.0;
+        config_talon.MotionMagic.MotionMagicCruiseVelocity = 20.0;
+        config_talon.MotionMagic.MotionMagicAcceleration = 9.0;
         config_talon.MotionMagic.MotionMagicJerk = 1000.0;
 
 

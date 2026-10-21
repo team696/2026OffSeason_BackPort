@@ -60,7 +60,7 @@ public class IntakeConstants {
         config.Slot2.kI = 3;
         config.Slot2.kD = 0;
 
-        config.Slot2.kS = 9;
+        config.Slot2.kS = 10;
         config.Slot2.kG = -1;
 
         config.Feedback.SensorToMechanismRatio = kGearing;

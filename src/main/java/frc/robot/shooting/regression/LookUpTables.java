@@ -15,6 +15,7 @@ public class LookUpTables {
 
         static{
             // closer than ~2.25 m the steepest hood shot is too flat to drop into the hub
+            /*
             scoringvelocityLUT.put(2.25, 29.10); // meters, RPS
             scoringvelocityLUT.put(2.5, 30.21); // meters, RPS
             scoringvelocityLUT.put(3.0, 32.32); // meters, RPS
@@ -23,6 +24,17 @@ public class LookUpTables {
             scoringvelocityLUT.put(4.5, 37.92); // meters, RPS
             scoringvelocityLUT.put(5.0, 39.70); // meters, RPS
             scoringvelocityLUT.put(5.5, 41.41); // meters, RPS
+            */
+
+            // Modified AST 20261012
+            scoringvelocityLUT.put(2.25, 20.00); // meters, RPS
+            scoringvelocityLUT.put(2.5, 20.00); // meters, RPS
+            scoringvelocityLUT.put(3.0, 20.00); // meters, RPS
+            scoringvelocityLUT.put(3.5, 20.00); // meters, RPS
+            scoringvelocityLUT.put(4.0, 20.); // meters, RPS
+            scoringvelocityLUT.put(4.5, 20.); // meters, RPS
+            scoringvelocityLUT.put(5.0, 20.); // meters, RPS
+            scoringvelocityLUT.put(5.5, 20.); // meters, RPS
         }
     }
 
