@@ -56,11 +56,12 @@ public class IntakeConstants {
     public static final TalonFXConfiguration getTalonFXConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
 
-        config.Slot2.kP = 7;
-        config.Slot2.kI = 0.5;
+        config.Slot2.kP = 10;
+        config.Slot2.kI = 3;
         config.Slot2.kD = 0;
 
-        config.Slot2.kS = 8;
+        config.Slot2.kS = 9;
+        config.Slot2.kG = -1;
 
         config.Feedback.SensorToMechanismRatio = kGearing;
 
@@ -69,10 +70,10 @@ public class IntakeConstants {
         config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         config.CurrentLimits.StatorCurrentLimitEnable = true;
-        config.CurrentLimits.StatorCurrentLimit = 75.0;
+        config.CurrentLimits.StatorCurrentLimit = 110.0;
 
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
-        config.CurrentLimits.SupplyCurrentLimit = 70.0;
+        config.CurrentLimits.SupplyCurrentLimit = 105.0;
 
         config.Feedback.SensorToMechanismRatio = kGearing;
 
