@@ -25,7 +25,7 @@
 
 
       // Motion Magic so every move follows the speed/accel limits in HoodConstants instead of slamming
-      public static final Setpoint STOW = Setpoint.withPositionSetpoint(HoodConstants.kMinAngle,2);
+      public static final Setpoint STOW = Setpoint.withPositionSetpoint(HoodConstants.kStowAngle,2);
       public static final Setpoint MAX_ANGLE = Setpoint.withPositionSetpoint(HoodConstants.kMaxAngle,2);
       public static final Setpoint ZERO = Setpoint.withPositionSetpoint(HoodConstants.Zero,2);
       public static Setpoint TEST_ANGLE = Setpoint.withPositionSetpoint(Units.Degrees.of(HoodConstants.testAngle.getAsDouble()));
@@ -49,7 +49,7 @@
 
     // The lib's homing runs a voltage setpoint from periodic(). A command that re-asks for home every loop
     // (followSetpointCommand) would cancel it before it finishes, so skip those repeats while homing.
-    // The lib finishes homing with its own MOTIONMAGIC setpoint at home, so only STOW/ZERO themselves are skipped.
+    // The lib finishes homing with its own MOTIONMAGIC setpoint at home, so only STOW/ZERO themselves are skipped.S
     @Override
     public void applySetpoint(Setpoint setpoint) {
       boolean homing = getSetpoint().mode.isVoltageControl();

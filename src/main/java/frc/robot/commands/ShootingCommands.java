@@ -86,11 +86,17 @@ public class ShootingCommands {
         ).beforeStarting(() -> Shooting.setState(ShootingState.HUB));
     }
 
+
+
+
+
+
     public static Command shoot(){
         return Commands.parallel(
             Shooting.mInstance.getMotionComp().PointToTarget(),
             spinUp(),
             Commands.run(()->{
+                Hood.get().applySetpoint(Hood.TEST_ANGLE);
                 if (ShootingCommands.readyToShoot()) {
                     FeedRollers.get().applySetpoint(FeedRollers.RUNNING);
                 } else {
@@ -102,9 +108,15 @@ public class ShootingCommands {
             // Apply cleanup directly: an enclosing auto may still own these subsystems.
             FeedRollers.get().applySetpoint(FeedRollers.IDLE);
             Shooter.get().applySetpoint(Shooter.IDLE);
-            Hood.get().applySetpoint(Hood.TEST_ANGLE);
+            Hood.get().applySetpoint(Hood.STOW);
+            ShootingCommands.Stop();
         });
     }
+
+
+
+
+
 
     public static Command manualShoot() {
         // Snapshot the preset and existing hub tuning when Y is pressed.
