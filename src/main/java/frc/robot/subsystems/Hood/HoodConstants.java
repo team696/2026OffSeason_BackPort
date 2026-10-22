@@ -35,7 +35,7 @@ public class HoodConstants {
     // 0 = home (bottom hard stop), ~33 deg measured max travel. Also the max for passing shots.
     public static final Angle kMaxAngle = Units.Degrees.of(180.0);
     public static final Angle kMinAngle = Units.Degrees.of(0);
-    public static final Angle kStowAngle = Units.Degrees.of(15);
+    public static final Angle kStowAngle = Units.Degrees.of(2);
     // Lowest angle used for shooting: the old "48 deg" minimum was in 2:1 units, 48 / 18 = 2.67 real deg
     public static final Angle kMinShootingAngle = Units.Degrees.of(48.0 / 18.0);
     public static final Angle Zero = Units.Degrees.of(0);

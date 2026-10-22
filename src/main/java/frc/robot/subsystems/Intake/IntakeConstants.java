@@ -37,8 +37,8 @@ public class IntakeConstants {
     public static final double kGearing  = 4.0*4.0*(30.0 / 12.0); //Added another 4:1 stage AST 20261020
 
 
-    public static final Distance kInDistance = Units.Inches.of(-0.00);
-    public static final Distance kOutDistance = Units.Inches.of(3.53);
+    public static final Distance kInDistance = Units.Inches.of(1.5);
+    public static final Distance kOutDistance = Units.Inches.of(4.8);
 
     public static final Distance kRadius = Units.Inches.of(34.0 / 20.0).div(2.0); //pitch radius
 	public static final DistanceAngleConverter converter = new DistanceAngleConverter(kRadius);

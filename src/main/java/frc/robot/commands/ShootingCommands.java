@@ -10,6 +10,7 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import java.util.Set;
 import javax.lang.model.util.ElementScanner14;
 
+import com.ctre.phoenix6.configs.Slot1Configs;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.units.measure.Time;
@@ -96,7 +97,6 @@ public class ShootingCommands {
             Shooting.mInstance.getMotionComp().PointToTarget(),
             spinUp(),
             Commands.run(()->{
-                Hood.get().applySetpoint(Hood.TEST_ANGLE);
                 if (ShootingCommands.readyToShoot()) {
                     FeedRollers.get().applySetpoint(FeedRollers.RUNNING);
                 } else {
@@ -126,14 +126,18 @@ public class ShootingCommands {
             double hoodDegrees = ShotTuning.applyHood(
                 ScoringHoodLUT.scoringhoodLUT.get(MANUAL_SHOT_DISTANCE_METERS), true);
             return Commands.parallel(
+                Shooting.mInstance.getMotionComp().PointToTarget(),
                 Shooter.get().followSetpointCommand(() ->
                     Setpoint.withVelocitySetpoint(RotationsPerSecond.of(rps))),
                 Hood.get().followSetpointCommand(() ->
                     Setpoint.withMotionMagicSetpoint(Degrees.of(hoodDegrees), 2)),
-                Commands.run(() -> {
-                    FeedRollers.get().applySetpoint(
-                        readyToShoot() ? FeedRollers.RUNNING : FeedRollers.IDLE);
-                }, FeedRollers.get())
+                Commands.run(()->{
+                if (ShootingCommands.readyToShoot()) {
+                    FeedRollers.get().applySetpoint(FeedRollers.RUNNING);
+                } else {
+                    FeedRollers.get().applySetpoint(FeedRollers.IDLE);
+                }
+            }, FeedRollers.get())
             ).finallyDo(interrupted -> {
                 FeedRollers.get().applySetpoint(FeedRollers.IDLE);
                 Shooter.get().applySetpoint(Shooter.IDLE);

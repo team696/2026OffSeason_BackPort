@@ -28,8 +28,8 @@ import frc.robot.Robot;
 public class FeedRollersConstants {
 
     public static AngularVelocity IdleSpeed = RotationsPerSecond.of(0);
-    public static AngularVelocity RunningSpeed = RotationsPerSecond.of(70.0);
-    public static final AngularVelocity epsilonThreshold = RotationsPerSecond.of(0.1);
+    public static AngularVelocity RunningSpeed = RotationsPerSecond.of(10.0);
+    public static final AngularVelocity epsilonThreshold = RotationsPerSecond.of(0.001);
     public static final Time debounder = Second.of(0.0);
     public static final double kGearing = 2;
     public static final double PercentOfLUT = 0.7;
@@ -47,11 +47,11 @@ public class FeedRollersConstants {
         config.followerAlignment = new MotorAlignmentValue[] {MotorAlignmentValue.Aligned};
 
         TalonFXConfiguration config_talon = new TalonFXConfiguration();
-        config_talon.Slot1.kP = 0.3;
+        config_talon.Slot1.kP = 2; //0.3;
         config_talon.Slot1.kI = 0;
         config_talon.Slot1.kD = 0;
 
-        config_talon.Slot1.kV = 0.12;
+        config_talon.Slot1.kV = 10; //0.12;
 
         // MotionMagicVelocity needs an acceleration or the roller never ramps up
         config_talon.MotionMagic.MotionMagicCruiseVelocity = 100.0;
@@ -59,10 +59,10 @@ public class FeedRollersConstants {
         config_talon.MotionMagic.MotionMagicJerk = 1000.0;
 
         config_talon.CurrentLimits.StatorCurrentLimitEnable = Robot.isReal();
-        config_talon.CurrentLimits.StatorCurrentLimit = 80.0;
+        config_talon.CurrentLimits.StatorCurrentLimit = 100.0;
 
         config_talon.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
-        config_talon.CurrentLimits.SupplyCurrentLimit = 40.0;
+        config_talon.CurrentLimits.SupplyCurrentLimit = 60.0;
 
         config_talon.Feedback.SensorToMechanismRatio = kGearing;
 

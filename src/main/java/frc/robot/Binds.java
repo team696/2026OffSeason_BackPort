@@ -55,7 +55,7 @@ public class Binds {
 			Controls.xboxController.LB.whileTrue(SuperStructure.Passing(ShootingState.NEUTRAL_FERRY_LEFT));
 			Controls.xboxController.RB.whileTrue(SuperStructure.Passing(ShootingState.NEUTRAL_FERRY_RIGHT));
 			Controls.xboxController.B.and(() -> !DriverStation.isTest())
-				.whileTrue(Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.HALF));
+				.whileTrue(Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.RETRACT));
 			// Temporary Test-mode override: hold B to run only the two intake rollers.
 			Controls.xboxController.B.and(DriverStation::isTestEnabled).whileTrue(
 				Commands.startEnd(
