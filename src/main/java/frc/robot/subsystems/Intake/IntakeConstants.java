@@ -111,14 +111,14 @@ public class IntakeConstants {
      */
     public static ZeroConfig getZeroConfig(){
         ZeroConfig config = new ZeroConfig();
-        config.kVoltage = Units.Volts.of(-3.0);
+        config.kVoltage = Units.Volts.of(-1.0);
         config.kZeroPosition = kHardStopAngle;
         config.kConfirmTolerance = converter.toAngle(Units.Inches.of(0.25));
         config.kStalledVelocity = converter.toAngle(Units.Inches.of(0.1)).per(Units.Second);
         config.kStartupGrace = Units.Seconds.of(0.3);
         config.kStalledTime = Units.Seconds.of(0.15);
         // slow rack (40:1): a full-travel move at -3 V takes a few seconds
-        config.kTimeout = Units.Seconds.of(6.0);
+        config.kTimeout = Units.Seconds.of(2.0);
         config.kConfirmTimeout = Units.Seconds.of(0.5);
         return config;
     }

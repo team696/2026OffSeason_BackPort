@@ -144,7 +144,7 @@ public class HoodConstants {
         config.kStartupGrace = Units.Seconds.of(0.3);
         config.kStalledTime = Units.Seconds.of(0.15);
         config.kTimeout = Units.Seconds.of(3.0);
-        config.kConfirmTimeout = Units.Seconds.of(0.5);
+        config.kConfirmTimeout = Units.Seconds.of(3.);
         return config;
     }
 
