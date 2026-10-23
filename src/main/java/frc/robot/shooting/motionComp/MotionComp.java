@@ -187,7 +187,7 @@ public class MotionComp {
             .withVelocityX(Controls.xboxController.leftJoyY.getAsDouble()/2*RobotConstants.DriveConstants.MaxSpeed)
             .withVelocityY(Controls.xboxController.leftJoyX.getAsDouble()/2*RobotConstants.DriveConstants.MaxSpeed)
             .withTargetDirection(atan2(getTarget().minus(getBaseTranslation())).plus(AIM_OFFSET))
-            .withTargetRateFeedforward(getTargetRateFeedforward()));});
+            .withTargetRateFeedforward(getTargetRateFeedforward()));}, Swerve.get());
     }
 
 

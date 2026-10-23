@@ -122,7 +122,7 @@ public class ServoMotorSubsystem<IO extends MotorIO> extends MotorSubsystem<IO> 
 	 * @return True if currently near setpoint, false if not. Returns false if not in position control.
 	 */
 	public boolean nearPositionSetpoint() {
-		return (getSetpoint().mode.isPositionControl()) && nearPosition(getPosition());
+		return getSetpoint().mode.isPositionControl() && nearPosition(Units.Radians.of(getSetpoint().baseUnits));
 	}
 
 	/**

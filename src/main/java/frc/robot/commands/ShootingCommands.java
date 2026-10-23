@@ -27,7 +27,6 @@ import frc.robot.shooting.regression.LookUpTables.ScoringHoodLUT;
 import frc.robot.shooting.regression.LookUpTables.ScoringVelocityLUT;
 import frc.robot.subsystems.FeedRollers.FeedRollers;
 import frc.robot.subsystems.Hood.Hood;
-import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterConstants;
 
@@ -143,7 +142,6 @@ public class ShootingCommands {
                 FeedRollers.get().applySetpoint(FeedRollers.IDLE);
                 Shooter.get().applySetpoint(Shooter.IDLE);
                 Hood.get().applySetpoint(Hood.STOW);
-                Intake.RackAndPinion.get().applySetpoint(Intake.RackAndPinion.HALF);
             });
         }, Set.of(Shooter.get(), Hood.get(), FeedRollers.get()))
         .withName("Manual Shoot");
