@@ -260,7 +260,7 @@ public class Rollers{
     public static RollerSimConstants getSimConstants(){
         RollerSimConstants constants = new RollerSimConstants();
 		constants.gearing = kGearing;
-		constants.motor = DCMotor.getKrakenX60(1);
+		constants.motor = DCMotor.getKrakenX44(1);
 		constants.momentOfInertia = 0.0000175584;
 		return constants;
     }

@@ -28,7 +28,7 @@ import frc.robot.Robot;
 public class FeedRollersConstants {
 
     public static AngularVelocity IdleSpeed = RotationsPerSecond.of(0);
-    public static AngularVelocity RunningSpeed = RotationsPerSecond.of(10.0);
+    public static AngularVelocity RunningSpeed = RotationsPerSecond.of(5.0);
     public static final AngularVelocity epsilonThreshold = RotationsPerSecond.of(0.001);
     public static final Time debounder = Second.of(0.0);
     public static final double kGearing = 2;
@@ -51,7 +51,7 @@ public class FeedRollersConstants {
         config_talon.Slot1.kI = 0;
         config_talon.Slot1.kD = 0;
 
-        config_talon.Slot1.kV = 10; //0.12;
+        config_talon.Slot1.kV = 5; //0.12;
 
         // MotionMagicVelocity needs an acceleration or the roller never ramps up
         config_talon.MotionMagic.MotionMagicCruiseVelocity = 100.0;

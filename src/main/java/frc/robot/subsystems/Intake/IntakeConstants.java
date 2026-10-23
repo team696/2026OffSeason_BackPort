@@ -39,6 +39,7 @@ public class IntakeConstants {
 
     public static final Distance kInDistance = Units.Inches.of(1.5);
     public static final Distance kOutDistance = Units.Inches.of(4.8);
+    public static final Distance kHalfDistance = Units.Inches.of(3);
 
     public static final Distance kRadius = Units.Inches.of(34.0 / 20.0).div(2.0); //pitch radius
 	public static final DistanceAngleConverter converter = new DistanceAngleConverter(kRadius);
@@ -48,6 +49,7 @@ public class IntakeConstants {
     //Need these for the servo motor base class
     public static final Angle kInAngle = converter.toAngle(kInDistance);
     public static final Angle kOutAngle = converter.toAngle(kOutDistance);
+    public static final Angle kHalfAngle = converter.toAngle(kHalfDistance);
 
 
 

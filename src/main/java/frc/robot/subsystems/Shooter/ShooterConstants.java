@@ -38,7 +38,7 @@ public class ShooterConstants {
 
     public static final AngularVelocity epsilonThreshold = RotationsPerSecond.of(0.1);
     // feed rollers wait until the drum is within this of its target speed
-    public static final AngularVelocity kFeedTolerance = RotationsPerSecond.of(15.0);
+    public static final AngularVelocity kFeedTolerance = RotationsPerSecond.of(200.0);
 
     public static final double kGearing = 45.0/22.0;
 

@@ -27,6 +27,7 @@ import frc.robot.shooting.regression.LookUpTables.ScoringHoodLUT;
 import frc.robot.shooting.regression.LookUpTables.ScoringVelocityLUT;
 import frc.robot.subsystems.FeedRollers.FeedRollers;
 import frc.robot.subsystems.Hood.Hood;
+import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterConstants;
 
@@ -126,7 +127,7 @@ public class ShootingCommands {
             double hoodDegrees = ShotTuning.applyHood(
                 ScoringHoodLUT.scoringhoodLUT.get(MANUAL_SHOT_DISTANCE_METERS), true);
             return Commands.parallel(
-                Shooting.mInstance.getMotionComp().PointToTarget(),
+                //Shooting.mInstance.getMotionComp().PointToTarget(),
                 Shooter.get().followSetpointCommand(() ->
                     Setpoint.withVelocitySetpoint(RotationsPerSecond.of(rps))),
                 Hood.get().followSetpointCommand(() ->
@@ -142,6 +143,7 @@ public class ShootingCommands {
                 FeedRollers.get().applySetpoint(FeedRollers.IDLE);
                 Shooter.get().applySetpoint(Shooter.IDLE);
                 Hood.get().applySetpoint(Hood.STOW);
+                Intake.RackAndPinion.get().applySetpoint(Intake.RackAndPinion.HALF);
             });
         }, Set.of(Shooter.get(), Hood.get(), FeedRollers.get()))
         .withName("Manual Shoot");

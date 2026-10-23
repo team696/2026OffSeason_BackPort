@@ -33,7 +33,7 @@ public class SuperStructure {
 
     public static Command StopIntake(){
         return Commands.parallel(
-            Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.RETRACT),
+            Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.HALF),
             SuperStructureConstants.StopIntakeRollers()
         );
     }
