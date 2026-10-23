@@ -8,7 +8,6 @@ package frc.robot.subsystems.vision;
 
 import static edu.wpi.first.units.Units.Centimeters;
 import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Milliseconds;
 
@@ -25,8 +24,8 @@ import frc.lib.bases.CameraSubsystem.CameraIOConfig;
 import frc.lib.bases.CameraSubsystem.SimulatedCameraIOConfig;
 import frc.lib.bases.CameraSubsystem.VisionConfig;
 import frc.lib.io.vision.CameraIO;
+import frc.lib.io.vision.limelight.AprilTagLimelightCameraIO;
 //import frc.lib.io.vision.limelight.AprilTagLimelightCameraIO;
-import frc.lib.io.vision.limelight.CombinedLimelightCameraIO;
 import frc.lib.io.vision.sim.AprilTagSimulatedCameraIO;
 import frc.lib.util.vision.CameraPipeline;
 import frc.lib.util.vision.CameraPipelineType;
@@ -82,7 +81,7 @@ public class CameraConstants {
                     return new AprilTagSimulatedCameraIO(getCameraConfig(), getSimConfig());
                 }
 
-                 return new CombinedLimelightCameraIO(getCameraConfig()); 
+                 return new AprilTagLimelightCameraIO(getCameraConfig());//CombinedLimelightCameraIO(getCameraConfig()); 
             }
 
 

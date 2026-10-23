@@ -51,6 +51,7 @@ public class Intake{
     public void periodic() {
     super.periodic();
       SmartDashboard.putNumber("Rack and Pinion Pose", this.getPosition().in(Rotations));
+      SmartDashboard.putNumber("Rack and Pinion Desired", this.getSetpoint().baseUnits / 2 / Math.PI);
       Setpoint target = getSetpoint();
       boolean positionControlled = target != null && target.mode.isPositionControl();
       double targetRotations = positionControlled ? target.baseUnits / (2.0 * Math.PI) : Double.NaN;

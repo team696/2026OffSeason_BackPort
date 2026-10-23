@@ -8,7 +8,6 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.io.MotorIO.Setpoint;
 import frc.robot.shooting.motionComp.MotionComp;
-import frc.robot.subsystems.Hood.HoodConstants;
 
 public class ShootingSetpoint {
     

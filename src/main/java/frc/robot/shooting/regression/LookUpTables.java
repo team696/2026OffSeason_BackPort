@@ -27,14 +27,14 @@ public class LookUpTables {
             */
 
             // Modified AST 20261012
-            scoringvelocityLUT.put(2.25, 25.00); // meters, RPS
-            scoringvelocityLUT.put(2.5, 25.00); // meters, RPS
-            scoringvelocityLUT.put(3.0, 26.00); // meters, RPS
-            scoringvelocityLUT.put(3.5, 26.00); // meters, RPS
-            scoringvelocityLUT.put(4.0, 27.00); // meters, RPS
-            scoringvelocityLUT.put(4.5, 27.00); // meters, RPS
-            scoringvelocityLUT.put(5.0, 28.00); // meters, RPS
-            scoringvelocityLUT.put(5.5, 28.00); // meters, RPS
+            scoringvelocityLUT.put(2.25, 27.00); // meters, RPS
+            scoringvelocityLUT.put(2.5, 28.00); // meters, RPS
+            scoringvelocityLUT.put(3.0, 30.00); // meters, RPS
+            scoringvelocityLUT.put(3.5, 32.00); // meters, RPS
+            scoringvelocityLUT.put(4.0, 34.00); // meters, RPS
+            scoringvelocityLUT.put(4.5, 36.00); // meters, RPS
+            scoringvelocityLUT.put(5.0, 38.00); // meters, RPS
+            scoringvelocityLUT.put(5.5, 40.00); // meters, RPS
         }
     }
 
@@ -53,14 +53,14 @@ public class LookUpTables {
             scoringhoodLUT.put(5.0, 8.67); // meters, Degrees
             scoringhoodLUT.put(5.5, 9.67); // meters, Degrees
             */
-            scoringhoodLUT.put(2.25, 15.0); // meters, Degrees
-            scoringhoodLUT.put(2.5, 15.0); // meters, Degrees
-            scoringhoodLUT.put(3.0, 15.0); // meters, Degrees
-            scoringhoodLUT.put(3.5, 15.0); // meters, Degrees
-            scoringhoodLUT.put(4.0, 15.0); // meters, Degrees
-            scoringhoodLUT.put(4.5, 15.0); // meters, Degrees
-            scoringhoodLUT.put(5.0, 15.0); // meters, Degrees
-            scoringhoodLUT.put(5.5, 15.0); // meters, Degrees
+            scoringhoodLUT.put(2.25, 3.0); // meters, Degrees
+            scoringhoodLUT.put(2.5, 4.0); // meters, Degrees
+            scoringhoodLUT.put(3.0, 5.0); // meters, Degrees
+            scoringhoodLUT.put(3.5, 6.0); // meters, Degrees
+            scoringhoodLUT.put(4.0, 7.0); // meters, Degrees
+            scoringhoodLUT.put(4.5, 8.0); // meters, Degrees
+            scoringhoodLUT.put(5.0, 9.0); // meters, Degrees
+            scoringhoodLUT.put(5.5, 10.0); // meters, Degrees
         }
     }
 

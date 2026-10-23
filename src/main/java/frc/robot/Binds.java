@@ -9,7 +9,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Commands;
-
+import frc.robot.commands.ZeroingCommands;
 import frc.robot.shooting.ShootingState;
 import frc.robot.subsystems.FeedRollers.FeedRollers;
 import frc.robot.subsystems.Hood.Hood;
@@ -46,7 +46,7 @@ public class Binds {
 			Shooter.get().setDefaultCommand(Shooter.get().setpointCommand(Shooter.IDLE));
 			Hopper.Rollers.get().setDefaultCommand(Hopper.Rollers.get().setpointCommand(Hopper.Rollers.IDLE));
 			FeedRollers.get().setDefaultCommand(FeedRollers.get().setpointCommand(FeedRollers.IDLE));
-
+			Controls.xboxController.X.whileTrue(ZeroingCommands.zeroIfNeeded());
 			Controls.xboxController.LT.whileTrue(SuperStructure.RunIntake()).whileFalse(SuperStructureConstants.StopIntakeRollers());
 			Controls.xboxController.RT.whileTrue(SuperStructure.Shooting());
 			Controls.xboxController.Y.whileTrue(SuperStructure.ManualShooting());

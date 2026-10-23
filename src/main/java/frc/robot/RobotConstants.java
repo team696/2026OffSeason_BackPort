@@ -8,7 +8,6 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.units.BaseUnits;
-import edu.wpi.first.wpilibj.DriverStation;
 
 import com.ctre.phoenix6.CANBus;
 

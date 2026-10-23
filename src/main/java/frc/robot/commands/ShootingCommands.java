@@ -8,21 +8,14 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import java.util.Set;
-import javax.lang.model.util.ElementScanner14;
 
-import com.ctre.phoenix6.configs.Slot1Configs;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
-import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import frc.lib.io.MotorIO.Setpoint;
 import frc.robot.shooting.ShotTuning;
 import frc.robot.shooting.Shooting;
 import frc.robot.shooting.ShootingSetpoint;
 import frc.robot.shooting.ShootingState;
-import frc.robot.shooting.motionComp.MotionComp;
 import frc.robot.shooting.regression.LookUpTables.ScoringHoodLUT;
 import frc.robot.shooting.regression.LookUpTables.ScoringVelocityLUT;
 import frc.robot.subsystems.FeedRollers.FeedRollers;

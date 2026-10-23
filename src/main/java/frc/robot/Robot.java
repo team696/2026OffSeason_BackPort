@@ -4,32 +4,21 @@
 
 package frc.robot;
 
-
-import static edu.wpi.first.units.Units.Degrees;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.util.FieldLayout;
-import frc.robot.Auto.NamedCommand;
-import frc.robot.Log.SEVERITY;
-import frc.robot.commands.ShootingCommands;
-import frc.robot.shooting.Shooting;
-import frc.robot.shooting.ShootingState;
 import frc.robot.shooting.ShotTuning;
 import frc.robot.subsystems.FeedRollers.FeedRollers;
 import frc.robot.subsystems.Hood.Hood;
 import frc.robot.subsystems.Hopper.Hopper;
-import frc.robot.subsystems.Hopper.HopperConstants.HopperPivot;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Superstructure.SuperStructure;
@@ -39,13 +28,12 @@ import frc.robot.subsystems.vision.Camera;
 import frc.robot.subsystems.vision.CameraConstants.PipelineConstants;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
 	private Command m_autonomousCommand;
 	private PowerDistribution pdh; 
-	private PowerTelemetry powerTelemetry;
+	//private PowerTelemetry powerTelemetry;
 
 	public Robot() {
 		pdh = new PowerDistribution(1, ModuleType.kRev);
@@ -159,11 +147,6 @@ public class Robot extends TimedRobot {
 		*/
 	}
 
-	// Sets the ShootingState when the button is clicked, then runs the command
-	private static Command withState(ShootingState state, Command command) {
-		return Commands.runOnce(() -> Shooting.setState(state)).andThen(command);
-	}
-
 	// Read-only handles for every motor, used to show each one's data on SmartDashboard (leaders and followers).
 	// Each motor's data goes in the same folder as that subsystem's buttons.
 	private final Map<String, TalonFX> dashboardMotors = new LinkedHashMap<>();
@@ -193,6 +176,7 @@ public class Robot extends TimedRobot {
 
 		SmartDashboard.putNumber("Distance to Blue Hub (m)", Swerve.get().distTo(FieldLayout.kBlueHub));
 
+		/* 
 		for (Map.Entry<String, TalonFX> entry : dashboardMotors.entrySet()) {
 			String folder = entry.getKey() + "/";
 			TalonFX motor = entry.getValue();
@@ -204,6 +188,7 @@ public class Robot extends TimedRobot {
 			SmartDashboard.putNumber(folder + "Voltage (V)", motor.getMotorVoltage().getValueAsDouble());
 			SmartDashboard.putNumber(folder + "Temperature (C)", motor.getDeviceTemp().getValueAsDouble());
 		}
+			*/
 	}
 
 	@Override

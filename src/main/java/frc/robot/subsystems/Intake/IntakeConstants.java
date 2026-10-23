@@ -14,6 +14,7 @@ import edu.wpi.first.units.measure.Distance;
 import static edu.wpi.first.units.Units.Amps;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -39,8 +40,8 @@ public class IntakeConstants {
     // The retracted hard stop is position 0; the in/half/out targets below all sit above it
     public static final Distance kHardStopDistance = Units.Inches.of(0.0);
     public static final Distance kInDistance = Units.Inches.of(.15);
-    public static final Distance kOutDistance = Units.Inches.of(3.51);
-    public static final Distance kHalfDistance = Units.Inches.of(1.8);
+    public static final Distance kOutDistance = Units.Inches.of(3.61); // 3.51
+    public static final Distance kHalfDistance = Units.Inches.of(.9);
 
     public static final Distance kRadius = Units.Inches.of(34.0 / 20.0).div(2.0); //pitch radius
 	public static final DistanceAngleConverter converter = new DistanceAngleConverter(kRadius);
@@ -60,12 +61,13 @@ public class IntakeConstants {
     public static final TalonFXConfiguration getTalonFXConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
 
-        config.Slot2.kP = 10;
-        config.Slot2.kI = 3;
-        config.Slot2.kD = 0;
+        config.Slot2.kP = 20;
+        config.Slot2.kI = 0; // 3
+        config.Slot2.kD = 1;
 
-        config.Slot2.kS = 10;
+        config.Slot2.kS = 0; // 10
         config.Slot2.kG = -1;
+        config.Slot2.GravityType = GravityTypeValue.Elevator_Static;
 
         config.Feedback.SensorToMechanismRatio = kGearing;
 
@@ -74,10 +76,10 @@ public class IntakeConstants {
         config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         config.CurrentLimits.StatorCurrentLimitEnable = true;
-        config.CurrentLimits.StatorCurrentLimit = 110.0;
+        config.CurrentLimits.StatorCurrentLimit = 60.0;
 
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
-        config.CurrentLimits.SupplyCurrentLimit = 105.0;
+        config.CurrentLimits.SupplyCurrentLimit = 40.0;
 
         config.Feedback.SensorToMechanismRatio = kGearing;
 
