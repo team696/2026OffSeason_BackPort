@@ -33,8 +33,8 @@
 
     /** Creates a new Hood. */
     private Hood() {
-      super(HoodConstants.getMotorIO(), "Hood", HoodConstants.kEpsilonThreshold, HoodConstants.getServoConfig());
-      // Hood rests on its bottom hard stop (home, 0 deg) at boot
+      super(HoodConstants.getMotorIO(), "Hood", HoodConstants.kEpsilonThreshold);
+      // Assign the boot position as 0 deg without driving into the hard stop.
       setCurrentPosition(HoodConstants.kMinAngle);
 
     }
@@ -51,18 +51,6 @@
           )
       );
   }
-
-    // The lib's homing runs a voltage setpoint from periodic(). A command that re-asks for home every loop
-    // (followSetpointCommand) would cancel it before it finishes, so skip those repeats while homing.
-    // The lib finishes homing with its own MOTIONMAGIC setpoint at home, so only STOW/ZERO themselves are skipped.S
-    @Override
-    public void applySetpoint(Setpoint setpoint) {
-      boolean homing = getSetpoint().mode.isVoltageControl();
-      if (homing && (setpoint == STOW || setpoint == ZERO)) {
-        return;
-      }
-      super.applySetpoint(setpoint);
-    }
 
         @Override
       public void periodic() {

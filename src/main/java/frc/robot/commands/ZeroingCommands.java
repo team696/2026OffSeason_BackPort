@@ -7,8 +7,8 @@ import frc.robot.subsystems.Hood.Hood;
 import frc.robot.subsystems.Intake.Intake;
 
 /**
- * Zeroes the hood and the intake rack against their hard stops. The encoders only count from wherever
- * they were at boot, so this runs once on the first enable and then the mechanisms hold their targets.
+ * Explicit commands to zero the hood and intake rack against their hard stops.
+ * These are not scheduled automatically at startup or on mode changes.
  */
 public class ZeroingCommands {
 
@@ -20,7 +20,7 @@ public class ZeroingCommands {
     /**
      * Zeros whichever of the hood and rack haven't been zeroed yet, both at the same time. Button presses that
      * need those subsystems are ignored until it finishes (about a second) instead of cancelling it halfway.
-     * Returns a new Command every call, so it can be scheduled on every enable.
+     * Returns a new Command every call for explicit zeroing requests.
      */
     public static Command zeroIfNeeded() {
         return Commands.parallel(

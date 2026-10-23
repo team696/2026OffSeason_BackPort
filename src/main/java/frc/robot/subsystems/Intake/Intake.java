@@ -35,7 +35,7 @@ public class Intake{
         IntakeConstants.RackAndPinion.getMotorIO(),
         "Rack and Pinon",
         IntakeConstants.RackAndPinion.kEpsilonThreshold);
-        // Assume the rack boots resting on its hard stop; zeroCommand() confirms it against the real stop on first enable.
+        // Assign the boot position as 0 inches without driving into the hard stop.
         setCurrentPosition(IntakeConstants.RackAndPinion.kHardStopAngle);
 
 ;
