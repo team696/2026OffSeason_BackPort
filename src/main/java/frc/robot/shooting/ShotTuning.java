@@ -12,8 +12,8 @@ import frc.robot.subsystems.Hood.HoodConstants;
  */
 public class ShotTuning {
     // final rps = LUT rps * RPS Scale + RPS Offset (hub or pass)
-    public static final TunableNumber rpsScale = new TunableNumber("Shooting/RPS Scale", 0.5);
-    public static final TunableNumber hubRpsOffset = new TunableNumber("Shooting/Hub RPS Offset", -1.0); // was overshooting a little
+    public static final TunableNumber rpsScale = new TunableNumber("Shooting/RPS Scale", 1);
+    public static final TunableNumber hubRpsOffset = new TunableNumber("Shooting/Hub RPS Offset", 0); // was overshooting a little
     public static final TunableNumber passRpsOffset = new TunableNumber("Shooting/Pass RPS Offset", 0.0);
     // final hood = LUT hood + Hood Offset (hub or pass), then clamped to the hood's shooting range
     public static final TunableNumber hubHoodOffset = new TunableNumber("Shooting/Hub Hood Offset", 0.0);

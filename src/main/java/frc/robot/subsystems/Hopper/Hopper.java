@@ -4,51 +4,14 @@
 
 package frc.robot.subsystems.Hopper;
 
-import static edu.wpi.first.units.Units.Rotation;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
-import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.bases.MotorSubsystem;
-import frc.lib.bases.ServoMotorSubsystem;
 import frc.lib.io.MotorIOTalonFX;
 import frc.lib.io.MotorIO.Setpoint;
-import frc.robot.subsystems.Hopper.HopperConstants.HopperPivot;
 
 public class Hopper {
-
-  public static class Pivot extends ServoMotorSubsystem<MotorIOTalonFX> {
-    private static Pivot pivot = null;
-    public static synchronized Pivot get(){
-      if(pivot == null){
-        pivot = new Pivot();
-      }
-      return pivot;
-    }
-
-    public Pivot(){
-      super(HopperConstants.HopperPivot.getMotorIO(), "Hopper Pivot", HopperPivot.kEpsilon);
-    }
-
-    public static final Setpoint UP = Setpoint.withPositionVelocitySetpoint(HopperPivot.kHighest, HopperPivot.kUpCruiseVelocity);
-    public static final Setpoint ZERO = Setpoint.withPositionVelocitySetpoint(HopperPivot.kLowestAngle, HopperPivot.kDownCruiseVelocity);
-    public static final Setpoint STOP = Setpoint.withNeutralSetpoint();
-    public static final Setpoint NOVOLTAGE = Setpoint.COAST;
-
-    // Goes to whatever "Hopper Pivot Test Angle" is set to on the dashboard (degrees)
-    public Command getTestAngleCommand() {
-      return followSetpointCommand(() ->
-          Setpoint.withPositionSetpoint(Units.Degrees.of(HopperConstants.HopperPivot.testAngle.getAsDouble()))
-      );
-    }
-
-      @Override
-      public void periodic() {
-        super.periodic();
-        SmartDashboard.putNumber("Hopper Pivot Location", this.getPosition().in(Rotation));
-      } 
-  }
 
   public static class Rollers extends MotorSubsystem<MotorIOTalonFX>{
 

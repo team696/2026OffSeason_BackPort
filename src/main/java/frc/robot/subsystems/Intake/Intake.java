@@ -96,7 +96,7 @@ public class Intake{
 			}
 			return rollers;
 		}
-
+    
 		public static final Setpoint IDLE = Setpoint.COAST;
 		public static final Setpoint INTAKE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller2.kIntakeSpeed);
 		public static final Setpoint OUTAKE = Setpoint.withVelocitySetpoint(IntakeConstants.Roller2.kOuttakeSpeed);

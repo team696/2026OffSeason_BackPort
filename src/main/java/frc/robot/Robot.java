@@ -56,7 +56,6 @@ public class Robot extends TimedRobot {
 		Intake.Rollers2.get();
 		FeedRollers.get();
 		Hood.get();
-		Hopper.Pivot.get();
 		Hopper.Rollers.get();
 		Camera.get();
 		ShotTuning.init(); // puts the shooting fudge factors on SmartDashboard
@@ -80,9 +79,9 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotInit(){
-		DataLogManager.start();
-		DriverStation.startDataLog(DataLogManager.getLog());
-		powerTelemetry = new PowerTelemetry(pdh, DataLogManager.getLog());
+		//DataLogManager.start();
+		//DriverStation.startDataLog(DataLogManager.getLog());
+		//powerTelemetry = new PowerTelemetry(pdh, DataLogManager.getLog());
 		SmartDashboard.putData("Superstructure/Run Hopper Roller", SuperStructureConstants.runHopperRoller());
 		SmartDashboard.putData("Superstructure/Stop Hopper Roller", SuperStructureConstants.StopRoller());
 		/* 
@@ -178,7 +177,6 @@ public class Robot extends TimedRobot {
 		addDashboardMotor("Shooter/Leader", Ports.SHOOTER_MAIN);
 		addDashboardMotor("Shooter/Follower", Ports.SHOOTER_FOLLOWER);
 		addDashboardMotor("Hood/Data", Ports.HOOD);
-		addDashboardMotor("Hopper/Pivot/Data", Ports.HOPPER_PIVOT);
 	}
 
 	private void addDashboardMotor(String folder, Ports port) {
@@ -187,7 +185,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotPeriodic() {
-		powerTelemetry.record();
+		//powerTelemetry.record();
 		SmartDashboard.putData(pdh);
 
 

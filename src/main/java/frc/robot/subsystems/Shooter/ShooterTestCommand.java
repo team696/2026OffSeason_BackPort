@@ -5,13 +5,11 @@
 package frc.robot.subsystems.Shooter;
 
 import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.Second;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.units.measure.Current;
-import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -25,7 +23,6 @@ public class ShooterTestCommand extends Command {
 
   /** Creates a new ShooterTestCommand. */
   private Timer m_timer = new Timer();
-  private TalonFX m_feedrollers;
   private StatusSignal<Current> m_current_feedrollers;
   private TalonFX m_shooter;
   private StatusSignal<Current> m_current_shooters;
@@ -34,7 +31,6 @@ public class ShooterTestCommand extends Command {
 
 
   public ShooterTestCommand(TalonFX feedrollers, TalonFX shooter) {
-    this.m_feedrollers = feedrollers;
     this.m_current_feedrollers = feedrollers.getStatorCurrent();
     this.m_shooter = shooter;
     this.m_current_shooters = m_shooter.getStatorCurrent();
@@ -61,7 +57,7 @@ public class ShooterTestCommand extends Command {
     }
     if (shooters_amps.gt(SHOOTERS_TRIP) && is_active) {
       //TODO: REPORT TIME:
-      Time time_to_report = Second.of(m_timer.get());
+      //Time time_to_report = Second.of(m_timer.get());
       m_timer.restart();
       is_active = false;
       return;

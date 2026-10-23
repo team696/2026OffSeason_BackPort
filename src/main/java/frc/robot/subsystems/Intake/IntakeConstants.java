@@ -13,10 +13,8 @@ import edu.wpi.first.units.measure.Distance;
 
 import static edu.wpi.first.units.Units.Amps;
 
-import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.lib.bases.ServoMotorSubsystem.ZeroConfig;
@@ -40,9 +38,9 @@ public class IntakeConstants {
 
     // The retracted hard stop is position 0; the in/half/out targets below all sit above it
     public static final Distance kHardStopDistance = Units.Inches.of(0.0);
-    public static final Distance kInDistance = Units.Inches.of(1.5);
-    public static final Distance kOutDistance = Units.Inches.of(4.8);
-    public static final Distance kHalfDistance = Units.Inches.of(3);
+    public static final Distance kInDistance = Units.Inches.of(.15);
+    public static final Distance kOutDistance = Units.Inches.of(3.51);
+    public static final Distance kHalfDistance = Units.Inches.of(1.8);
 
     public static final Distance kRadius = Units.Inches.of(34.0 / 20.0).div(2.0); //pitch radius
 	public static final DistanceAngleConverter converter = new DistanceAngleConverter(kRadius);

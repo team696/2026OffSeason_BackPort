@@ -45,7 +45,6 @@ public class Binds {
 			Hood.get().setDefaultCommand(Hood.get().setpointCommand(Hood.STOW));
 			Shooter.get().setDefaultCommand(Shooter.get().setpointCommand(Shooter.IDLE));
 			Hopper.Rollers.get().setDefaultCommand(Hopper.Rollers.get().setpointCommand(Hopper.Rollers.IDLE));
-			Hopper.Pivot.get().setDefaultCommand(Hopper.Pivot.get().setpointCommand(Hopper.Pivot.NOVOLTAGE));
 			FeedRollers.get().setDefaultCommand(FeedRollers.get().setpointCommand(FeedRollers.IDLE));
 
 			Controls.xboxController.LT.whileTrue(SuperStructure.RunIntake()).whileFalse(SuperStructureConstants.StopIntakeRollers());

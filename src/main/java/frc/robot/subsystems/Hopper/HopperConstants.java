@@ -7,7 +7,6 @@ package frc.robot.subsystems.Hopper;
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degree;
 import static edu.wpi.first.units.Units.Inch;
-import static edu.wpi.first.units.Units.Rotation;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -16,21 +15,17 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.units.MomentOfInertiaUnit;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
-import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Mass;
-import edu.wpi.first.units.measure.MomentOfInertia;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.lib.io.MotorIOTalonFX;
 import frc.lib.io.MotorIOTalonFX.MotorIOTalonFXConfig;
 import frc.lib.io.MotorIOTalonFXSim;
 import frc.lib.sim.PivotSim.PivotSimConstants;
-import frc.lib.sim.PivotSim;
 import frc.lib.sim.RollerSim;
 import frc.lib.sim.RollerSim.RollerSimConstants;
 import frc.lib.util.tunablenumbers.TunableNumber;
@@ -170,7 +165,7 @@ public class HopperPivot{
         return config;
     }
 
-
+    /* 
     public static MotorIOTalonFXConfig getIOConfig(){
         MotorIOTalonFXConfig config = new MotorIOTalonFXConfig();
         config.mainConfig = getTalonFXConfig();
@@ -188,7 +183,7 @@ public class HopperPivot{
         else{
             return new MotorIOTalonFXSim(getIOConfig(), new PivotSim(getSimConstants()));
         }
-    }
+    }*/
 
     public static PivotSimConstants getSimConstants(){
         PivotSimConstants constants = new PivotSimConstants();

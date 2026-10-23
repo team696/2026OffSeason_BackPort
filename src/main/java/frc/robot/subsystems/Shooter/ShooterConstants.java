@@ -38,7 +38,7 @@ public class ShooterConstants {
 
     public static final AngularVelocity epsilonThreshold = RotationsPerSecond.of(0.1);
     // feed rollers wait until the drum is within this of its target speed
-    public static final AngularVelocity kFeedTolerance = RotationsPerSecond.of(200.0);
+    public static final AngularVelocity kFeedTolerance = RotationsPerSecond.of(1.5);
 
     public static final double kGearing = 45.0/22.0;
 
@@ -69,17 +69,17 @@ public class ShooterConstants {
 
         // Volts per rps of error: pushes back when a ball slows the drum. Lower if
         // still sags while feeding, lower it if the drum oscillates or whines at speed.
-        config_talon.Slot1.kP = 0;
+        config_talon.Slot1.kP = 0.1;
         config_talon.Slot1.kI = 0;
         config_talon.Slot1.kD = 0;
 
         config_talon.Voltage.PeakForwardVoltage = 12;
         config_talon.Voltage.PeakReverseVoltage = -12;
 
-        config_talon.Slot1.kV = 1;
+        config_talon.Slot1.kV = .25;
 
-        config_talon.MotionMagic.MotionMagicCruiseVelocity = 20.0;
-        config_talon.MotionMagic.MotionMagicAcceleration = 9.0;
+        config_talon.MotionMagic.MotionMagicCruiseVelocity = 40.0;
+        config_talon.MotionMagic.MotionMagicAcceleration = 100.0;
         config_talon.MotionMagic.MotionMagicJerk = 1000.0;
 
 
@@ -99,7 +99,6 @@ public class ShooterConstants {
 
         config.mainConfig = config_talon;
         config.followerConfig = config_talon;
-
 
         return config;
     }

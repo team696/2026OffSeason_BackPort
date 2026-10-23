@@ -60,6 +60,6 @@ public class Shooter extends FlywheelMotorSubsystem<MotorIOTalonFX> {
         super.periodic();
         SmartDashboard.putNumber("Shooter speed", Shooter.get().getVelocity().in(RotationsPerSecond));
         SmartDashboard.putNumber("Shooter Setpoint", Shooter.get().getSetpoint().baseUnits / 2 / Math.PI);
-
+        SmartDashboard.putNumber("Shooter Error", Shooter.get().getSetpoint().baseUnits / 2 / Math.PI - Shooter.get().getVelocity().in(RotationsPerSecond));
       }
 }

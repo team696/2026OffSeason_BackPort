@@ -6,11 +6,8 @@ package frc.robot.subsystems.Superstructure;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.units.Units;
-import frc.robot.subsystems.FeedRollers.FeedRollers;
+
 import frc.robot.subsystems.Hopper.Hopper;
-import frc.robot.subsystems.Hopper.HopperConstants;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.commands.ShootingCommands;
 import frc.robot.shooting.ShootingState;
