@@ -39,6 +39,11 @@
 
     }
 
+    /** Drives the hood into its bottom hard stop (0 deg), zeroes the encoder there, then goes to STOW. Skipped once zeroed. */
+    public Command zeroCommand() {
+      return zeroIfNeededCommand(HoodConstants.getZeroConfig(), STOW);
+    }
+
     public Command getTestShotCommand() {
       return followSetpointCommand(() -> 
           Setpoint.withMotionMagicSetpoint(

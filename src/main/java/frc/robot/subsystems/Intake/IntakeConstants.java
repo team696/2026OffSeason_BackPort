@@ -19,6 +19,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import frc.lib.bases.ServoMotorSubsystem.ZeroConfig;
 import frc.lib.io.MotorIOTalonFX;
 import frc.lib.io.MotorIOTalonFXSim;
 import frc.lib.io.MotorIOTalonFX.MotorIOTalonFXConfig;
@@ -37,6 +38,8 @@ public class IntakeConstants {
     public static final double kGearing  = 4.0*4.0*(30.0 / 12.0); //Added another 4:1 stage AST 20261020
 
 
+    // The retracted hard stop is position 0; the in/half/out targets below all sit above it
+    public static final Distance kHardStopDistance = Units.Inches.of(0.0);
     public static final Distance kInDistance = Units.Inches.of(1.5);
     public static final Distance kOutDistance = Units.Inches.of(4.8);
     public static final Distance kHalfDistance = Units.Inches.of(3);
@@ -47,6 +50,7 @@ public class IntakeConstants {
     public static final Angle kEpsilonThreshold = converter.toAngle(Units.Inches.of(0.0001));//Amount of error the motor is willing to accept
 
     //Need these for the servo motor base class
+    public static final Angle kHardStopAngle = converter.toAngle(kHardStopDistance);
     public static final Angle kInAngle = converter.toAngle(kInDistance);
     public static final Angle kOutAngle = converter.toAngle(kOutDistance);
     public static final Angle kHalfAngle = converter.toAngle(kHalfDistance);
@@ -100,14 +104,33 @@ public class IntakeConstants {
         }
     }
 
+    /**
+     * Zeroing against the retracted hard stop on first enable. The voltage is a first guess to tune on the robot:
+     * it has to be enough to keep the rack moving against friction, but a stalled motor draws about V / 0.03 ohm
+     * (roughly 90 A at 3 V), so keep it as low as it can be. Negative drives toward the stop (position goes down).
+     */
+    public static ZeroConfig getZeroConfig(){
+        ZeroConfig config = new ZeroConfig();
+        config.kVoltage = Units.Volts.of(-3.0);
+        config.kZeroPosition = kHardStopAngle;
+        config.kConfirmTolerance = converter.toAngle(Units.Inches.of(0.25));
+        config.kStalledVelocity = converter.toAngle(Units.Inches.of(0.1)).per(Units.Second);
+        config.kStartupGrace = Units.Seconds.of(0.3);
+        config.kStalledTime = Units.Seconds.of(0.15);
+        // slow rack (40:1): a full-travel move at -3 V takes a few seconds
+        config.kTimeout = Units.Seconds.of(6.0);
+        config.kConfirmTimeout = Units.Seconds.of(0.5);
+        return config;
+    }
+
 
     public static LinearSimConstants getSimConstants(){
         LinearSimConstants constants = new LinearSimConstants();
         constants.gearing = kGearing;
-        constants.minHeight = kInDistance;
+        constants.minHeight = kHardStopDistance;
         constants.maxHeight = kOutDistance;
         constants.simGravity = false;
-        constants.startingHeight = kInDistance;
+        constants.startingHeight = kHardStopDistance;
         constants.motor = DCMotor.getKrakenX60(1);
         constants.carriageMass = Units.Pounds.of(8);
         constants.converter = converter;

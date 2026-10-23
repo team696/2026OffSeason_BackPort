@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.bases.MotorSubsystem;
 import frc.lib.bases.ServoMotorSubsystem;
 import frc.lib.io.MotorIO.Setpoint;
@@ -26,18 +27,24 @@ public class Intake{
 
     public static final Setpoint RETRACT = Setpoint.withPositionSetpoint(IntakeConstants.RackAndPinion.kInAngle);
     public static final Setpoint EXTEND = Setpoint.withPositionSetpoint(IntakeConstants.RackAndPinion.kOutAngle);
-    public static final Setpoint HALF = Setpoint.withPositionSetpoint(IntakeConstants.RackAndPinion.kInAngle);
+    public static final Setpoint HALF = Setpoint.withPositionSetpoint(IntakeConstants.RackAndPinion.kHalfAngle);
 
 
     public RackAndPinion(){
       super(
-        IntakeConstants.RackAndPinion.getMotorIO(), 
-        "Rack and Pinon", 
+        IntakeConstants.RackAndPinion.getMotorIO(),
+        "Rack and Pinon",
         IntakeConstants.RackAndPinion.kEpsilonThreshold);
-        setCurrentPosition(IntakeConstants.RackAndPinion.kInAngle);
+        // Assume the rack boots resting on its hard stop; zeroCommand() confirms it against the real stop on first enable.
+        setCurrentPosition(IntakeConstants.RackAndPinion.kHardStopAngle);
 
 ;
 
+    }
+
+    /** Drives the rack into its retracted hard stop, zeroes the encoder there, then goes to RETRACT. Skipped once zeroed. */
+    public Command zeroCommand() {
+      return zeroIfNeededCommand(IntakeConstants.RackAndPinion.getZeroConfig(), RETRACT);
     }
 
     @Override

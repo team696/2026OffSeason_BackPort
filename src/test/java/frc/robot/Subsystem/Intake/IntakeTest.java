@@ -3,9 +3,11 @@ package frc.robot.Subsystem.Intake;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.io.MotorIO.Mode;
 import frc.lib.io.MotorIO.Setpoint;
 import frc.robot.Subsystem.SubsystemTestBase;
@@ -40,7 +42,7 @@ class IntakeTest extends SubsystemTestBase {
     void rackSetpointsMatchConstants() {
         assertEquals(IntakeConstants.RackAndPinion.kInAngle.baseUnitMagnitude(), Intake.RackAndPinion.RETRACT.baseUnits, kEpsilon);
         assertEquals(IntakeConstants.RackAndPinion.kOutAngle.baseUnitMagnitude(), Intake.RackAndPinion.EXTEND.baseUnits, kEpsilon);
-        assertEquals(Intake.RackAndPinion.EXTEND.baseUnits / 2.0, Intake.RackAndPinion.HALF.baseUnits, kEpsilon);
+        assertEquals(IntakeConstants.RackAndPinion.kHalfAngle.baseUnitMagnitude(), Intake.RackAndPinion.HALF.baseUnits, kEpsilon);
     }
 
     @Test
@@ -52,8 +54,23 @@ class IntakeTest extends SubsystemTestBase {
     @Test
     void angleDistanceConversionRoundTrips() {
         var converter = IntakeConstants.RackAndPinion.converter;
-        assertEquals(14.0, converter.toDistance(IntakeConstants.RackAndPinion.kOutAngle).in(Inches), 1e-6);
-        assertEquals(-0.01, converter.toDistance(IntakeConstants.RackAndPinion.kInAngle).in(Inches), 1e-6);
+        assertEquals(IntakeConstants.RackAndPinion.kOutDistance.in(Inches), converter.toDistance(IntakeConstants.RackAndPinion.kOutAngle).in(Inches), 1e-6);
+        assertEquals(IntakeConstants.RackAndPinion.kInDistance.in(Inches), converter.toDistance(IntakeConstants.RackAndPinion.kInAngle).in(Inches), 1e-6);
+        assertEquals(IntakeConstants.RackAndPinion.kHalfDistance.in(Inches), converter.toDistance(IntakeConstants.RackAndPinion.kHalfAngle).in(Inches), 1e-6);
+    }
+
+    @Test
+    void hardStopIsBelowEveryTarget() {
+        assertTrue(IntakeConstants.RackAndPinion.kHardStopAngle.baseUnitMagnitude() < Intake.RackAndPinion.RETRACT.baseUnits);
+        assertEquals(0.0, IntakeConstants.RackAndPinion.kHardStopDistance.in(Inches), kEpsilon);
+    }
+
+    @Test
+    void zeroConfigDrivesTowardTheHardStop() {
+        var config = IntakeConstants.RackAndPinion.getZeroConfig();
+        assertTrue(config.kVoltage.baseUnitMagnitude() < 0.0, "zeroing should drive toward the retracted hard stop");
+        assertEquals(IntakeConstants.RackAndPinion.kHardStopAngle.baseUnitMagnitude(), config.kZeroPosition.baseUnitMagnitude(), kEpsilon);
+        assertTrue(config.kTimeout.baseUnitMagnitude() > config.kStartupGrace.baseUnitMagnitude() + config.kStalledTime.baseUnitMagnitude());
     }
 
     // ---- roller setpoints ----
@@ -118,6 +135,46 @@ class IntakeTest extends SubsystemTestBase {
             () -> rack.nearPosition(IntakeConstants.RackAndPinion.kInAngle, IntakeConstants.RackAndPinion.converter.toAngle(Inches.of(0.5))),
             6.0,
             "Rack never retracted, at " + IntakeConstants.RackAndPinion.converter.toDistance(rack.getPosition()).in(Inches) + " in");
+    }
+
+    @Test
+    void zeroingFindsTheHardStopThenRetracts() {
+        Intake.RackAndPinion rack = Intake.RackAndPinion.get();
+        var tolerance = IntakeConstants.RackAndPinion.converter.toAngle(Inches.of(0.5));
+
+        // start away from the stop so it has to drive in
+        schedule(rack.setpointCommand(Intake.RackAndPinion.EXTEND));
+        runUntil(() -> rack.nearPosition(IntakeConstants.RackAndPinion.kOutAngle, tolerance), 6.0, "Rack never extended");
+
+        Command zero = rack.zeroAgainstHardStopCommand(IntakeConstants.RackAndPinion.getZeroConfig(), Intake.RackAndPinion.RETRACT);
+        schedule(zero);
+        assertTrue(zero.isScheduled(), "Zeroing ended right away");
+        assertTrue(rack.getSetpoint().mode.isVoltageControl(), "Zeroing should drive with voltage");
+        runUntil(() -> !zero.isScheduled(), 12.0, "Rack zeroing never finished");
+
+        assertTrue(rack.hasZeroed(), "Rack should be zeroed after the command finishes");
+        assertSame(Intake.RackAndPinion.RETRACT, rack.getSetpoint());
+        runUntil(() -> rack.nearPosition(IntakeConstants.RackAndPinion.kInAngle, tolerance), 6.0,
+            "Rack never moved off the hard stop to RETRACT, at " + IntakeConstants.RackAndPinion.converter.toDistance(rack.getPosition()).in(Inches) + " in");
+    }
+
+    @Test
+    void zeroCommandIsSkippedOnceZeroed() {
+        Intake.RackAndPinion rack = Intake.RackAndPinion.get();
+        if (!rack.hasZeroed()) {
+            Command zero = rack.zeroAgainstHardStopCommand(IntakeConstants.RackAndPinion.getZeroConfig(), Intake.RackAndPinion.RETRACT);
+            schedule(zero);
+            runUntil(() -> !zero.isScheduled(), 12.0, "Rack zeroing never finished");
+        }
+        assertTrue(rack.hasZeroed());
+
+        // a marker setpoint: a skipped zero must not touch the rack
+        rack.applySetpoint(Intake.RackAndPinion.EXTEND);
+        Command again = rack.zeroCommand();
+        schedule(again);
+        runFor(0.1);
+        assertFalse(again.isScheduled(), "Zeroing should end right away once already zeroed");
+        assertSame(Intake.RackAndPinion.EXTEND, rack.getSetpoint());
     }
 
     @Test

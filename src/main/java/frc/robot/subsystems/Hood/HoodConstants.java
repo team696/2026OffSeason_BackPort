@@ -18,6 +18,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.lib.bases.ServoMotorSubsystem.ServoHomingConfig;
+import frc.lib.bases.ServoMotorSubsystem.ZeroConfig;
 import frc.lib.io.MotorIOTalonFX;
 import frc.lib.io.MotorIOTalonFX.MotorIOTalonFXConfig;
 import frc.lib.io.MotorIOTalonFXSim;
@@ -130,6 +131,21 @@ public class HoodConstants {
 							kSimStictionVelocity,
 							kSimViscousFrictionVoltsPerRadPerSec));
         }
+    }
+
+    /** Zeroing against the bottom hard stop (0 deg) on first enable; same voltage and stall speed the lib homing uses. */
+    public static ZeroConfig getZeroConfig() {
+        ServoHomingConfig homing = getServoConfig();
+        ZeroConfig config = new ZeroConfig();
+        config.kVoltage = homing.kHomingVoltage;
+        config.kZeroPosition = kMinAngle;
+        config.kConfirmTolerance = Units.Degrees.of(1.0);
+        config.kStalledVelocity = homing.kSetHomedVelocity;
+        config.kStartupGrace = Units.Seconds.of(0.3);
+        config.kStalledTime = Units.Seconds.of(0.15);
+        config.kTimeout = Units.Seconds.of(3.0);
+        config.kConfirmTimeout = Units.Seconds.of(0.5);
+        return config;
     }
 
     public static ServoHomingConfig getServoConfig() {

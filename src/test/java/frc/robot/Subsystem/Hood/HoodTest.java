@@ -2,15 +2,18 @@ package frc.robot.Subsystem.Hood;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.io.MotorIO.Mode;
 import frc.lib.io.MotorIO.Setpoint;
 import frc.robot.Subsystem.SubsystemTestBase;
 import frc.robot.subsystems.Hood.Hood;
 import frc.robot.subsystems.Hood.HoodConstants;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class HoodTest extends SubsystemTestBase {
@@ -27,7 +30,7 @@ class HoodTest extends SubsystemTestBase {
     void stowAndMaxAreHoodLimits() {
         assertEquals(Mode.POSITIONPID, Hood.STOW.mode);
         assertEquals(Mode.POSITIONPID, Hood.MAX_ANGLE.mode);
-        assertEquals(HoodConstants.kMinAngle.baseUnitMagnitude(), Hood.STOW.baseUnits, kEpsilon);
+        assertEquals(HoodConstants.kStowAngle.baseUnitMagnitude(), Hood.STOW.baseUnits, kEpsilon);
         assertEquals(HoodConstants.kMaxAngle.baseUnitMagnitude(), Hood.MAX_ANGLE.baseUnits, kEpsilon);
     }
 
@@ -43,6 +46,14 @@ class HoodTest extends SubsystemTestBase {
         assertEquals(HoodConstants.kMinAngle.in(Degrees), config.kHomePosition.in(Degrees), kEpsilon);
         assertTrue(config.kHomingVoltage.baseUnitMagnitude() < 0.0, "homing should drive toward the min hard stop");
         assertTrue(config.kHomingTimeout.baseUnitMagnitude() > 0.0);
+    }
+
+    @Test
+    void zeroConfigDrivesTowardTheHardStop() {
+        var config = HoodConstants.getZeroConfig();
+        assertTrue(config.kVoltage.baseUnitMagnitude() < 0.0, "zeroing should drive toward the bottom hard stop");
+        assertEquals(0.0, config.kZeroPosition.in(Degrees), kEpsilon);
+        assertTrue(HoodConstants.kStowAngle.in(Degrees) > config.kZeroPosition.in(Degrees), "stow should sit above the hard stop");
     }
 
     // ---- behavior in sim ----
@@ -65,6 +76,7 @@ class HoodTest extends SubsystemTestBase {
             "Hood never reached 30 deg, at " + hood.getPosition().in(Degrees));
     }
 
+    @Disabled("Stow is 2 deg now, not home (0 deg), so the lib's lazy homing never triggers; zeroing is covered by zeroingFindsTheHardStopThenStows")
     @Test
     void stowHomesAndFinishesInMotionMagic() {
         Hood hood = Hood.get();
@@ -83,6 +95,7 @@ class HoodTest extends SubsystemTestBase {
             "Hood should be at home after homing, at " + hood.getPosition().in(Degrees));
     }
 
+    @Disabled("Stow is 2 deg now, not home (0 deg), so the lib's lazy homing never triggers; zeroing is covered by zeroingFindsTheHardStopThenStows")
     @Test
     void repeatedStowIsIgnoredWhileHoming() {
         Hood hood = Hood.get();
@@ -101,5 +114,45 @@ class HoodTest extends SubsystemTestBase {
         Setpoint twenty = Setpoint.withPositionSetpoint(Degrees.of(20.0));
         hood.applySetpoint(twenty);
         assertSame(twenty, hood.getSetpoint());
+    }
+
+    @Test
+    void zeroingFindsTheHardStopThenStows() {
+        Hood hood = Hood.get();
+
+        // start away from the stop so it has to drive down
+        schedule(hood.setpointCommand(Setpoint.withPositionSetpoint(Degrees.of(20.0))));
+        runUntil(() -> hood.nearPosition(Degrees.of(20.0), Degrees.of(2.0)), 4.0, "Hood never left the stop");
+
+        Command zero = hood.zeroAgainstHardStopCommand(HoodConstants.getZeroConfig(), Hood.STOW);
+        schedule(zero);
+        assertTrue(zero.isScheduled(), "Zeroing ended right away");
+        assertTrue(hood.getSetpoint().mode.isVoltageControl(), "Zeroing should drive with voltage");
+        runUntil(() -> !zero.isScheduled(), 8.0, "Hood zeroing never finished, at " + hood.getPosition().in(Degrees));
+
+        assertTrue(hood.hasZeroed(), "Hood should be zeroed after the command finishes");
+        assertSame(Hood.STOW, hood.getSetpoint());
+        runUntil(() -> hood.nearPosition(HoodConstants.kStowAngle, Degrees.of(1.0)), 4.0,
+            "Hood never moved off the hard stop to STOW, at " + hood.getPosition().in(Degrees));
+    }
+
+    @Test
+    void zeroCommandIsSkippedOnceZeroed() {
+        Hood hood = Hood.get();
+        if (!hood.hasZeroed()) {
+            Command zero = hood.zeroAgainstHardStopCommand(HoodConstants.getZeroConfig(), Hood.STOW);
+            schedule(zero);
+            runUntil(() -> !zero.isScheduled(), 8.0, "Hood zeroing never finished");
+        }
+        assertTrue(hood.hasZeroed());
+
+        // a marker setpoint: a skipped zero must not touch the hood
+        Setpoint marker = Setpoint.withPositionSetpoint(Degrees.of(10.0));
+        hood.applySetpoint(marker);
+        Command again = hood.zeroCommand();
+        schedule(again);
+        runFor(0.1);
+        assertFalse(again.isScheduled(), "Zeroing should end right away once already zeroed");
+        assertSame(marker, hood.getSetpoint());
     }
 }

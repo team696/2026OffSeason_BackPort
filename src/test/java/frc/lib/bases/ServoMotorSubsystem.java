@@ -14,6 +14,7 @@ import frc.lib.io.MotorIO;
 import frc.lib.io.MotorIO.Setpoint;
 import frc.lib.util.DelayedBoolean;
 import frc.lib.util.Util;
+import java.util.Set;
 
 /**
  * Base subsystem for any subsystem that uses motors and requires precise position control.
@@ -27,6 +28,9 @@ public class ServoMotorSubsystem<IO extends MotorIO> extends MotorSubsystem<IO> 
 	private boolean mHoming = false;
 	private boolean mNeedsToHome = true;
 	private DelayedBoolean mHomingDelay;
+
+	// Set by zeroAgainstHardStopCommand once the position has been zeroed against a hard stop
+	private boolean hasZeroed = false;
 
 	/**
 	 * Creates a *non-homing* ServoMotorSubsystem with a MotorIO, name for telemetry, and threshold for differences in measurement.
@@ -221,6 +225,38 @@ public class ServoMotorSubsystem<IO extends MotorIO> extends MotorSubsystem<IO> 
 		io.setCurrentPosition(position);
 	}
 
+	/**
+	 * Whether {@link #zeroAgainstHardStopCommand} has successfully zeroed this mechanism since boot.
+	 *
+	 * @return True once the position has been zeroed against the hard stop.
+	 */
+	public boolean hasZeroed() {
+		return hasZeroed;
+	}
+
+	/**
+	 * Creates a Command that drives into a hard stop, zeroes the encoder there, and then applies a setpoint.
+	 * If the stop is never found (timeout) or the zero never shows up in the position reading, the motor is
+	 * left neutral, a warning is reported, and {@link #hasZeroed()} stays false so it can be retried.
+	 *
+	 * @param config Voltage, stall detection and timeouts for the zeroing.
+	 * @param finishSetpoint Setpoint to apply after a successful zero.
+	 * @return A command requiring this subsystem.
+	 */
+	public Command zeroAgainstHardStopCommand(ZeroConfig config, Setpoint finishSetpoint) {
+		return new ZeroCommand(config, finishSetpoint);
+	}
+
+	/**
+	 * Same as {@link #zeroAgainstHardStopCommand}, but does nothing if this mechanism already zeroed since boot.
+	 * The check happens when the command starts, not when it's built.
+	 */
+	public Command zeroIfNeededCommand(ZeroConfig config, Setpoint finishSetpoint) {
+		return Commands.defer(
+				() -> hasZeroed ? Commands.none() : zeroAgainstHardStopCommand(config, finishSetpoint),
+				Set.of(this));
+	}
+
 	@Override
 	public void initSendable(SendableBuilder builder) {
 		super.initSendable(builder);
@@ -229,6 +265,119 @@ public class ServoMotorSubsystem<IO extends MotorIO> extends MotorSubsystem<IO> 
 			builder.addBooleanProperty("Homing", () -> mHoming, null);
 			builder.addBooleanProperty("Needs to Home", () -> mNeedsToHome, null);
 		}
+	}
+
+	/**
+	 * Drives at a fixed voltage until the mechanism stalls against a hard stop, then zeroes the encoder.
+	 *
+	 * <p>The encoder is only zeroed once the new value shows up in {@link #getPosition()}: the zero is
+	 * sent on a background thread, so applying a position setpoint right away could chase the old reading.
+	 */
+	private class ZeroCommand extends Command {
+		private final ZeroConfig config;
+		private final Setpoint driveSetpoint;
+		private final Setpoint finishSetpoint;
+		private final Timer runTimer = new Timer();
+		private final Timer stalledTimer = new Timer();
+		private final Timer confirmTimer = new Timer();
+		private boolean zeroSent;
+		private boolean confirmed;
+		private boolean failed;
+
+		ZeroCommand(ZeroConfig config, Setpoint finishSetpoint) {
+			this.config = config;
+			this.finishSetpoint = finishSetpoint;
+			this.driveSetpoint = Setpoint.withVoltageSetpoint(config.kVoltage);
+			addRequirements(ServoMotorSubsystem.this);
+			setName(ServoMotorSubsystem.this.name + " Zero Against Hard Stop");
+		}
+
+		@Override
+		public void initialize() {
+			runTimer.restart();
+			stalledTimer.stop();
+			stalledTimer.reset();
+			confirmTimer.stop();
+			confirmTimer.reset();
+			zeroSent = false;
+			confirmed = false;
+			failed = false;
+			applySetpoint(driveSetpoint);
+		}
+
+		@Override
+		public void execute() {
+			if (!zeroSent) {
+				applySetpoint(driveSetpoint);
+				// the mechanism starts at rest, so don't call that a stall until it's had time to get moving
+				boolean stopped = runTimer.hasElapsed(config.kStartupGrace.in(Units.Seconds))
+						&& Math.abs(getVelocity().baseUnitMagnitude()) < config.kStalledVelocity.baseUnitMagnitude();
+				if (stopped) {
+					stalledTimer.start();
+				} else {
+					stalledTimer.stop();
+					stalledTimer.reset();
+				}
+
+				if (stalledTimer.hasElapsed(config.kStalledTime.in(Units.Seconds))) {
+					applySetpoint(Setpoint.withNeutralSetpoint());
+					setCurrentPosition(config.kZeroPosition);
+					zeroSent = true;
+					confirmTimer.restart();
+				} else if (runTimer.hasElapsed(config.kTimeout.in(Units.Seconds))) {
+					failed = true;
+				}
+			} else if (nearPosition(config.kZeroPosition, config.kConfirmTolerance)) {
+				confirmed = true;
+			} else if (confirmTimer.hasElapsed(config.kConfirmTimeout.in(Units.Seconds))) {
+				failed = true;
+			}
+		}
+
+		@Override
+		public boolean isFinished() {
+			return confirmed || failed;
+		}
+
+		@Override
+		public void end(boolean interrupted) {
+			if (confirmed && !interrupted) {
+				hasZeroed = true;
+				applySetpoint(finishSetpoint);
+				return;
+			}
+			// never leave the voltage request behind: it would start pushing into the stop again on re-enable
+			applySetpoint(Setpoint.withNeutralSetpoint());
+			if (failed) {
+				DriverStation.reportWarning(
+						ServoMotorSubsystem.this.name + " could not zero against its hard stop ("
+								+ (zeroSent ? "zero never showed up in the position reading" : "never stalled before the timeout")
+								+ "); position is still unknown",
+						false);
+			}
+		}
+	}
+
+	/**
+	 * Configuration for zeroing a ServoMotorSubsystem against a hard stop.
+	 */
+	public static class ZeroConfig {
+		/** Voltage to drive at; the sign must point toward the hard stop. */
+		public Voltage kVoltage;
+		/** Position the mechanism is at when it is sitting on the hard stop. */
+		public Angle kZeroPosition;
+		/** How close the position reading must get to kZeroPosition to count the zero as applied. */
+		public Angle kConfirmTolerance;
+		/** Below this speed the mechanism counts as stopped. */
+		public AngularVelocity kStalledVelocity;
+		/** Time to ignore stalls after starting, while the mechanism gets moving. */
+		public Time kStartupGrace;
+		/** How long the mechanism must stay stopped to count as against the hard stop. */
+		public Time kStalledTime;
+		/** Give up if the stop hasn't been found by then. */
+		public Time kTimeout;
+		/** Give up if the zero hasn't shown up in the position reading by then. */
+		public Time kConfirmTimeout;
 	}
 
 	/**

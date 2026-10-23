@@ -23,6 +23,7 @@ import frc.lib.util.FieldLayout;
 import frc.robot.Auto.NamedCommand;
 import frc.robot.Log.SEVERITY;
 import frc.robot.commands.ShootingCommands;
+import frc.robot.commands.ZeroingCommands;
 import frc.robot.shooting.Shooting;
 import frc.robot.shooting.ShootingState;
 import frc.robot.shooting.ShotTuning;
@@ -212,8 +213,18 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		m_autonomousCommand = Auto.getSelectedAuto();
 		DriverStation.getAlliance().ifPresent((alliance)->{ RobotConstants.isRedAlliance = alliance == DriverStation.Alliance.Red; });
-		if (m_autonomousCommand != null) {
-			m_autonomousCommand.schedule();
+		Command auto = m_autonomousCommand;
+		if (ZeroingCommands.needed()) {
+			// First enable since boot: zero the hood and rack, then start the auto. The auto is scheduled from
+			// here instead of being composed into a sequence, since a composed command can't be scheduled alone later.
+			// If zeroing fails the auto still starts, with the warning from the failed zero in the DS log.
+			ZeroingCommands.zeroIfNeeded().finallyDo(interrupted -> {
+				if (!interrupted && auto != null && DriverStation.isAutonomousEnabled()) {
+					auto.schedule();
+				}
+			}).schedule();
+		} else if (auto != null) {
+			auto.schedule();
 		}
 	}
 
@@ -222,6 +233,16 @@ public class Robot extends TimedRobot {
 		DriverStation.getAlliance().ifPresent((alliance)->{ RobotConstants.isRedAlliance = alliance == DriverStation.Alliance.Red; });
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
+		}
+		if (ZeroingCommands.needed()) {
+			ZeroingCommands.zeroIfNeeded().schedule();
+		}
+	}
+
+	@Override
+	public void testInit() {
+		if (ZeroingCommands.needed()) {
+			ZeroingCommands.zeroIfNeeded().schedule();
 		}
 	}
 

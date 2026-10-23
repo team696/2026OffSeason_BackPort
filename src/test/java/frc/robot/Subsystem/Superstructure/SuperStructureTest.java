@@ -99,7 +99,7 @@ class SuperStructureTest extends SubsystemTestBase {
         schedule(shooting);
         assertTrue(shooting.isScheduled(), "Shooting ended right away");
         assertSame(Hopper.Rollers.INTAKE, Hopper.Rollers.get().getSetpoint());
-        assertSame(Intake.RackAndPinion.EXTEND, Intake.RackAndPinion.get().getSetpoint());
+        assertSame(Intake.RackAndPinion.HALF, Intake.RackAndPinion.get().getSetpoint());
         runFor(0.5);
         assertSame(Intake.RackAndPinion.HALF, Intake.RackAndPinion.get().getSetpoint());
     }
@@ -116,8 +116,9 @@ class SuperStructureTest extends SubsystemTestBase {
         schedule(auto);
         runFor(0.06);
         assertEquals(Mode.VELOCITY, Shooter.get().getSetpoint().mode);
-        assertSame(Intake.Rollers.SLOW_INTAKE, Intake.Rollers.get().getSetpoint());
-        assertSame(Intake.Rollers2.SLOW_INTAKE, Intake.Rollers2.get().getSetpoint());
+        // the intake rollers are stopped while shooting
+        assertSame(Intake.Rollers.IDLE, Intake.Rollers.get().getSetpoint());
+        assertSame(Intake.Rollers2.IDLE, Intake.Rollers2.get().getSetpoint());
         // Exercise cleanup with a running feeder without waiting for simulated spin-up.
         FeedRollers.get().applySetpoint(FeedRollers.RUNNING);
 
@@ -193,7 +194,7 @@ class SuperStructureTest extends SubsystemTestBase {
         assertSame(Intake.Rollers.IDLE, Intake.Rollers.get().getSetpoint());
         assertSame(Intake.Rollers2.IDLE, Intake.Rollers2.get().getSetpoint());
         // STOW gets swapped for the hood's homing setpoint, so check where it ends up instead
-        runUntil(() -> Hood.get().nearPosition(HoodConstants.kMinAngle, Degrees.of(2.0)), 4.0,
+        runUntil(() -> Hood.get().nearPosition(HoodConstants.kStowAngle, Degrees.of(1.0)), 4.0,
             "ShootingStop never stowed the hood, at " + Hood.get().getPosition().in(Degrees));
     }
 
