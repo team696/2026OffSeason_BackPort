@@ -86,7 +86,8 @@ public class CameraSubsystem extends SubsystemBase {
 	}
 
 	public void applyVisionEstimate(CameraIO camera, VisionEstimate estimate) {
-		Vector<N3> deviations = camera.getAprilTagStdDevs().times(estimate.getAverageDistance().in(Meters));
+		double distanceMeters = estimate.getAverageDistance().in(Meters);
+		Vector<N3> deviations = camera.getAprilTagStdDevs().times(distanceMeters * distanceMeters);
 		Drive.mInstance.addVisionUpdate(
 				estimate.getPose(),
 				estimate.getTimestamp(),
@@ -257,7 +258,7 @@ public class CameraSubsystem extends SubsystemBase {
 	public static class CameraIOConfig {
 		public String name = null;
 		public Pose3d robotToCameraOffset = null;
-		public Vector<N3> aprilTagVisionStdDevs = VecBuilder.fill(0.3, 0.3, 99999.0);
+		public Vector<N3> aprilTagVisionStdDevs = VecBuilder.fill(0.15, 0.15, 0.15);
 	}
 
 	public static class SimulatedCameraIOConfig {

@@ -17,6 +17,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AprilTagLimelightCameraIO extends LimelightCameraIO {
 
+	private static final double MAX_TAG_DISTANCE_METERS = 2.5;
+	private static final double MAX_TAG_AMBIGUITY = 0.43;
+
 	private Optional<VisionEstimate> lastGivenEstimate = Optional.empty();
 
 	public AprilTagLimelightCameraIO(CameraIOConfig config) {
@@ -30,13 +33,38 @@ public class AprilTagLimelightCameraIO extends LimelightCameraIO {
 
 	// spotless:off
 
+	static boolean isValidEstimate(PoseEstimate estimate) {
+		if (estimate == null || estimate.pose == null || estimate.tagCount < 1
+				|| estimate.rawFiducials == null || estimate.rawFiducials.length != estimate.tagCount) {
+			return false;
+		}
+		double x = estimate.pose.getX();
+		double y = estimate.pose.getY();
+		if (!Double.isFinite(x) || !Double.isFinite(y)
+				|| (x == 0.0 && y == 0.0)
+				|| x < 0.0 || x > FieldLayout.kFieldLength.in(Meters)
+				|| y < 0.0 || y > FieldLayout.kFieldWidth.in(Meters)
+				|| !Double.isFinite(estimate.avgTagDist)
+				|| estimate.avgTagDist < 0.0 || estimate.avgTagDist > MAX_TAG_DISTANCE_METERS) {
+			return false;
+		}
+		// Check every contributing tag so a nearby tag cannot hide a distant or ambiguous one.
+		for (var tag : estimate.rawFiducials) {
+			if (tag == null || !Double.isFinite(tag.distToCamera)
+					|| tag.distToCamera < 0.0 || tag.distToCamera > MAX_TAG_DISTANCE_METERS
+					|| !Double.isFinite(tag.ambiguity)
+					|| tag.ambiguity < 0.0 || tag.ambiguity > MAX_TAG_AMBIGUITY) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	@Override
 	public Optional<VisionEstimate> getRobotPose() {
 		updateGyro();
 		PoseEstimate limelightEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(config.name);
-		if (limelightEstimate == null
-				|| (limelightEstimate.pose.getX() == 0 && limelightEstimate.pose.getY() == 0)
-				|| limelightEstimate.tagCount < 1)
+		if (!isValidEstimate(limelightEstimate))
 			return (lastGivenEstimate = Optional.empty());
 
 		int buffer[] = new int[limelightEstimate.rawFiducials.length];
@@ -57,14 +85,12 @@ public class AprilTagLimelightCameraIO extends LimelightCameraIO {
 		updateGyro();
 		PoseEstimate limelightEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(config.name);
 
-		  if (limelightEstimate != null && limelightEstimate.rawFiducials.length > 0) {
+		  if (limelightEstimate != null && limelightEstimate.rawFiducials != null
+				&& limelightEstimate.rawFiducials.length > 0 && limelightEstimate.rawFiducials[0] != null) {
         SmartDashboard.putNumber("Debug/Ambiguity", limelightEstimate.rawFiducials[0].ambiguity);
     		}
     	SmartDashboard.putNumber("Debug/TagCount", limelightEstimate == null ? -1 : limelightEstimate.tagCount);
-		if (limelightEstimate == null
-				|| (limelightEstimate.pose.getX() == 0
-						|| limelightEstimate.pose.getY() == 0
-						|| limelightEstimate.tagCount < 1)) {
+		if (!isValidEstimate(limelightEstimate)) {
 			return Optional.empty();
 		}
 		int buffer[] = new int[limelightEstimate.rawFiducials.length];

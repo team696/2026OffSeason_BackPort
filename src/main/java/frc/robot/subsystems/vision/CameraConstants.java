@@ -33,9 +33,9 @@ import frc.lib.util.vision.CameraPipelineType;
 /** Add your docs here. */
 public class CameraConstants {
 
-    //Standard deviation
+    // X/Y (meters) and heading (radians), multiplied by average tag distance squared.
     public static final Vector<N3> DEFAULT_STD_DEVIATION = 
-        VecBuilder.fill(0.3,0.3,999999.0); //Basically rejects all rotational values, relying purely on the pigeon
+        VecBuilder.fill(0.15, 0.15, 0.15);
 
     public static final class LeftConstants{ //Front Camera
 
