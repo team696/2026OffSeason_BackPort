@@ -10,6 +10,7 @@ import java.util.Map;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -67,6 +68,12 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotInit(){
+		DataLogManager.start();
+		DriverStation.startDataLog(DataLogManager.getLog());
+		SmartDashboard.putData("Vision/Disable Localization",
+			Camera.get().runOnce(() -> Camera.get().disable()).ignoringDisable(true));
+		SmartDashboard.putData("Vision/Enable Localization",
+			Camera.get().runOnce(() -> Camera.get().enable()).ignoringDisable(true));
 		//DataLogManager.start();
 		//DriverStation.startDataLog(DataLogManager.getLog());
 		//powerTelemetry = new PowerTelemetry(pdh, DataLogManager.getLog());

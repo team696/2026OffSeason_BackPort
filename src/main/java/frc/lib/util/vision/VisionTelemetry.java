@@ -15,7 +15,8 @@ import java.util.Arrays;
 public final class VisionTelemetry {
     public enum Decision {
         FUSION_SUBMITTED, DISABLED_POSE_RESET, NULL_ESTIMATE, NULL_POSE,
-        NO_TAGS, ORIGIN_POSE, HIGH_YAW_RATE, PITCH_UNSTABLE, VISION_DISABLED
+        NO_TAGS, ORIGIN_POSE, HIGH_YAW_RATE, PITCH_UNSTABLE, VISION_DISABLED,
+        INVALID_FRAME_TIME, DUPLICATE_OR_OUT_OF_ORDER, INVALID_ESTIMATE
     }
 
     private final NetworkTable table;
@@ -50,7 +51,7 @@ public final class VisionTelemetry {
             "headingResidualToCurrentPose_rad", "sigmaX_m", "sigmaY_m", "sigmaHeading_rad", "duplicateRead"
         });
         table.getEntry("AcceptedMeaning").setString("Submitted to fusion or used for reset; native estimator acceptance is not observable");
-        table.getEntry("CountMeaning").setString("Processing attempts; repeated frames are counted and flagged, not filtered");
+        table.getEntry("CountMeaning").setString("Processing attempts; inspect Decision for whether each read was submitted or rejected");
         table.getEntry("HasAcceptedPose").setBoolean(false);
         table.getEntry("HasRejectedPose").setBoolean(false);
         table.getEntry("AcceptedCount").setInteger(0);
