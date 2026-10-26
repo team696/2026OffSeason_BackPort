@@ -61,6 +61,19 @@ public class ShootingCommands {
         return Commands.waitUntil(ShootingCommands::atShooterSpeed);
     }
 
+    /**
+     * Holds the feed rollers still until the drum first reaches speed, then keeps feeding until the shot ends.
+     * Latched on purpose: each ball slows the drum past kFeedTolerance, and re-checking every loop made the
+     * feeder stop and start on every ball.
+     */
+    public static Command feedOnceReady() {
+        return Commands.sequence(
+            FeedRollers.get().setpointCommand(FeedRollers.IDLE),
+            Commands.waitUntil(ShootingCommands::readyToShoot),
+            FeedRollers.get().setpointCommand(FeedRollers.RUNNING)
+        );
+    }
+
     public static Command testShot(){
         return Commands.parallel(
             testspinUp(),
@@ -89,13 +102,7 @@ public class ShootingCommands {
         return Commands.parallel(
             Shooting.mInstance.getMotionComp().PointToTarget(),
             spinUp(),
-            Commands.run(()->{
-                if (ShootingCommands.readyToShoot()) {
-                    FeedRollers.get().applySetpoint(FeedRollers.RUNNING);
-                } else {
-                    FeedRollers.get().applySetpoint(FeedRollers.IDLE);
-                }
-            }, FeedRollers.get())
+            feedOnceReady()
         ).beforeStarting(() -> Shooting.setState(ShootingState.HUB))
         .finallyDo(interrupted -> {
             // Apply cleanup directly: an enclosing auto may still own these subsystems.
@@ -124,13 +131,7 @@ public class ShootingCommands {
                     Setpoint.withVelocitySetpoint(RotationsPerSecond.of(rps))),
                 Hood.get().followSetpointCommand(() ->
                     Setpoint.withMotionMagicSetpoint(Degrees.of(hoodDegrees), 2)),
-                Commands.run(()->{
-                if (ShootingCommands.readyToShoot()) {
-                    FeedRollers.get().applySetpoint(FeedRollers.RUNNING);
-                } else {
-                    FeedRollers.get().applySetpoint(FeedRollers.IDLE);
-                }
-            }, FeedRollers.get())
+                feedOnceReady()
             ).finallyDo(interrupted -> {
                 FeedRollers.get().applySetpoint(FeedRollers.IDLE);
                 Shooter.get().applySetpoint(Shooter.IDLE);
