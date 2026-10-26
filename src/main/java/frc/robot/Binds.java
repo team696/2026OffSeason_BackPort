@@ -48,8 +48,8 @@ public class Binds {
 			FeedRollers.get().setDefaultCommand(FeedRollers.get().setpointCommand(FeedRollers.IDLE));
 			Controls.xboxController.X.whileTrue(ZeroingCommands.zeroIfNeeded());
 			Controls.xboxController.LT.whileTrue(SuperStructure.RunIntake()).whileFalse(SuperStructureConstants.StopIntakeRollers());
-			Controls.xboxController.Y.whileTrue(SuperStructure.Shooting());
-			//Controls.xboxController.Y.whileTrue(SuperStructure.ManualShooting());
+			Controls.xboxController.RT.whileTrue(SuperStructure.Shooting());
+			Controls.xboxController.Y.whileTrue(SuperStructure.ManualShooting());
 			Controls.xboxController.A.whileTrue(Swerve.get().resetGyro());
 			Controls.xboxController.LB.whileTrue(SuperStructure.Passing(ShootingState.NEUTRAL_FERRY_LEFT));
 			Controls.xboxController.RB.whileTrue(SuperStructure.Passing(ShootingState.NEUTRAL_FERRY_RIGHT));
