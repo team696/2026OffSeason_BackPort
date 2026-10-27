@@ -11,8 +11,8 @@
   "autoFolders": [
     "New Folder"
   ],
-  "defaultMaxVel": 2.5,
-  "defaultMaxAccel": 2.0,
+  "defaultMaxVel": 5.0,
+  "defaultMaxAccel": 10.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "defaultNominalVoltage": 12.0,

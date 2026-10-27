@@ -38,7 +38,7 @@ public class ShooterConstants {
 
     public static final AngularVelocity epsilonThreshold = RotationsPerSecond.of(0.1);
     // feed rollers wait until the drum is within this of its target speed
-    public static final AngularVelocity kFeedTolerance = RotationsPerSecond.of(1.5);
+    public static final AngularVelocity kFeedTolerance = RotationsPerSecond.of(.10);
 
     public static final double kGearing = 45.0/22.0;
 
@@ -90,8 +90,8 @@ public class ShooterConstants {
         // 45 A (and Phoenix's default drop to 40 A after 1 s) couldn't keep up with balls going through:
         // the drum hit 40 rps then sagged to 32 while feeding. Two motors at 60 A = up to 120 A from the
         // battery during a burst - lower these if the robot browns out while driving and shooting.
-        config_talon.CurrentLimits.SupplyCurrentLimit = 80.0;
-        config_talon.CurrentLimits.SupplyCurrentLowerLimit = 50.0;
+        config_talon.CurrentLimits.SupplyCurrentLimit = 100.0;
+        config_talon.CurrentLimits.SupplyCurrentLowerLimit = 80.0;
         config_talon.CurrentLimits.SupplyCurrentLowerTime = 1;
         config_talon.Feedback.SensorToMechanismRatio = kGearing;
 

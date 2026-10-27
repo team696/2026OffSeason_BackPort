@@ -28,7 +28,7 @@ import frc.robot.Robot;
 public class FeedRollersConstants {
 
     public static AngularVelocity IdleSpeed = RotationsPerSecond.of(0);
-    public static AngularVelocity RunningSpeed = RotationsPerSecond.of(5.0);
+    public static AngularVelocity RunningSpeed = RotationsPerSecond.of(10.0);
     public static final AngularVelocity epsilonThreshold = RotationsPerSecond.of(0.001);
     public static final Time debounder = Second.of(0.0);
     public static final double kGearing = 2;
