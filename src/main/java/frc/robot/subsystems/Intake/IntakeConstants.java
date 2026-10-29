@@ -56,7 +56,7 @@ public class IntakeConstants {
 
 
 
-    public static final Current kCurrentThreshold = Amps.of(25); 
+    public static final Current kCurrentThreshold = Amps.of(28); 
 
     public static final TalonFXConfiguration getTalonFXConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
@@ -76,10 +76,10 @@ public class IntakeConstants {
         config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         config.CurrentLimits.StatorCurrentLimitEnable = true;
-        config.CurrentLimits.StatorCurrentLimit = 25.0;
+        config.CurrentLimits.StatorCurrentLimit = 28.0;
 
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
-        config.CurrentLimits.SupplyCurrentLimit = 20.0;
+        config.CurrentLimits.SupplyCurrentLimit = 23.0;
 
         config.Feedback.SensorToMechanismRatio = kGearing;
 
