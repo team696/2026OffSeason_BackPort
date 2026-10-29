@@ -117,7 +117,7 @@ public class SuperStructure {
                             Setpoint.withPositionSetpoint( 
                                 IntakeConstants.RackAndPinion.converter.toAngle(
                                     Units.Inches.of(
-                                        (.8-Math.min(1, (Timer.getFPGATimestamp() - time) / 3)) * 3.5 + .3
+                                        (1-Math.min(1, (Timer.getFPGATimestamp() - time) / 25)) * 3.5 + .3
                                     )) ));
                     }),
             ShootingCommands.Pass(side),
