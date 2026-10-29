@@ -109,6 +109,17 @@ public class SuperStructure {
 
     public static Command Passing(ShootingState side){
         return Commands.parallel(
+            Intake.RackAndPinion.get().startRun(
+                     ()->{
+                        time = Timer.getFPGATimestamp();
+                     }, ()->{
+                        Intake.RackAndPinion.get().applySetpoint( 
+                            Setpoint.withPositionSetpoint( 
+                                IntakeConstants.RackAndPinion.converter.toAngle(
+                                    Units.Inches.of(
+                                        (1-Math.min(1, (Timer.getFPGATimestamp() - time) / 3)) * 3.5 + .3
+                                    )) ));
+                    }),
             ShootingCommands.Pass(side),
             SuperStructureConstants.runHopperRoller()
         );

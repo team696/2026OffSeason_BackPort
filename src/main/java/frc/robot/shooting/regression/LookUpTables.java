@@ -27,8 +27,8 @@ public class LookUpTables {
             */
 
             // Modified AST 20261012
-            scoringvelocityLUT.put(1.75, 24.00); // meters, RPS
-            scoringvelocityLUT.put(2.5, 25.00); // meters, RPS
+            scoringvelocityLUT.put(1.75, 25.00); // meters, RPS
+            scoringvelocityLUT.put(2.5, 27.00); // meters, RPS
             scoringvelocityLUT.put(3.0, 29.00); // meters, RPS
             scoringvelocityLUT.put(3.5, 32.00); // meters, RPS
             scoringvelocityLUT.put(4.0, 34.00); // meters, RPS
