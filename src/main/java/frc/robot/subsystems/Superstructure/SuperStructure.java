@@ -74,7 +74,7 @@ public class SuperStructure {
                             Setpoint.withPositionSetpoint( 
                                 IntakeConstants.RackAndPinion.converter.toAngle(
                                     Units.Inches.of(
-                                        (1-Math.min(1, (Timer.getFPGATimestamp() - time) / 3)) * 3.5 + .3
+                                        (1-Math.min(1, (Timer.getFPGATimestamp() - time) / 1)) * 3.5 + .3
                                     )) ));
                     }),
                 //Intake.RackAndPinion.get().setpointCommand(Intake.RackAndPinion.HALF),
