@@ -80,9 +80,9 @@ public class LookUpTables {
 
         static{
             // 3.0 m would need a lob higher than FERRY_MIN_APEX allows at the steepest hood angle
-            neturalzonehoodLUT.put(4.5, 3.67); // meters, Degrees
-            neturalzonehoodLUT.put(6.0, 10.67); // meters, Degrees
-            neturalzonehoodLUT.put(7.5, 17.67); // meters, Degrees
+            neturalzonehoodLUT.put(4.5, 15.0); // meters, Degrees
+            neturalzonehoodLUT.put(6.0, 20.0); // meters, Degrees
+            neturalzonehoodLUT.put(7.5, 25.0); // meters, Degrees
         }
     }
 
