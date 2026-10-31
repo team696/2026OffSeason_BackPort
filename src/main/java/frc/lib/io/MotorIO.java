@@ -15,6 +15,7 @@ import edu.wpi.first.units.measure.*;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import frc.lib.util.Util;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.UnaryOperator;
 
 /**
@@ -39,6 +40,25 @@ public abstract class MotorIO implements Sendable {
 	 * @param mechanismPosition the mechanism's position to set location as.
 	 */
 	public abstract void setCurrentPosition(Angle mechanismPosition);
+
+	/**
+	 * Requests a homing reset and reports whether the device acknowledged it. IO implementations
+	 * that queue position resets must override this method and complete the future after the reset.
+	 */
+	public CompletableFuture<Boolean> setCurrentPositionForHoming(Angle mechanismPosition) {
+		try {
+			setCurrentPosition(mechanismPosition);
+			return CompletableFuture.completedFuture(true);
+		} catch (RuntimeException exception) {
+			return CompletableFuture.failedFuture(exception);
+		}
+	}
+
+	/** Whether the most recently read homing feedback can be used. Hardware IO also checks its age/status. */
+	public boolean homingFeedbackValid(Time maximumAge) {
+		return Double.isFinite(getPosition().baseUnitMagnitude())
+				&& Double.isFinite(getVelocity().baseUnitMagnitude());
+	}
 
 	/**
 	 * Set's the mechanism's current location as zero.

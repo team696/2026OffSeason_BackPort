@@ -24,9 +24,11 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.UnaryOperator;
@@ -34,7 +36,7 @@ import java.util.function.UnaryOperator;
 /**
  * Class used to control a main TalonFX and any number of followers for a real mechanism.
  */
-public class MotorIOTalonFX extends MotorIO {
+public class MotorIOTalonFX extends MotorIO implements AutoCloseable {
 	protected final TalonFX main;
 	protected final TalonFX[] followers;
 	protected TalonFXConfiguration config;
@@ -141,8 +143,45 @@ public class MotorIOTalonFX extends MotorIO {
 	@Override
 	public void setCurrentPosition(Angle mechanismPosition) {
 		threadPoolExecutor.submit(() -> {
-			main.setPosition(mechanismPosition);
+			resetPosition(mechanismPosition);
 		});
+	}
+
+	private boolean resetPosition(Angle mechanismPosition) {
+		boolean acknowledged = main.setPosition(mechanismPosition).isOK();
+		if (acknowledged) onPositionResetAcknowledged(mechanismPosition);
+		return acknowledged;
+	}
+
+	/** Lets simulated feedback mirror an encoder reset without changing the mechanism's physical state. */
+	protected void onPositionResetAcknowledged(Angle mechanismPosition) {}
+
+	@Override
+	public CompletableFuture<Boolean> setCurrentPositionForHoming(Angle mechanismPosition) {
+		CompletableFuture<Boolean> completion = new CompletableFuture<>();
+		var task = threadPoolExecutor.submit(() -> {
+			if (completion.isCancelled()) return;
+			try {
+				completion.complete(resetPosition(mechanismPosition));
+			} catch (RuntimeException exception) {
+				completion.completeExceptionally(exception);
+			}
+		});
+		// Cancel a queued request when possible. An already executing device write cannot be undone.
+		completion.whenComplete((success, error) -> {
+			if (completion.isCancelled()) task.cancel(false);
+		});
+		return completion;
+	}
+
+	@Override
+	public boolean homingFeedbackValid(Time maximumAge) {
+		if (!super.homingFeedbackValid(maximumAge)) return false;
+		var position = main.getPosition(false);
+		var velocity = main.getVelocity(false);
+		return position.getStatus().isOK() && velocity.getStatus().isOK()
+				&& (maximumAge == null || (position.getTimestamp().getLatency() <= maximumAge.in(Units.Seconds)
+						&& velocity.getTimestamp().getLatency() <= maximumAge.in(Units.Seconds)));
 	}
 
 	@Override
@@ -302,6 +341,13 @@ public class MotorIOTalonFX extends MotorIO {
 
 	public TalonFX getMain() {
 		return main;
+	}
+
+	@Override
+	public void close() {
+		threadPoolExecutor.shutdownNow();
+		for (TalonFX follower : followers) follower.close();
+		main.close();
 	}
 
 	@Override

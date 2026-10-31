@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 5.724215909090909,
-        "y": 0.5512954545454545
+        "x": 5.724,
+        "y": 0.551
       },
       "prevControl": {
-        "x": 5.415011363641189,
-        "y": 0.8605000000008203
+        "x": 5.41479545455028,
+        "y": 0.8602045454553658
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "RS34"
     }
   ],
   "rotationTargets": [

@@ -3,6 +3,8 @@ package frc.lib.io;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.Notifier;
 import frc.lib.sim.MechanismSim;
 
@@ -12,6 +14,7 @@ import frc.lib.sim.MechanismSim;
 public class MotorIOTalonFXSim extends MotorIOTalonFX {
 	private MechanismSim sim;
 	private Notifier notifier;
+	private volatile Angle encoderOffset = Units.Radians.zero();
 
 	/**
 	 * Creates a MotorIOTalonFX from a provided configuration.
@@ -46,13 +49,32 @@ public class MotorIOTalonFXSim extends MotorIOTalonFX {
 
 	@Override
 	protected void updateMotorInputs(Inputs inputsToUpdate, TalonFX motor) {
-		inputsToUpdate.position = sim.getPosition();
+		inputsToUpdate.position = sim.getPosition().plus(encoderOffset);
 		inputsToUpdate.velocity = sim.getVelocity();
 		inputsToUpdate.statorCurrent = sim.getStatorCurrent();
 		inputsToUpdate.supplyCurrent =
 				Units.Amps.of(main.getSimState().getSupplyCurrent()).times(getMotorInvertMultiplier());
 		inputsToUpdate.motorVoltage =
 				Units.Volts.of(main.getSimState().getMotorVoltage()).times(getMotorInvertMultiplier());
+	}
+
+	@Override
+	protected void onPositionResetAcknowledged(Angle mechanismPosition) {
+		// An encoder reset changes coordinates, not the simulated rack's physical location or limits.
+		encoderOffset = mechanismPosition.minus(sim.getPosition());
+	}
+
+	@Override
+	public boolean homingFeedbackValid(Time maximumAge) {
+		// These inputs come directly from the physics model, not the cached CAN status signals.
+		return Double.isFinite(getPosition().baseUnitMagnitude())
+				&& Double.isFinite(getVelocity().baseUnitMagnitude());
+	}
+
+	@Override
+	public void close() {
+		notifier.close();
+		super.close();
 	}
 
 	/**

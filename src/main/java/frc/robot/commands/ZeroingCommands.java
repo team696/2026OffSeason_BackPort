@@ -18,8 +18,8 @@ public class ZeroingCommands {
     }
 
     /**
-     * Zeros whichever of the hood and rack haven't been zeroed yet, both at the same time. Button presses that
-     * need those subsystems are ignored until it finishes (about a second) instead of cancelling it halfway.
+     * Re-homes the rack on every operator request, and zeros the hood if it needs zeroing. Button presses that
+     * need those subsystems are ignored until it finishes or X is released, instead of cancelling it halfway.
      * Returns a new Command every call for explicit zeroing requests.
      */
     public static Command zeroIfNeeded() {

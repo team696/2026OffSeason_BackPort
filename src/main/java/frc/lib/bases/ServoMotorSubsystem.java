@@ -15,6 +15,7 @@ import frc.lib.io.MotorIO.Setpoint;
 import frc.lib.util.DelayedBoolean;
 import frc.lib.util.Util;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Base subsystem for any subsystem that uses motors and requires precise position control.
@@ -31,6 +32,11 @@ public class ServoMotorSubsystem<IO extends MotorIO> extends MotorSubsystem<IO> 
 
 	// Set by zeroAgainstHardStopCommand once the position has been zeroed against a hard stop
 	private boolean hasZeroed = false;
+	private String zeroingState = "NOT_STARTED";
+	private String zeroingFailure = "";
+	private int zeroingAttempts;
+	private double lastPreZeroPositionRadians = Double.NaN;
+	private long inputSequence;
 
 	/**
 	 * Creates a *non-homing* ServoMotorSubsystem with a MotorIO, name for telemetry, and threshold for differences in measurement.
@@ -72,6 +78,7 @@ public class ServoMotorSubsystem<IO extends MotorIO> extends MotorSubsystem<IO> 
 	@Override
 	public void periodic() {
 		super.periodic();
+		inputSequence++;
 		if (isHomingSubsystem) {
 			if (mNeedsToHome && !mHoming && setpointNearHome() && nearHomingLocation()) {
 				mHoming = true;
@@ -234,6 +241,11 @@ public class ServoMotorSubsystem<IO extends MotorIO> extends MotorSubsystem<IO> 
 		return hasZeroed;
 	}
 
+	public String getZeroingState() { return zeroingState; }
+	public String getZeroingFailure() { return zeroingFailure; }
+	public int getZeroingAttempts() { return zeroingAttempts; }
+	public double getLastPreZeroPositionRadians() { return lastPreZeroPositionRadians; }
+
 	/**
 	 * Creates a Command that drives into a hard stop, zeroes the encoder there, and then applies a setpoint.
 	 * If the stop is never found (timeout) or the zero never shows up in the position reading, the motor is
@@ -283,6 +295,8 @@ public class ServoMotorSubsystem<IO extends MotorIO> extends MotorSubsystem<IO> 
 		private boolean zeroSent;
 		private boolean confirmed;
 		private boolean failed;
+		private CompletableFuture<Boolean> resetAcknowledgement;
+		private long acknowledgementInputSequence = -1;
 
 		ZeroCommand(ZeroConfig config, Setpoint finishSetpoint) {
 			this.config = config;
@@ -294,6 +308,11 @@ public class ServoMotorSubsystem<IO extends MotorIO> extends MotorSubsystem<IO> 
 
 		@Override
 		public void initialize() {
+			hasZeroed = false;
+			zeroingState = "DRIVING_TO_HOME";
+			zeroingFailure = "";
+			zeroingAttempts++;
+			lastPreZeroPositionRadians = Double.NaN;
 			runTimer.restart();
 			stalledTimer.stop();
 			stalledTimer.reset();
@@ -302,12 +321,34 @@ public class ServoMotorSubsystem<IO extends MotorIO> extends MotorSubsystem<IO> 
 			zeroSent = false;
 			confirmed = false;
 			failed = false;
-			applySetpoint(driveSetpoint);
+			resetAcknowledgement = null;
+			acknowledgementInputSequence = -1;
+			if (io.homingFeedbackValid(config.kMaxFeedbackAge)) {
+				applySetpoint(driveSetpoint);
+			} else {
+				fail("INVALID_FEEDBACK", "position or velocity feedback is invalid or stale");
+			}
+		}
+
+		private void fail(String state, String reason) {
+			failed = true;
+			zeroingState = state;
+			zeroingFailure = reason;
+			applySetpoint(Setpoint.withNeutralSetpoint());
 		}
 
 		@Override
 		public void execute() {
+			if (failed || confirmed) return;
+			if (!io.homingFeedbackValid(config.kMaxFeedbackAge)) {
+				fail("INVALID_FEEDBACK", "position or velocity feedback is invalid or stale");
+				return;
+			}
 			if (!zeroSent) {
+				if (runTimer.hasElapsed(config.kTimeout.in(Units.Seconds))) {
+					fail("HOME_TIMEOUT", "did not reach a plausible home before timeout; encoder was not zeroed");
+					return;
+				}
 				applySetpoint(driveSetpoint);
 				// the mechanism starts at rest, so don't call that a stall until it's had time to get moving
 				boolean stopped = runTimer.hasElapsed(config.kStartupGrace.in(Units.Seconds))
@@ -317,20 +358,44 @@ public class ServoMotorSubsystem<IO extends MotorIO> extends MotorSubsystem<IO> 
 				} else {
 					stalledTimer.stop();
 					stalledTimer.reset();
+					zeroingState = "DRIVING_TO_HOME";
 				}
 
 				if (stalledTimer.hasElapsed(config.kStalledTime.in(Units.Seconds))) {
+					lastPreZeroPositionRadians = getPosition().baseUnitMagnitude();
+					// This is a plausibility guard against a known far-from-home stall, not proof of
+					// physical contact. A relative encoder can already have an incorrect reference.
+					if (config.kMaxPreZeroPositionError != null
+							&& !nearPosition(config.kZeroPosition, config.kMaxPreZeroPositionError)) {
+						// Bumper contact can pause the rack before the real hard stop. Keep the
+						// same bounded homing effort instead of ending the button's one attempt.
+						zeroingState = "BLOCKED_AWAY_FROM_HOME";
+						return;
+					}
 					applySetpoint(Setpoint.withNeutralSetpoint());
-					setCurrentPosition(config.kZeroPosition);
+					resetAcknowledgement = io.setCurrentPositionForHoming(config.kZeroPosition);
 					zeroSent = true;
+					zeroingState = "WAITING_FOR_ZERO_ACK";
 					confirmTimer.restart();
-				} else if (runTimer.hasElapsed(config.kTimeout.in(Units.Seconds))) {
-					failed = true;
 				}
-			} else if (nearPosition(config.kZeroPosition, config.kConfirmTolerance)) {
-				confirmed = true;
-			} else if (confirmTimer.hasElapsed(config.kConfirmTimeout.in(Units.Seconds))) {
-				failed = true;
+			} else {
+				if (resetAcknowledgement.isCompletedExceptionally()
+						|| (resetAcknowledgement.isDone() && !resetAcknowledgement.getNow(false))) {
+					fail("ZERO_RESET_FAILED", "device did not acknowledge the encoder reset");
+					return;
+				}
+				if (resetAcknowledgement.isDone()) {
+					if (acknowledgementInputSequence < 0) {
+						acknowledgementInputSequence = inputSequence;
+						zeroingState = "WAITING_FOR_ZERO_FEEDBACK";
+					} else if (inputSequence > acknowledgementInputSequence
+							&& nearPosition(config.kZeroPosition, config.kConfirmTolerance)) {
+						confirmed = true;
+					}
+				}
+				if (!confirmed && confirmTimer.hasElapsed(config.kConfirmTimeout.in(Units.Seconds))) {
+					fail("ZERO_CONFIRM_TIMEOUT", "encoder reset was not acknowledged and confirmed before timeout");
+				}
 			}
 		}
 
@@ -343,15 +408,24 @@ public class ServoMotorSubsystem<IO extends MotorIO> extends MotorSubsystem<IO> 
 		public void end(boolean interrupted) {
 			if (confirmed && !interrupted) {
 				hasZeroed = true;
+				zeroingState = "HOMED";
 				applySetpoint(finishSetpoint);
 				return;
 			}
 			// never leave the voltage request behind: it would start pushing into the stop again on re-enable
+			hasZeroed = false;
+			if (resetAcknowledgement != null && !resetAcknowledgement.isDone()) {
+				resetAcknowledgement.cancel(false);
+			}
+			if (interrupted) {
+				zeroingState = "INTERRUPTED";
+				zeroingFailure = "homing was interrupted; position remains unverified";
+			}
 			applySetpoint(Setpoint.withNeutralSetpoint());
 			if (failed) {
 				DriverStation.reportWarning(
 						ServoMotorSubsystem.this.name + " could not zero against its hard stop ("
-								+ (zeroSent ? "zero never showed up in the position reading" : "never stalled before the timeout")
+								+ zeroingFailure
 								+ "); position is still unknown",
 						false);
 			}
@@ -370,6 +444,10 @@ public class ServoMotorSubsystem<IO extends MotorIO> extends MotorSubsystem<IO> 
 		public Angle kConfirmTolerance;
 		/** Below this speed the mechanism counts as stopped. */
 		public AngularVelocity kStalledVelocity;
+		/** Optional bound on the old encoder reading before accepting a stall as home. Not an absolute sensor. */
+		public Angle kMaxPreZeroPositionError;
+		/** Optional maximum hardware feedback age; IO always rejects non-finite feedback. */
+		public Time kMaxFeedbackAge;
 		/** Time to ignore stalls after starting, while the mechanism gets moving. */
 		public Time kStartupGrace;
 		/** How long the mechanism must stay stopped to count as against the hard stop. */

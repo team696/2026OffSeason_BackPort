@@ -6,6 +6,7 @@ package frc.robot.subsystems.Intake;
 
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -42,9 +43,14 @@ public class Intake{
 
     }
 
-    /** Drives the rack into its retracted hard stop, zeroes the encoder there, then goes to RETRACT. Skipped once zeroed. */
+    /** Explicit operator homing can be repeated after a lost reference or failed attempt. */
     public Command zeroCommand() {
-      return zeroIfNeededCommand(IntakeConstants.RackAndPinion.getZeroConfig(), RETRACT);
+      var config = IntakeConstants.RackAndPinion.getZeroConfig();
+      // Reject the recorded mid-travel stall instead of redefining that location as zero.
+      // This still relies on the old relative reference; a home switch is needed for absolute proof.
+      config.kMaxPreZeroPositionError = config.kConfirmTolerance;
+      config.kMaxFeedbackAge = Seconds.of(0.1);
+      return zeroAgainstHardStopCommand(config, RETRACT);
     }
 
     @Override
@@ -60,6 +66,12 @@ public class Intake{
       SmartDashboard.putNumber("Intake/Rack and Pinion/Target Rotations", targetRotations);
       SmartDashboard.putNumber("Intake/Rack and Pinion/Position Error Rotations",
           targetRotations - getPosition().in(Rotations));
+      SmartDashboard.putString("Intake/Rack and Pinion/Homing State", getZeroingState());
+      SmartDashboard.putString("Intake/Rack and Pinion/Homing Failure", getZeroingFailure());
+      SmartDashboard.putBoolean("Intake/Rack and Pinion/Has Verified Home", hasZeroed());
+      SmartDashboard.putNumber("Intake/Rack and Pinion/Homing Attempts", getZeroingAttempts());
+      SmartDashboard.putNumber("Intake/Rack and Pinion/Last Prezero Position Rotations",
+          getLastPreZeroPositionRadians() / (2.0 * Math.PI));
   }
 
   }
