@@ -76,10 +76,10 @@ public class IntakeConstants {
         config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         config.CurrentLimits.StatorCurrentLimitEnable = true;
-        config.CurrentLimits.StatorCurrentLimit = 30.0;
+        config.CurrentLimits.StatorCurrentLimit = 33.0;
 
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
-        config.CurrentLimits.SupplyCurrentLimit = 26.0;
+        config.CurrentLimits.SupplyCurrentLimit = 29.0;
 
         config.Feedback.SensorToMechanismRatio = kGearing;
 
