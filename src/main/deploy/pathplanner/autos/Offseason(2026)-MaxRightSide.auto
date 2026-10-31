@@ -23,7 +23,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 3.5
+                  "waitTime": 2.75
                 }
               },
               {
@@ -62,13 +62,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RS5"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "RS6"
+            "pathName": "RS4.5"
           }
         },
         {

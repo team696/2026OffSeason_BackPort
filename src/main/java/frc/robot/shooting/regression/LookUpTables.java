@@ -15,7 +15,7 @@ public class LookUpTables {
 
         static{
             // closer than ~2.25 m the steepest hood shot is too flat to drop into the hub
-            /*
+            /*4
             scoringvelocityLUT.put(2.25, 29.10); // meters, RPS
             scoringvelocityLUT.put(2.5, 30.21); // meters, RPS
             scoringvelocityLUT.put(3.0, 32.32); // meters, RPS
@@ -29,7 +29,7 @@ public class LookUpTables {
             // Modified AST 20261012
             scoringvelocityLUT.put(1.75, 25.00); // meters, RPS
             scoringvelocityLUT.put(2.5, 27.00); // meters, RPS
-            scoringvelocityLUT.put(3.0, 29.00); // meters, RPS
+            scoringvelocityLUT.put(3.0, 31.00); // meters, RPS
             scoringvelocityLUT.put(3.5, 32.00); // meters, RPS
             scoringvelocityLUT.put(4.0, 34.00); // meters, RPS
             scoringvelocityLUT.put(4.5, 36.00); // meters, RPS
@@ -69,9 +69,9 @@ public class LookUpTables {
 
         static{
             // 3.0 m would need a lob higher than FERRY_MIN_APEX allows at the steepest hood angle
-            neturalzonevelocityLUT.put(4.5, 40.0); // meters, RPS
-            neturalzonevelocityLUT.put(6.0, 42.0); // meters, RPS
-            neturalzonevelocityLUT.put(7.5, 45.0); // meters, RPS
+            neturalzonevelocityLUT.put(4.5, 38.0); // meters, RPS
+            neturalzonevelocityLUT.put(6.0, 38.0); // meters, RPS
+            neturalzonevelocityLUT.put(7.5, 38.0); // meters, RPS
         }
     }
 
@@ -80,9 +80,9 @@ public class LookUpTables {
 
         static{
             // 3.0 m would need a lob higher than FERRY_MIN_APEX allows at the steepest hood angle
-            neturalzonehoodLUT.put(4.5, 15.0); // meters, Degrees
-            neturalzonehoodLUT.put(6.0, 20.0); // meters, Degrees
-            neturalzonehoodLUT.put(7.5, 25.0); // meters, Degrees
+            neturalzonehoodLUT.put(4.5, 25.0); // meters, Degrees
+            neturalzonehoodLUT.put(6.0, 28.0); // meters, Degrees
+            neturalzonehoodLUT.put(7.5, 30.0); // meters, Degrees
         }
     }
 
