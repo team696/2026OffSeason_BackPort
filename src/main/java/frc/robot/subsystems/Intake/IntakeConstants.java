@@ -105,9 +105,9 @@ public class IntakeConstants {
     }
 
     /**
-     * Zeroing against the retracted hard stop on first enable. The voltage is a first guess to tune on the robot:
-     * it has to be enough to keep the rack moving against friction, but a stalled motor draws about V / 0.03 ohm
-     * (roughly 90 A at 3 V), so keep it as low as it can be. Negative drives toward the stop (position goes down).
+     * Explicit operator zeroing against the retracted hard stop. The voltage must be tuned on the robot:
+     * it has to keep the rack moving against friction. The stator limit caps stall torque even if a larger
+     * voltage is requested. Negative drives toward the stop (position goes down).
      */
     public static ZeroConfig getZeroConfig(){
         ZeroConfig config = new ZeroConfig();
@@ -117,8 +117,9 @@ public class IntakeConstants {
         config.kStalledVelocity = converter.toAngle(Units.Inches.of(0.1)).per(Units.Second);
         config.kStartupGrace = Units.Seconds.of(0.3);
         config.kStalledTime = Units.Seconds.of(0.15);
-        // slow rack (40:1): a full-travel move at -3 V takes a few seconds
-        config.kTimeout = Units.Seconds.of(2.0);
+        // Recorded -1 V travel is about 0.65 in/s: 3.61 inches takes roughly 5.6 seconds.
+        // Allow startup, stall confirmation, and brief bumper contact within a bounded attempt.
+        config.kTimeout = Units.Seconds.of(8.0);
         config.kConfirmTimeout = Units.Seconds.of(0.5);
         return config;
     }
